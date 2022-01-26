@@ -1,5 +1,11 @@
 //El punto final de este proyecto es conseguir desarrollar un juego de rol de baloncesto.
 
+//Muestro si es una partida nueva o una continuada en un p
+const tipoDePartida = document.querySelector("#nuevaOContinuada");
+tipoDePartida.innerHTML = localStorage.getItem("TipoDePartida");
+if (localStorage.getItem("TipoDePartida") == "Nuevo juego"){
+    localStorage.removeItem("TipoDePartida");
+}
 
 //Defino valiables necesarias
 let altura;
@@ -333,11 +339,9 @@ const verJugadores = ()=> {
             let listaJugadoresFiltrados;
 
 
+            //Creo arrays que van a servir para armar una función que simplifique la creación de los filtros.
 
             //Creo un filtro por cada tipo de habilidad--------------------------------------
-
-
-
             if (respuestaParaFiltros == "ALTURA") {
                 let alturaFiltrada = prompt("Introduzca la altura mínima (cm) por la que filtrar (ej. 210)");
                 const filtroJugadoresAltosEquipoA = listaJugadoresA.filter(habilidades => habilidades.altura >= alturaFiltrada);
