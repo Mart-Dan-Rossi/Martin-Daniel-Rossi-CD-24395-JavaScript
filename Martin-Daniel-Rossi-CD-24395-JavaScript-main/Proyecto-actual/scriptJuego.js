@@ -96,7 +96,7 @@ const p = document.createElement("p");
 //Le pongo contenido al p
 p.innerText = localStorage.getItem("tipoDePartida");
 //Ubico el p en el HTML
-document.body.head.appendChild(p);
+document.body.header.appendChild(p);
 
 //Si comienzo una nueva partida cambio el valor de este dato en el local storage esta información para que si entra directo a esta página le aparezca como continuada (pretendo hacer que en un futuro por defecto se continúen las partidas)
 localStorage.setItem("tipoDePartida", "Continuar juego");
