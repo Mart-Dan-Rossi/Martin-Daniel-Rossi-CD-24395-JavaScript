@@ -1,10 +1,100 @@
 //El punto final de este proyecto es conseguir desarrollar un juego de rol de baloncesto.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+DEJO COMENTADAS PARTES CUYA FUNCIONALIDAD QUEDA OBSOLETA COMPARADO CON LO QUE
+SE PUEDE LOGRAR CON LAS HERRAMIENTAS APRENDIDAS EN LA CLASE DE EVENTOS.
+TAL VEZ MÁS ADELANTE NECESITE ALGO DE AHÍ POR ESO LO CONSERVO DE ESTA FORMA.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //Muestro si es una partida nueva o una continuada en un p
 const tipoDePartida = document.querySelector("#nuevaOContinuada");
-tipoDePartida.innerHTML = localStorage.getItem("TipoDePartida");
-if (localStorage.getItem("TipoDePartida") == "Nuevo juego"){
-    localStorage.removeItem("TipoDePartida");
+tipoDePartida.innerHTML = localStorage.getItem("tipoDePartida");
+if (localStorage.getItem("tipoDePartida") == "Nuevo juego"){
+    localStorage.removeItem("tipoDePartida");
 }
 
 //Defino valiables necesarias
@@ -198,7 +288,7 @@ const listaJugadoresB = [jugadorB1, jugadorB2, jugadorB3, jugadorB4, jugadorB5];
 const costeAccionesDefensa = {moverseRecto: 1, moverseDiagonal: 1.5, intentarUnRoboAlPortadorDeLaPelota: 1, intentarInterceptarPase: 1, esperaAtosigante: 1, esperaCautelosa: 0.5}
 const costeAccionesAtaque = {moverseRecto: 1, moverseDiagonal: 1.5, pase: 0.5, dribblingRecto: 1, dribblingDiagonal: 1.5, esperarSinBalon: 1, esperarEnTripleAmenaza: 0.5}
 
-//Creo función compuesta que permite a los "coach" ver las habilidades de los jugadores
+/*Creo función compuesta que permite a los "coach" ver las habilidades de los jugadores
 const mostrarPosicionesJugadores = () => {
     alert(`Las ubicaciones del equipo "A" son:`);
         for (let i=0; i<5; i++) {
@@ -230,7 +320,7 @@ const mostrarPosicionesJugadores = () => {
 const verJugadores = ()=> {
     //Creo función para que los coach puedan ver las posiciones de los jugadores en este momento
     const posicionJugadores = (p)=> {
-        let coachVeUbicacionJugadores = "";/*Esto queda vacío para que se inicie el búcle*/        
+        let coachVeUbicacionJugadores = "";//Esto queda vacío para que se inicie el búcle        
         while ((coachVeUbicacionJugadores != "SI") && (coachVeUbicacionJugadores != "NO")){
             //El búcle pide respuesta de los usuarios
             coachVeUbicacionJugadores = prompt(p).toUpperCase();
@@ -246,13 +336,13 @@ const verJugadores = ()=> {
     }
     //Redacto la pregunta que será realizada a los usuarios al correrse "posicionJugadores()"
     let primeraPregunta = "Desea ver la ubicación de los jugadores? (Si/No)";
-    while (posicionJugadores(primeraPregunta) == "SI") {/*Tras corroborar que la respuesta fué bien cargada veo cuál fué. La negativa corta el búcle*/
+    while (posicionJugadores(primeraPregunta) == "SI") {//Tras corroborar que la respuesta fué bien cargada veo cuál fué. La negativa corta el búcle
         mostrarPosicionesJugadores();
         primeraPregunta = "Desea volver a ver la ubicación de los jugadores? (Si/No)"
     }
     //Creo función que pregunte a los "coach" si quieren realizar esta acción
     const verHabilidadesGenerales = (p)=> {
-        let coachVeJugadores = "";/*Esto queda vacío para que se inicie el búcle*/        
+        let coachVeJugadores = "";//Esto queda vacío para que se inicie el búcle        
         while ((coachVeJugadores != "SI") && (coachVeJugadores != "NO")){
             //El búcle pide respuesta de los usuarios
             coachVeJugadores = prompt(p).toUpperCase();
@@ -270,7 +360,7 @@ const verJugadores = ()=> {
     let laPregunta = "Desea ver las habilidades de los jugadores? (Si/No)";
 
     
-    while (verHabilidadesGenerales(laPregunta) == "SI") {/*Tras corroborar que la respuesta fué bien cargada veo cuál fué. La negativa corta el búcle*/
+    while (verHabilidadesGenerales(laPregunta) == "SI") {//Tras corroborar que la respuesta fué bien cargada veo cuál fué. La negativa corta el búcle
         alert(`Los datos y habilidades del equipo "A" son:`);
         for (let i=0; i<5; i++) {
             let concatenado = "";
@@ -299,7 +389,7 @@ const verJugadores = ()=> {
         }
         //Creo función para preguntar a los "coach" si quieren filtrar alguna información
         const quiereVerDestacadosPorHabilidad = (p)=>{
-            let coachVeHabilidadesQueDestacan = "";/*Esto queda vacío para que se inicie el búcle*/
+            let coachVeHabilidadesQueDestacan = "";//Esto queda vacío para que se inicie el búcle
             //El búcle va a corroborar si la respusta fue bien cargada
             while ((coachVeHabilidadesQueDestacan != "SI") && (coachVeHabilidadesQueDestacan != "NO")){
                 coachVeHabilidadesQueDestacan = prompt(p).toUpperCase();//Realizo la pregunta
@@ -313,13 +403,13 @@ const verJugadores = ()=> {
             }
         }
         
-        let otraPregunta = "Desea ver los que destacan en una habilidad?(Si/No)";/*Esta es la pregunta que será hecha a los usuarios*/
+        let otraPregunta = "Desea ver los que destacan en una habilidad?(Si/No)";//Esta es la pregunta que será hecha a los usuarios
         //Tras corroborar que la respuesta fué bien cargada veo cuál fué esta
         while (quiereVerDestacadosPorHabilidad(otraPregunta) == "SI"){
             //Si el usuario afirma creo función para corroborar que la respuesta a la próxima pregunta esté bien cargada
             //Si la respuesta es negativa se corta el búcle por lo que continúa con lo próximo
             const cualQuiereVer = (p)=>{
-                let coachQuiereVerTalHabilidad = "";/*Dejo esto vacío para que se inicie el búcle*/
+                let coachQuiereVerTalHabilidad = "";/*Dejo esto vacío para que se inicie el búcle
                 //El búcle va a corroborar que esté bien cargada la respuesta
                 while ((coachQuiereVerTalHabilidad != "ALTURA") && (coachQuiereVerTalHabilidad != "PESO") && (coachQuiereVerTalHabilidad != "CAPACIDADATLETICA") && (coachQuiereVerTalHabilidad != "DEFENSAPERIMETRAL") && (coachQuiereVerTalHabilidad != "DEFENSAINTERNA") && (coachQuiereVerTalHabilidad != "CAPACIDADREBOTEADORA") && (coachQuiereVerTalHabilidad != "ANOTACIONEXTERIOR") && (coachQuiereVerTalHabilidad != "ANOTACIONINTERIOR") && (coachQuiereVerTalHabilidad != "CREACIONDEJUEGO")){
                     coachQuiereVerTalHabilidad = prompt(p).toUpperCase();//Hago la pregunta
@@ -511,12 +601,12 @@ verJugadores();
 /*function getRandomArbitrary(min, max) {
     return Math.random() * (max - min) + min;
 }*/
-//Función que sirve para lanzar un dado de 20 caras
+/*Función que sirve para lanzar un dado de 20 caras*/
 function dadoDe20(){
     return Math.random() * (21-1)+1;
 }
 
-//Se disputa el salto entre 2 para comenzar el partido
+/*Se disputa el salto entre 2 para comenzar el partido*/
 alert("El árbitro se dispone en mitad de cancha a lanzar el balón hacia arriba para iniciar del encuentro. Lo lanza y..");
 //Creo un bucle para resolver quién consigue más puntos considerando las estadísticas que influyen en esta acción y lo que sacan con el dado
 let saltoA = 0;
@@ -550,7 +640,7 @@ while (saltoA == saltoB){
         alert("Ambos jugadores alcanzan el balón al mismo tiempo, la disputa por el salto sigue!");
     }
 };
-//Creo función que calcule los puntos de acción que tendrán los jugadores en el próximo "instante"
+/*Creo función que calcule los puntos de acción que tendrán los jugadores en el próximo "instante"*/
 const comienzaInstante = ()=>{
     for (let i=0; i<=4; i++){
         listaJugadoresA[i].nuevospuntosDeAccion();
@@ -558,7 +648,7 @@ const comienzaInstante = ()=>{
     }
 }
 
-//Creo funcion para comprobar quién tiene la posesión del balón
+/*Creo funcion para comprobar quién tiene la posesión del balón*/
 const queEquipoAtaca = ()=> {
     for (let i=0; i < 5; i++) {
         if (listaJugadoresA[i].conPelota == true) {
@@ -570,7 +660,7 @@ const queEquipoAtaca = ()=> {
     }
 }
 
-//Creo función para determinar si algún jugador aún tiene su "turno" sin usar en este "instante"
+/*Creo función para determinar si algún jugador aún tiene su "turno" sin usar en este "instante"*/
 const algunoTieneTurno = () => {
     //Creo arrays que van a llenarse con los jugadores que cumplan con la condición
     const jugadoresAConTurno = [];
@@ -591,7 +681,7 @@ const algunoTieneTurno = () => {
     //Devuelvo este {ultinmo array}
     return turnoEnAlgunEquipo;
 }
-//Creo herramientas que van a servir para que los coach seleccionen al jugador con el que quieren jugar en este "turno"
+/*Creo herramientas que van a servir para que los coach seleccionen al jugador con el que quieren jugar en este "turno"
 const herramientaParaElegirJugadorDefensor = ()=>{
     let defensorQueRealizaUnaAccion;
     alert(`El equipo que ataca es el equipo ${queEquipoAtaca()} por lo que el otro equipo comienza eligiendo con qué jugador va a realizar una acción`);
@@ -605,13 +695,13 @@ const herramientaParaElegirJugadorDefensor = ()=>{
         //Respuestas a posibles errores
         let ultimaLetraPrompt = Number(defensorQueRealizaUnaAccion.slice(-1));
         let primeraLetraPrompt = (defensorQueRealizaUnaAccion.charAt(0));
-        if ((defensorQueRealizaUnaAccion.length != 2) || (listaJugadoresB[ultimaLetraPrompt] == undefined)){
+        if ((defensorQueRealizaUnaAccion.length != 2) || (listaJugadoresB[ultimaLetraPrompt-1] == undefined)){
             return "Dato mal escrito";
         }
         else if (primeraLetraPrompt != "B") {
             return "Su equipo es el B, cargue bien el dato por favor";
         }
-        else if (listaJugadoresB[ultimaLetraPrompt].turnoUsado == true){
+        else if (listaJugadoresB[ultimaLetraPrompt-1].turnoUsado == true){
             return `Este jugador no cuenta con más "turnos" en este "instante"`;
         }
         //Respuesta jugador seleccionado
@@ -625,13 +715,13 @@ const herramientaParaElegirJugadorDefensor = ()=>{
         //Respuestas a posibles errores
         let ultimaLetraPrompt = Number(defensorQueRealizaUnaAccion.slice(-1));
         let primeraLetraPrompt = defensorQueRealizaUnaAccion.charAt(0);
-        if ((defensorQueRealizaUnaAccion.length != 2) || (listaJugadoresA[ultimaLetraPrompt] == undefined)){
+        if ((defensorQueRealizaUnaAccion.length != 2) || (listaJugadoresA[ultimaLetraPrompt-1] == undefined)){
             return "Dato mal escrito";
         }
         else if (primeraLetraPrompt != "A") {
             return "Su equipo es el A, cargue bien el dato por favor";
         }
-        else if (listaJugadoresA[ultimaLetraPrompt].turnoUsado == true){
+        else if (listaJugadoresA[ultimaLetraPrompt-1].turnoUsado == true){
             return `Este jugador no cuenta con más "turnos" en este "instante"`
         }
         //Respuesta jugador seleccionado
@@ -642,8 +732,8 @@ const herramientaParaElegirJugadorDefensor = ()=>{
     else {
         return "A ningún jugador de tu equipo le queda turno en este instante";
     }
-}
-const herramientaParaElegirJugadorAtacante = ()=>{
+}*/
+/*const herramientaParaElegirJugadorAtacante = ()=>{
     let atacanteQueRealizaUnaAccion;
     alert(`Ahora es turno del equipo ${queEquipoAtaca()} de que elija con qué jugador va a realizar una acción`);
     //Utilizo función creada con anterioridad para comprobar qué jugadores tienen un "turno" aún disponible
@@ -694,9 +784,9 @@ const herramientaParaElegirJugadorAtacante = ()=>{
     else {
         return "A ningún jugador de tu equipo le queda turno en este instante";
     }
-}
+}*/
 
-//Creo funciones que pide al coach que corresponda que seleccione con quién va a realizar su próxima acción
+/*Creo funciones que pide al coach que corresponda que seleccione con quién va a realizar su próxima acción
 const coachDefensorEligeJugador = ()=>{
     //Utilizando funciones previas indico si el "coach" ingresó bien la data pedida
     while (true){
@@ -728,11 +818,11 @@ const coachAtacanteEligeJugador = ()=>{
             return respuestaSeleccionJugadorEquipoAtacante
         }
     }
-}
+}*/
 
-//Creo función para que el coach elija la acción que va a realizar
+/*Creo función para que el coach elija la acción que va a realizar
 const accionARealizarDefensa = (p)=> {
-    let coachElijeAccion = "";/*Esto queda vacío para que se inicie el búcle*/        
+    let coachElijeAccion = "";//Esto queda vacío para que se inicie el búcle        
     while ((coachElijeAccion != "MOVERSE") && (coachElijeAccion != "INTENTAR UN ROBO AL PORTADOR DE LA PELOTA") && (coachElijeAccion != "INTENTAR INTERCEPTAR PASE") && (coachElijeAccion != "ESPERA ATOSIGANTE") && (coachElijeAccion != "ESPERA CAUTELOSA")) {
         //El búcle pide respuesta de los usuarios
         coachElijeAccion = prompt(p).toUpperCase();
@@ -760,15 +850,17 @@ const turnoJugadorDefensor = (jugador)=>{
                 }
             }
     }
-}
+}*/
 //Continúa el partido luego del salto lo pongo en búcle puesto que la dinámica del juego es cíclica
 while (finDePartido == false) {
     comienzaInstante();
-    verJugadores();
+
+    /*verJugadores();
     let jugadorDefensorElegido = coachDefensorEligeJugador();
     turnoJugadorDefensor(jugadorDefensorElegido);
     verJugadores();
-    let jugadorAtacanteElegido = coachAtacanteEligeJugador();
+    let jugadorAtacanteElegido = coachAtacanteEligeJugador();*/
+
     //AGREGAR que comparar iniciativas
     //AGREGAR elegir la acción a realizar por parte de cada jugador elegido
 
