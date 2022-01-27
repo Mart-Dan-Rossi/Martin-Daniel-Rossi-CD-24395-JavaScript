@@ -9,13 +9,12 @@ const textoOpciones = ["Nuevo juego","Continuar juego"];
 
 //Creo bucle para crear eventos de botones nuevoJuego y continuarJuego
 //Agrego el evento
-for(opcion in opciones){
-    opciones[opcion].addEventListener("click", ()=>{
-    //Acciones realizadas con el evento 
-    //Guardo en el localStorage el botón seleccionado en forma de string
-    localStorage.setItem("tipoDePartida", textoOpciones[opcion]);
-    console.log(localStorage.getItem("tipoDePartida"))
-    //Cambio a la página de juego
-    window.location.href="./juego.html";
+for(let i=0; i<opciones.length; i++){
+    opciones[i].addEventListener("click", ()=>{
+        //Acciones realizadas con el evento 
+        //Guardo en el localStorage el botón seleccionado en forma de string
+        localStorage.setItem("tipoDePartida", textoOpciones[i]);
+        //Cambio a la página de juego
+        window.location.href="./juego.html";
     });
 }

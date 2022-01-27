@@ -96,10 +96,11 @@ const p = document.createElement("p");
 //Le pongo contenido al p
 p.innerText = localStorage.getItem("tipoDePartida");
 //Ubico el p en el HTML
-document.body.header.appendChild(p);
-
-//Si comienzo una nueva partida cambio el valor de este dato en el local storage esta información para que si entra directo a esta página le aparezca como continuada (pretendo hacer que en un futuro por defecto se continúen las partidas)
+document.querySelector("header").appendChild(p);
+//Pongo el "tipoDePartida" del local storage como continuar juego. En un futuro voy a permitir reanudar partidas y por defecto quiero que se continúe por si entran a este html andes de pasar por la página de inicio.
 localStorage.setItem("tipoDePartida", "Continuar juego");
+
+
 
 /*Defino valiables necesarias*/
 let altura;
