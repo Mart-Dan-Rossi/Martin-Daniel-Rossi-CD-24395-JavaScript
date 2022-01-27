@@ -90,14 +90,18 @@ TAL VEZ MÁS ADELANTE NECESITE ALGO DE AHÍ POR ESO LO CONSERVO DE ESTA FORMA.
 
 
 
-//Muestro si es una partida nueva o una continuada en un p
-const tipoDePartida = document.querySelector("#nuevaOContinuada");
-tipoDePartida.innerHTML = localStorage.getItem("tipoDePartida");
-if (localStorage.getItem("tipoDePartida") == "Nuevo juego"){
-    localStorage.removeItem("tipoDePartida");
-}
+/*Muestro si es una partida nueva o una continuada en un p*/
+//Creo el p
+const p = document.createElement("p");
+//Le pongo contenido al p
+p.innerText = localStorage.getItem("tipoDePartida");
+//Ubico el p en el HTML
+document.body.head.appendChild(p);
 
-//Defino valiables necesarias
+//Si comienzo una nueva partida cambio el valor de este dato en el local storage esta información para que si entra directo a esta página le aparezca como continuada (pretendo hacer que en un futuro por defecto se continúen las partidas)
+localStorage.setItem("tipoDePartida", "Continuar juego");
+
+/*Defino valiables necesarias*/
 let altura;
 let peso;
 let capacidadAtletica;
