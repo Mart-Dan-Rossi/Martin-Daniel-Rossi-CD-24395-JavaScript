@@ -173,13 +173,16 @@ for (jugador in listaJugadoresA) {
     //Inserto cada dato a cada espacio
     for (habilidades in listaJugadoresA[jugador]){
         //Pongo condicionales para que los distintos puntos tomen distintos colores dependiendo el valor
+        //Como nombre, altura y peso no se miden sobre la cantidad de puntos que se le puede poner a los jugadores les hago un bucle especial a cada uno
         if (habilidades == "nombre"){
+            //Agrego una casilla con el nombre
             tabla += `<td class="tdHabilidades" colspan="2">`;
             tabla += `${listaJugadoresA[jugador][habilidades]}`;
             tabla += `</td>`;
         }
         else if (habilidades == "altura") {
             for (let i=0; i < 8; i++){
+                //En estos bucles uso un if para que en cada vuelta se fije si el valor está entre ciertos rangos, si lo está agrega la casilla con el valor y un class que determina su color
                 if ((rangosAlturas[i] < listaJugadoresA[jugador][habilidades]) && (listaJugadoresA[jugador][habilidades] <= rangosAlturas[i+1])) {
                     tabla += `<td class="tdHabilidades ${rangosHabilidad[i]}" colspan="2">`;
                     tabla += `${listaJugadoresA[jugador][habilidades]}`;
@@ -187,6 +190,7 @@ for (jugador in listaJugadoresA) {
                 }
             }
         }
+        //Repito lo anterior en los siguientes else if
         else if (habilidades == "peso") {
             for (let i=0; i < 8; i++){
                 if ((rangosPesos[i] < listaJugadoresA[jugador][habilidades]) && (listaJugadoresA[jugador][habilidades] <= rangosPesos[i+1])) {
@@ -206,8 +210,10 @@ for (jugador in listaJugadoresA) {
             }
         }
     }
+    //Cierro el tr
     tabla += `</tr>`;
 }
+//Cierro la tabla
 tabla +="</table>";
 //Imprimo la tabla A
 dataTablaA.innerHTML = tabla;
@@ -231,13 +237,16 @@ for (jugador in listaJugadoresB) {
     //Inserto cada dato a cada espacio
     for (habilidades in listaJugadoresB[jugador]){
         //Pongo condicionales para que los distintos puntos tomen distintos colores dependiendo el valor
+        //Como nombre, altura y peso no se miden sobre la cantidad de puntos que se le puede poner a los jugadores les hago un bucle especial a cada uno
         if (habilidades == "nombre"){
+            //Agrego una casilla con el nombre
             tabla += `<td class="tdHabilidades" colspan="2">`;
             tabla += `${listaJugadoresB[jugador][habilidades]}`;
             tabla += `</td>`;
         }
         else if (habilidades == "altura") {
             for (let i=0; i < 8; i++){
+                //En estos bucles uso un if para que en cada vuelta se fije si el valor está entre ciertos rangos, si lo está agrega la casilla con el valor y un class que determina su color
                 if ((rangosAlturas[i] < listaJugadoresB[jugador][habilidades]) && (listaJugadoresB[jugador][habilidades] <= rangosAlturas[i+1])) {
                     tabla += `<td class="tdHabilidades ${rangosHabilidad[i]}" colspan="2">`;
                     tabla += `${listaJugadoresB[jugador][habilidades]}`;
@@ -245,6 +254,7 @@ for (jugador in listaJugadoresB) {
                 }
             }
         }
+        //Repito lo anterior en los siguientes else if
         else if (habilidades == "peso") {
             for (let i=0; i < 8; i++){
                 if ((rangosPesos[i] < listaJugadoresB[jugador][habilidades]) && (listaJugadoresB[jugador][habilidades] <= rangosPesos[i+1])) {
@@ -264,8 +274,10 @@ for (jugador in listaJugadoresB) {
             }
         }
     }
+    //Cierro el tr
     tabla += `</tr>`;
 }
+//Cierro la tabla
 tabla +="</table>";
 //Imprimo la tabla B
 dataTablaB.innerHTML = tabla;
