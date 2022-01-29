@@ -1,0 +1,74 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+body{
+    padding: 10px;
+    max-width: 100vw;
+}
+#idTablaA, #idTablaB {
+    padding: 20px 0px 10px 0px;
+}
+.tablaHabilidades {
+    border: orange 4px double;
+    border-radius: 5%;
+}
+.tdHabilidades, .thHabilidades {
+    width: 70px;
+    padding: 2px;
+}
+.thHabilidades {
+    border: black 2px solid;
+    font-weight: bolder;
+    font-size: large;
+    text-align: center;
+    background-color: lightgrey;
+}
+.tdHabilidades {
+    border: black 1px ridge;
+    text-align: center;
+    background-color:  #e4ded3;
+}
+.puntosMuyBajos {
+    color: rgb(255, 0, 26);
+}
+
+.puntosBajos{
+    color: rgb(255, 70, 0);
+}
+
+.puntosMediosBajos {
+    color: rgb(255, 140, 0)     
+}
+
+.puntosMedios {
+    color: rgb(255, 210, 0) 
+}
+
+.puntosMediosAltos {
+    color: rgb(210, 255, 0) 
+}
+
+.puntosAltos {
+    color: rgb(130, 255, 0) 
+}
+
+.puntosMuyAltos {
+    color: rgb(0, 255, 0) 
+}
+
+.contenedorCancha {
+    width: 100%;
+    display: grid;
+    grid-template-columns: auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto;
+    grid-template-rows: auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto;
+    align-content: stretch;
+    justify-content: stretch;
+    height: 52vw;
+    background-image: url(../Img/miCancha.jpg);
+    background-size: cover;
+}
+
+.contenedorCancha div {
+    border: black 1px ridge;
+}

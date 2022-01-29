@@ -15,6 +15,6 @@ for(let i=0; i<opciones.length; i++){
         //Guardo en el localStorage el botón seleccionado en forma de string
         localStorage.setItem("tipoDePartida", textoOpciones[i]);
         //Cambio a la página de juego
-        window.location.href="./juego.html";
+        window.location.href="./pages/juego.html";
     });
 }
