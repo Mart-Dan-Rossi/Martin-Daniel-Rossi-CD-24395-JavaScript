@@ -107,7 +107,7 @@ const jugadorB5 = new Jugador(`(B5)`,218, 120, 50, 5, 95, 95, 10, 100, 15);
 //Creo arrays para guardar información de los equipos
 const listaJugadoresA = [jugadorA1, jugadorA2, jugadorA3, jugadorA4, jugadorA5];
 const listaJugadoresB = [jugadorB1, jugadorB2, jugadorB3, jugadorB4, jugadorB5];
-
+const ambosEquipos = [listaJugadoresA, listaJugadoresB];
 
 
 
@@ -155,132 +155,70 @@ const rangosSobreCien = [0, 14, 29, 43, 57, 71, 86, 100, 115];
 
 let dataTablaA = document.getElementById("idTablaA");
 let dataTablaB = document.getElementById("idTablaB");
+const ambasTablas = [dataTablaA, dataTablaB];
 
-
-//Hago tabla A
-dataTablaA.innerHTML = "";
-
-let tabla = `<table class="tablaHabilidades"><tr>`;
-//Creo títulos
-for (titulos of habilidadesResumidas){
-    //Cada título
-    tabla += `<th class="thHabilidades" colspan="2">${titulos}</th>`;
-}
-tabla += `</tr>`;
-//Creo filas de stats
-for (jugador in listaJugadoresA) {
-    tabla += `<tr>`;
-    //Inserto cada dato a cada espacio
-    for (habilidades in listaJugadoresA[jugador]){
-        //Pongo condicionales para que los distintos puntos tomen distintos colores dependiendo el valor
-        //Como nombre, altura y peso no se miden sobre la cantidad de puntos que se le puede poner a los jugadores les hago un bucle especial a cada uno
-        if (habilidades == "nombre"){
-            //Agrego una casilla con el nombre
-            tabla += `<td class="tdHabilidades" colspan="2">`;
-            tabla += `${listaJugadoresA[jugador][habilidades]}`;
-            tabla += `</td>`;
-        }
-        else if (habilidades == "altura") {
-            for (let i=0; i < 8; i++){
-                //En estos bucles uso un if para que en cada vuelta se fije si el valor está entre ciertos rangos, si lo está agrega la casilla con el valor y un class que determina su color
-                if ((rangosAlturas[i] < listaJugadoresA[jugador][habilidades]) && (listaJugadoresA[jugador][habilidades] <= rangosAlturas[i+1])) {
-                    tabla += `<td class="tdHabilidades ${rangosHabilidad[i]}" colspan="2">`;
-                    tabla += `${listaJugadoresA[jugador][habilidades]}`;
-                    tabla += `</td>`;
-                }
-            }
-        }
-        //Repito lo anterior en los siguientes else if
-        else if (habilidades == "peso") {
-            for (let i=0; i < 8; i++){
-                if ((rangosPesos[i] < listaJugadoresA[jugador][habilidades]) && (listaJugadoresA[jugador][habilidades] <= rangosPesos[i+1])) {
-                    tabla += `<td class="tdHabilidades ${rangosHabilidad[i]}" colspan="2">`;
-                    tabla += `${listaJugadoresA[jugador][habilidades]}`;
-                    tabla += `</td>`;
-                }
-            }
-        }
-        else if ((habilidades != "nombre") && (habilidades != "altura") && (habilidades != "peso")){
-            for (let i=0; i < 8; i++){
-                if ((rangosSobreCien[i] < listaJugadoresA[jugador][habilidades]) && (listaJugadoresA[jugador][habilidades] <= rangosSobreCien[i+1])) {
-                    tabla += `<td class="tdHabilidades ${rangosHabilidad[i]}" colspan="2">`;
-                    tabla += `${listaJugadoresA[jugador][habilidades]}`;
-                    tabla += `</td>`;
-                }
-            }
-        }
+//Hago tablas con un bucle para poder seleccionar en cada iteración los datos correspondientes a uno de los equipos
+for (let u=0; u < 2; u++){
+    ambasTablas[u].innerHTML = "";
+    
+    let tabla = `<table class="tablaHabilidades"><tr>`;
+    //Creo títulos
+    for (titulos of habilidadesResumidas){
+        //Cada título
+        tabla += `<th class="thHabilidades" colspan="2">${titulos}</th>`;
     }
-    //Cierro el tr
     tabla += `</tr>`;
-}
-//Cierro la tabla
-tabla +="</table>";
-//Imprimo la tabla A
-dataTablaA.innerHTML = tabla;
-
-
-
-
-//Hago tabla B
-dataTablaB.innerHTML = "";
-
-tabla = `<table class="tablaHabilidades"><tr>`;
-//Creo títulos
-for (titulos of habilidadesResumidas){
-    //Cada título
-    tabla += `<th class="thHabilidades" colspan="2">${titulos}</th>`;
-}
-tabla += `</tr>`;
-//Creo filas de stats
-for (jugador in listaJugadoresB) {
-    tabla += `<tr>`;
-    //Inserto cada dato a cada espacio
-    for (habilidades in listaJugadoresB[jugador]){
-        //Pongo condicionales para que los distintos puntos tomen distintos colores dependiendo el valor
-        //Como nombre, altura y peso no se miden sobre la cantidad de puntos que se le puede poner a los jugadores les hago un bucle especial a cada uno
-        if (habilidades == "nombre"){
-            //Agrego una casilla con el nombre
-            tabla += `<td class="tdHabilidades" colspan="2">`;
-            tabla += `${listaJugadoresB[jugador][habilidades]}`;
-            tabla += `</td>`;
-        }
-        else if (habilidades == "altura") {
-            for (let i=0; i < 8; i++){
-                //En estos bucles uso un if para que en cada vuelta se fije si el valor está entre ciertos rangos, si lo está agrega la casilla con el valor y un class que determina su color
-                if ((rangosAlturas[i] < listaJugadoresB[jugador][habilidades]) && (listaJugadoresB[jugador][habilidades] <= rangosAlturas[i+1])) {
-                    tabla += `<td class="tdHabilidades ${rangosHabilidad[i]}" colspan="2">`;
-                    tabla += `${listaJugadoresB[jugador][habilidades]}`;
-                    tabla += `</td>`;
+    //Creo filas de stats
+    for (jugador in ambosEquipos[u]) {
+        tabla += `<tr>`;
+        //Inserto cada dato a cada espacio
+        for (habilidades in ambosEquipos[u][jugador]){
+            //Pongo condicionales para que los distintos puntos tomen distintos colores dependiendo el valor
+            //Como nombre, altura y peso no se miden sobre la cantidad de puntos que se le puede poner a los jugadores les hago un bucle especial a cada uno
+            if (habilidades == "nombre"){
+                //Agrego una casilla con el nombre
+                tabla += `<td class="tdHabilidades" colspan="2">`;
+                tabla += `${ambosEquipos[u][jugador][habilidades]}`;
+                tabla += `</td>`;
+            }
+            else if (habilidades == "altura") {
+                for (let i=0; i < 8; i++){
+                    //En estos bucles uso un if para que en cada vuelta se fije si el valor está entre ciertos rangos, si lo está agrega la casilla con el valor y un class que determina su color
+                    if ((rangosAlturas[i] < ambosEquipos[u][jugador][habilidades]) && (ambosEquipos[u][jugador][habilidades] <= rangosAlturas[i+1])) {
+                        tabla += `<td class="tdHabilidades ${rangosHabilidad[i]}" colspan="2">`;
+                        tabla += `${ambosEquipos[u][jugador][habilidades]}`;
+                        tabla += `</td>`;
+                    }
+                }
+            }
+            //Repito lo anterior en los siguientes else if
+            else if (habilidades == "peso") {
+                for (let i=0; i < 8; i++){
+                    if ((rangosPesos[i] < ambosEquipos[u][jugador][habilidades]) && (ambosEquipos[u][jugador][habilidades] <= rangosPesos[i+1])) {
+                        tabla += `<td class="tdHabilidades ${rangosHabilidad[i]}" colspan="2">`;
+                        tabla += `${ambosEquipos[u][jugador][habilidades]}`;
+                        tabla += `</td>`;
+                    }
+                }
+            }
+            else if ((habilidades != "nombre") && (habilidades != "altura") && (habilidades != "peso")){
+                for (let i=0; i < 8; i++){
+                    if ((rangosSobreCien[i] < ambosEquipos[u][jugador][habilidades]) && (ambosEquipos[u][jugador][habilidades] <= rangosSobreCien[i+1])) {
+                        tabla += `<td class="tdHabilidades ${rangosHabilidad[i]}" colspan="2">`;
+                        tabla += `${ambosEquipos[u][jugador][habilidades]}`;
+                        tabla += `</td>`;
+                    }
                 }
             }
         }
-        //Repito lo anterior en los siguientes else if
-        else if (habilidades == "peso") {
-            for (let i=0; i < 8; i++){
-                if ((rangosPesos[i] < listaJugadoresB[jugador][habilidades]) && (listaJugadoresB[jugador][habilidades] <= rangosPesos[i+1])) {
-                    tabla += `<td class="tdHabilidades ${rangosHabilidad[i]}" colspan="2">`;
-                    tabla += `${listaJugadoresB[jugador][habilidades]}`;
-                    tabla += `</td>`;
-                }
-            }
-        }
-        else if ((habilidades != "nombre") && (habilidades != "altura") && (habilidades != "peso")){
-            for (let i=0; i < 8; i++){
-                if ((rangosSobreCien[i] < listaJugadoresB[jugador][habilidades]) && (listaJugadoresB[jugador][habilidades] <= rangosSobreCien[i+1])) {
-                    tabla += `<td class="tdHabilidades ${rangosHabilidad[i]}" colspan="2">`;
-                    tabla += `${listaJugadoresB[jugador][habilidades]}`;
-                    tabla += `</td>`;
-                }
-            }
-        }
+        //Cierro el tr
+        tabla += `</tr>`;
     }
-    //Cierro el tr
-    tabla += `</tr>`;
+    //Cierro la tabla
+    tabla +="</table>";
+    //Imprimo la tabla A
+    ambasTablas[u].innerHTML = tabla;
 }
-//Cierro la tabla
-tabla +="</table>";
-//Imprimo la tabla B
-dataTablaB.innerHTML = tabla;
 
 
 /*Se disputa el salto entre 2 para comenzar el partido*/
