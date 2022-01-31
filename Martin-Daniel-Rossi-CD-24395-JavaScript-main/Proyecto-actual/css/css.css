@@ -72,3 +72,21 @@ body{
 .contenedorCancha div {
     border: black 1px ridge;
 }
+
+.contenedorCancha div img {
+    position: absolute;
+    width: 3vw;
+    height: 5vh;
+    padding: 2px 0px;
+}
+
+.conPelota {
+    z-index: 2;
+}
+
+.contenedorBotonesDeAccion {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}

@@ -112,21 +112,22 @@ const ambosEquipos = [listaJugadoresA, listaJugadoresB];
 
 
 //Contruyo estados de jugadores
-const estadoJugadorA1 = new EstadoDelJugador(14, 1);
-const estadoJugadorA2 = new EstadoDelJugador(14, 5);
-const estadoJugadorA3 = new EstadoDelJugador(14, 10);
-const estadoJugadorA4 = new EstadoDelJugador(14, 14);
-const estadoJugadorA5 = new EstadoDelJugador(14, 7);
+const estadoJugadorA1 = new EstadoDelJugador(13, 1);
+const estadoJugadorA2 = new EstadoDelJugador(13, 5);
+const estadoJugadorA3 = new EstadoDelJugador(13, 10);
+const estadoJugadorA4 = new EstadoDelJugador(13, 14);
+const estadoJugadorA5 = new EstadoDelJugador(14, 8);
 
-const estadoJugadorB1 = new EstadoDelJugador(15, 2);
-const estadoJugadorB2 = new EstadoDelJugador(15, 6);
-const estadoJugadorB3 = new EstadoDelJugador(15, 11);
-const estadoJugadorB4 = new EstadoDelJugador(15, 15);
+const estadoJugadorB1 = new EstadoDelJugador(16, 2);
+const estadoJugadorB2 = new EstadoDelJugador(16, 6);
+const estadoJugadorB3 = new EstadoDelJugador(16, 11);
+const estadoJugadorB4 = new EstadoDelJugador(16, 15);
 const estadoJugadorB5 = new EstadoDelJugador(15, 8);
 
 //Creo arraus para guardar esta infomación por equipo
 const listaEstadosJugadoresA = [estadoJugadorA1, estadoJugadorA2, estadoJugadorA3, estadoJugadorA4, estadoJugadorA5];
 const listaEstadosJugadoresB = [estadoJugadorB1, estadoJugadorB2, estadoJugadorB3, estadoJugadorB4, estadoJugadorB5];
+const estadosAmbosEquipos = [listaEstadosJugadoresA, listaEstadosJugadoresB];
 
 //Creo objeto para costos de "puntos de acción" para cada acción
 const costeAccionesDefensa = {moverseRecto: 1, moverseDiagonal: 1.5, intentarUnRoboAlPortadorDeLaPelota: 1, intentarInterceptarPase: 1, esperaAtosigante: 1, esperaCautelosa: 0.5}
@@ -147,6 +148,7 @@ function dadoDe20(){
 
 /*Muestro habilidades de los jugadores*/
 //Creo arrays que van a servir para hacer esto
+const listaHabilidades = ["nombre", "altura", "peso", "capacidadAtletica", "defensaPerimetral", "defensaInterna", "capacidadReboteadora", "anotacionExterior", "anotacionInterior", "creacionDeJuego"];
 const habilidadesResumidas = ["Nombre", "Alt", "Peso", "Cap atl", "Def per", "Def int", "Cap reb", "3ple", "Anot int", "Creación"];
 const rangosHabilidad = ["puntosMuyBajos", "puntosBajos", "puntosMediosBajos", "puntosMedios", "puntosMediosAltos", "puntosAltos", "puntosMuyAltos", "sobreHumano"];
 const rangosAlturas = [0, 164, 175, 184, 194, 203, 213, 222, 232];
@@ -221,48 +223,6 @@ for (let u=0; u < 2; u++){
 }
 
 
-/*Se disputa el salto entre 2 para comenzar el partido*/
-alert("El árbitro se dispone en mitad de cancha a lanzar el balón hacia arriba para iniciar del encuentro. Lo lanza y..");
-//Creo un bucle para resolver quién consigue más puntos considerando las estadísticas que influyen en esta acción y lo que sacan con el dado
-let saltoA = 0;
-let saltoB = 0;
-//Si empatan vuelve a comenzar el ciclo
-while (saltoA == saltoB){
-    //Calculo cuántos puntos consigue cada jugador para esta acción
-    saltoA = dadoDe20() + listaJugadoresA[4].altura+listaJugadoresA[4].capacidadAtletica;
-    alert(`${listaJugadoresA[4].nombre} consigue ${saltoA} puntos en el salto`);
-    saltoB = dadoDe20() + listaJugadoresB[4].altura+listaJugadoresB[4].capacidadAtletica;
-    alert(`${listaJugadoresB[4].nombre} consigue ${saltoB} puntos en el salto`);
-    //Comparo el desempeño de los jugadores y devuelvo lo que ocurre considerando los resultados
-    let resultadoSalto = saltoA-saltoB;
-    if (resultadoSalto > 0){
-        alert(`El salto lo gana el equipo A y la pelota ahora está en posesión de ${listaJugadoresA[0].nombre}`);
-        listaJugadoresA[0].conPelota = true;
-        listaJugadoresA[0].ultimaAccion = `${listaJugadoresA[0].nombre} recibe un pase`;
-        console.log(`${listaJugadoresA[0].ultimaAccion}`);
-        listaJugadoresA[4].ultimaAccion = `${listaJugadoresA[4].nombre} gana el salto`;
-        console.log(`${listaJugadoresA[4].ultimaAccion}`);
-    }
-    else if (resultadoSalto < 0){
-        alert(`El salto lo gana el equipo B y la pelota ahora está en posesión de ${listaJugadoresB[0].nombre}`);
-        listaJugadoresB[0].conPelota = true;
-        listaJugadoresB[0].ultimaAccion = `${listaJugadoresB[0].nombre} recibe un pase`;
-        console.log(`${listaJugadoresB[0].ultimaAccion}`);
-        listaJugadoresB[4].ultimaAccion = `${listaJugadoresB[4].nombre} gana el salto`;
-        console.log(`${listaJugadoresB[4].ultimaAccion}`);
-    }
-    else{
-        alert("Ambos jugadores alcanzan el balón al mismo tiempo, la disputa por el salto sigue!");
-    }
-};
-/*Creo función que calcule los puntos de acción que tendrán los jugadores en el próximo "instante"*/
-const comienzaInstante = ()=>{
-    for (let i=0; i<=4; i++){
-        listaEstadosJugadoresA[i].nuevospuntosDeAccion();
-        listaEstadosJugadoresB[i].nuevospuntosDeAccion();
-    }
-}
-
 /*Creo funcion para comprobar quién tiene la posesión del balón*/
 const queEquipoAtaca = ()=> {
     for (let i=0; i < 5; i++) {
@@ -272,6 +232,144 @@ const queEquipoAtaca = ()=> {
         else if (listaEstadosJugadoresB[i].conPelota == true) {
             return "B";
         }
+    }
+}
+/*Agrego función que ponga imagenes de jugadores en la ubicación en la que se encuentren*/
+//El primer bucle lo uso para recorrer estadosAmbosEquipos (elije el equipo)
+const letraEquipo = ["A","B"]; 
+
+const imgHabilidadesDeJugadoresAAtacantes = {
+    defecto: `../Img/AAtaca.png`
+};
+const imgHabilidadesDeJugadoresBAtacantes = {
+    defecto: `../Img/BAtaca.png`
+};
+
+const imgHabilidadesAmbosEquiposAtacando = [imgHabilidadesDeJugadoresAAtacantes, imgHabilidadesDeJugadoresBAtacantes];
+
+
+const imgHabilidadesDeJugadoresADefensores = {
+    defecto: `../Img/ADefiende.png`
+}
+const imgHabilidadesDeJugadoresBDefensores = {
+    defecto: `../Img/BDefiende.png`
+}
+
+const imgHabilidadesAmbosEquiposDefendiendo = [imgHabilidadesDeJugadoresADefensores, imgHabilidadesDeJugadoresBDefensores];
+
+const imgConPelota = [`../Img/ACHabilAtacaCPelota.png`, `../Img/BCHabilAtacaCPelota.png`];
+
+const posicionYAletra = ()=>{
+    for (let i=0; i < 2; i++){
+        if (estadosAmbosEquipos[i][jugador]["ubicacionY"] == 1){
+            return "A";       
+        }
+        else if (estadosAmbosEquipos[i][jugador]["ubicacionY"] == 2){
+            return "B";
+        }
+        else if (estadosAmbosEquipos[i][jugador]["ubicacionY"] == 3){
+            return "C";
+        }
+        else if (estadosAmbosEquipos[i][jugador]["ubicacionY"] == 4){
+            return "D";
+        }
+        else if (estadosAmbosEquipos[i][jugador]["ubicacionY"] == 5){
+            return "E";
+        }
+        else if (estadosAmbosEquipos[i][jugador]["ubicacionY"] == 6){
+            return "F";
+        }
+        else if (estadosAmbosEquipos[i][jugador]["ubicacionY"] == 7){
+            return "G";
+        }
+        else if (estadosAmbosEquipos[i][jugador]["ubicacionY"] == 8){
+            return "H";
+        }
+        else if (estadosAmbosEquipos[i][jugador]["ubicacionY"] == 9){
+            return "I";
+        }
+        else if (estadosAmbosEquipos[i][jugador]["ubicacionY"] == 10){
+            return "J";
+        }
+        else if (estadosAmbosEquipos[i][jugador]["ubicacionY"] == 11){
+            return "K";
+        }
+        else if (estadosAmbosEquipos[i][jugador]["ubicacionY"] == 12){
+            return "L";
+        }
+        else if (estadosAmbosEquipos[i][jugador]["ubicacionY"] == 13){
+            return "M";
+        }
+        else if (estadosAmbosEquipos[i][jugador]["ubicacionY"] == 14){
+            return "N";
+        }
+        else if (estadosAmbosEquipos[i][jugador]["ubicacionY"] == 15){
+            return "O";
+        }
+    }
+}
+const muestroPosicionesEnCancha = ()=>{
+    for (let i=0; i < 2; i++){
+        //El segundo bucle lo uso para recorrer listaEstadosJugadores(A/B) (elije el jugador)
+        for (jugador in estadosAmbosEquipos[i]) {
+            //De cada jugador tomo sus posiciones X e Y y las junto en un string compatible con los ID de los divs que representan las casillas de la cancha
+            let idDivs = `${estadosAmbosEquipos[i][jugador]["ubicacionX"]}_${estadosAmbosEquipos[i][jugador]["ubicacionY"]}`;
+            let posicionJugador = document.getElementById(idDivs);
+            let concateno = "";
+            if (queEquipoAtaca() == letraEquipo[i]) {
+                concateno += `<img src="${imgHabilidadesAmbosEquiposAtacando[i]["defecto"]}" alt="${ambosEquipos[i][jugador].nombre} se encuentra en ${posicionYAletra()}${estadosAmbosEquipos[i][jugador]["ubicacionX"]}">`;
+            }
+            else {
+                concateno += `<img src="${imgHabilidadesAmbosEquiposDefendiendo[i]["defecto"]}" alt="${ambosEquipos[i][jugador].nombre} se encuentra en ${posicionYAletra()}${estadosAmbosEquipos[i][jugador]["ubicacionX"]}">`;
+            }
+            console.log(estadosAmbosEquipos[i][jugador].conPelota);
+            if (estadosAmbosEquipos[i][jugador].conPelota == true) {
+                concateno += `<img src="${imgConPelota[i]}" alt="${ambosEquipos[i][jugador].nombre} se encuentra en poseción de la pelota">`;
+            }
+            posicionJugador.innerHTML = concateno;
+        }
+    }
+}
+
+/*Se disputa el salto entre 2 para comenzar el partido*/
+console.log("El árbitro se dispone en mitad de cancha a lanzar el balón hacia arriba para iniciar del encuentro. Lo lanza y..");
+//Creo un bucle para resolver quién consigue más puntos considerando las estadísticas que influyen en esta acción y lo que sacan con el dado
+let saltoA = 0;
+let saltoB = 0;
+//Si empatan vuelve a comenzar el ciclo
+while (saltoA == saltoB){
+    //Calculo cuántos puntos consigue cada jugador para esta acción
+    saltoA = dadoDe20() + listaJugadoresA[4].altura+listaJugadoresA[4].capacidadAtletica;
+    console.log(`${listaJugadoresA[4].nombre} consigue ${saltoA} puntos en el salto`);
+    saltoB = dadoDe20() + listaJugadoresB[4].altura+listaJugadoresB[4].capacidadAtletica;
+    console.log(`${listaJugadoresB[4].nombre} consigue ${saltoB} puntos en el salto`);
+    //Comparo el desempeño de los jugadores y devuelvo lo que ocurre considerando los resultados
+    let resultadoSalto = saltoA-saltoB;
+    if (resultadoSalto > 0){
+        console.log(`El salto lo gana el equipo A y la pelota ahora está en posesión de ${listaJugadoresA[0].nombre}`);
+        listaEstadosJugadoresA[0].conPelota = true;
+        listaEstadosJugadoresA[0].ultimaAccion = `${listaJugadoresA[0].nombre} recibe un pase`;
+        console.log(`${listaEstadosJugadoresA[0].ultimaAccion}`);
+        listaEstadosJugadoresA[4].ultimaAccion = `${listaJugadoresA[4].nombre} gana el salto`;
+        console.log(`${listaEstadosJugadoresA[4].ultimaAccion}`);
+    }
+    else if (resultadoSalto < 0){
+        console.log(`El salto lo gana el equipo B y la pelota ahora está en posesión de ${listaJugadoresB[0].nombre}`);
+        listaEstadosJugadoresB[0].conPelota = true;
+        listaEstadosJugadoresB[0].ultimaAccion = `${listaJugadoresB[0].nombre} recibe un pase`;
+        console.log(`${listaEstadosJugadoresB[0].ultimaAccion}`);
+        listaEstadosJugadoresB[4].ultimaAccion = `${listaJugadoresB[4].nombre} gana el salto`;
+        console.log(`${listaEstadosJugadoresB[4].ultimaAccion}`);
+    }
+    else{
+        console.log("Ambos jugadores alcanzan el balón al mismo tiempo, la disputa por el salto sigue!");
+    }
+};
+/*Creo función que calcule los puntos de acción que tendrán los jugadores en el próximo "instante"*/
+const comienzaInstante = ()=>{
+    for (let i=0; i<=4; i++){
+        listaEstadosJugadoresA[i].nuevospuntosDeAccion();
+        listaEstadosJugadoresB[i].nuevospuntosDeAccion();
     }
 }
 
@@ -299,12 +397,13 @@ const algunoTieneTurno = () => {
 
 //Continúa el partido luego del salto lo pongo en búcle puesto que la dinámica del juego es cíclica
 while (finDePartido == false) {
+    muestroPosicionesEnCancha();
     comienzaInstante();
     //AGREGAR bucle de:
-        //AGREGAR función que compara iniciativas
-        //AGREGAR función que selecciona jugador que realiza una acción en este turno
-        //AGREGAR función que elije la acción a realizar por parte de cada jugador elegido
-        //AGREGAR función que realiza acción y sus consecuencias (Si es una acción de implementación inmediata o supeditada y ya se puede calcular)
+    //AGREGAR función que compara iniciativas
+    //AGREGAR función que selecciona jugador que realiza una acción en este turno
+    //AGREGAR función que elije la acción a realizar por parte de cada jugador elegido
+    //AGREGAR función que realiza acción y sus consecuencias (Si es una acción de implementación inmediata o supeditada y ya se puede calcular)
     //AGREGAR función que calcula consecuencias de acciones de implementación tardía
     //AGREGAR función que cuenta cuánto tiempo de juego transcurrió
     finDePartido = true;
