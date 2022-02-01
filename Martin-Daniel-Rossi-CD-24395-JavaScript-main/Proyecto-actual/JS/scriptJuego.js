@@ -408,13 +408,15 @@ const creoBotones = (nombreDelBoton)=>{
         tiro: "Tiro",
         confirmar: "Confirmar"
     }
-    const button = document.createElement("button");
-    const divContenedor = getElementById("contenedorBotonesDeAccion");
-    //Le pongo un id con el parámetro
-    button.setAttribute("id", nombreDelBoton);
-    //Utilizando el parámetro le pongo un texto predefinido al botón
-    button.innerHTML(nombresIdBotones[nombreDelBoton]);
-    divContenedor.appendChild(button);
+    if (document.getElementById(`${nombreDelBoton}`) == null){
+        const button = document.createElement("button");
+        const divContenedor = document.querySelector(".contenedorBotonesDeAccion");
+        //Le pongo un id con el parámetro
+        button.setAttribute("id", nombreDelBoton);
+        //Utilizando el parámetro le pongo un texto predefinido al botón
+        button.innerHTML=`${nombresIdBotones[nombreDelBoton]}`;
+        divContenedor.appendChild(button);
+    }
 }
 
 
@@ -458,23 +460,26 @@ const muestroJugadoresConTurno = (ataqueODefensa)=> {
             let idDivs = `${estadosAmbosEquipos[ataqueODefensa][jugador]["ubicacionX"]}_${estadosAmbosEquipos[ataqueODefensa][jugador]["ubicacionY"]}`;
             let posicionJugador = document.getElementById(idDivs);
             //Agrego atributo que va a colorear el fondo en la casilla en la que se encuentran estos jugadores
-            posicionJugador.setAttribute("class", "fondoVerde");
+            posicionJugador.setAttribute("class", `fondoVerde jugador${jugador}`);
         }
     }
 }
+
+
 //ARREGLAR
-/*Creo función para que los coach seleccionen el jugador con el que van a realizar una acción
-const coachDefensorElijeJugador = ()=>{
-    let jugadoresElegibles = document.getElementsByClassName("fondoVerde");
-    jugadoresElegibles.addEventListener("click", ()=>{
-        creoBotones("confirmar");
-    })
-    let botonConfirmar = document.getElementById("confirmar");
-    botonConfirmar.addEventListener("click", (evt)=>{
-        jugadoresElegibles.setAttribute("class", "");
-        return console.log(evt);
-    })
-}*/
+/*Creo función para que los coach seleccionen el jugador con el que van a realizar una acción*/
+const coachDefensorElijeJugador = (ataqueODefensa)=>{
+    for (let i=0; i < algunoTieneTurno()[ataqueODefensa].length; i++){
+        let jugadoresElegibles = document.querySelector(`.jugador${i}`);
+        jugadoresElegibles.addEventListener("click", ()=>{
+            creoBotones("confirmar")
+    });
+        let botonConfirmar = document.querySelector("#confirmar");
+        // botonConfirmar.addEventListener("click", ()=>{
+        //     jugadoresElegibles.setAttribute("class", "")
+        // });
+    }
+}
 //Agregar confirmación
 
 //Continúa el partido luego del salto lo pongo en búcle puesto que la dinámica del juego es cíclica
@@ -484,7 +489,7 @@ while (finDePartido == false) {
     
     //AGREGAR bucle de:
         muestroJugadoresConTurno(queEquipoDefiendeNumero());
-        coachDefensorElijeJugador();
+        coachDefensorElijeJugador(queEquipoDefiendeNumero());
         //WORKING función para que los coach elijan con quién quieren realizar una acción*/
         //AGREGAR función que compara iniciativas
         //AGREGAR función que elije la acción a realizar por parte de cada jugador elegido
