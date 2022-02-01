@@ -12,6 +12,15 @@ document.querySelector("header").appendChild(p);
 localStorage.setItem("tipoDePartida", "Continuar juego");
 
 
+//Funciones para los dados
+// Retorna un número aleatorio entre min (incluido) y max (excluido);
+/*function getRandomArbitrary(min, max) {
+    return Math.random() * (max - min) + min;
+}*/
+/*Función que sirve para lanzar un dado de 20 caras*/
+function dadoDe20(){
+    return Math.random() * (21-1)+1;
+}
 
 /*Defino valiables necesarias*/
 let altura;
@@ -60,36 +69,48 @@ class EstadoDelJugador {
         this.turnoUsado = false;/*Determina si el jugador ya ha realizado una acción en este "Instante"*/
         this.ultimaAccion = "Todavía no realizó ninguna acción";/*Recuerda cuál fué la última acción realizada por el jugador*/
         this.puntosDeAccion = 0;/*Determina de cuántos puntos de acción dispone el jugador en su turno*/
-        this.nuevospuntosDeAccion = ()=>{
-            if (this.altura <= 192) {
-                resultadoDado = dadoDe20();
-                this.puntosDeAccion = 2;
-                if (resultadoDado > 6) {
-                    ++this.puntosDeAccion;
-                }
-            }
-            else if ((this.altura > 192) && (this.altura <= 208)) {
-                resultadoDado = dadoDe20();
-                this.puntosDeAccion = 2;
-                if (resultadoDado > 10) {
-                    ++this.puntosDeAccion;
-                }
-            }
-            else if (this.altura > 208) {
-                resultadoDado = dadoDe20();
-                this.puntosDeAccion = 1;
-                if ((resultadoDado > 3) && (resultadoDado <16)) {
-                    ++this.puntosDeAccion;
-                }
-                else if (resultadoDado >=16) {
-                    ++this.puntosDeAccion;
-                }
-            }
-        };
-        //AGREGAR terminar método para mover jugadores
-        
     }
 }
+
+
+/*Creo una función que sirve para asignar nuevos puntos de acción a los jugadores al comenzar cada turno*/
+const nuevosPuntosDeAccion = ()=> {
+    //Búcle que selecciona equipo
+    for (listas in estadosAmbosEquipos){
+        //Búcle que selecciona cada jugador dentro de cada equipo
+        for (jugadores in estadosAmbosEquipos[listas]){
+            //Por las dudas reseteo los puntos de acción
+            estadosAmbosEquipos[listas][jugadores].puntosDeAccion = 0;
+            //Los jugadores más bajos tienen más chances de conseguir 3 puntos de acción y no tienen chances de conseguir sólo 1
+            if (ambosEquipos[listas][jugadores].altura <= 192){
+                estadosAmbosEquipos[listas][jugadores].puntosDeAccion = 2;
+                resultadoDado = dadoDe20();
+                if (resultadoDado > 6) {
+                    estadosAmbosEquipos[listas][jugadores].puntosDeAccion += 1;
+                }
+            }
+            //Los jugadores promedio tienen menos chances que los bajos de conseguir 3 puntos de acción y no tienen chances de conseguir sólo 1
+            else if ((ambosEquipos[listas][jugador].altura > 192) && (ambosEquipos[listas][jugador].altura <= 208)) {
+                estadosAmbosEquipos[listas][jugadores].puntosDeAccion = 2;
+                resultadoDado = dadoDe20();
+                if (resultadoDado > 10) {
+                    estadosAmbosEquipos[listas][jugadores].puntosDeAccion += 1;
+                }
+            }
+            //Los jugadores altos tienen chances de quedarse con un solo punto de acción y pocas de conseguir 3
+            else if (ambosEquipos[listas][jugador].altura > 208) {
+                estadosAmbosEquipos[listas][jugadores].puntosDeAccion = 1;
+                resultadoDado = dadoDe20();
+                if ((resultadoDado > 3) && (resultadoDado <16)) {
+                    estadosAmbosEquipos[listas][jugadores].puntosDeAccion += 1;
+                }
+                else if (resultadoDado >=16) {
+                    estadosAmbosEquipos[listas][jugadores].puntosDeAccion += 1;
+                }
+            }
+        }
+    }
+};
 
 //Contruyo habilidades jugadores
 const jugadorA1 = new Jugador(`(A1)`,180, 80, 70, 100, 10, 20, 70, 60, 95);
@@ -131,19 +152,7 @@ const estadosAmbosEquipos = [listaEstadosJugadoresA, listaEstadosJugadoresB];
 
 //Creo objeto para costos de "puntos de acción" para cada acción
 const costeAccionesDefensa = {moverseRecto: 1, moverseDiagonal: 1.5, intentarUnRoboAlPortadorDeLaPelota: 1, intentarInterceptarPase: 1, esperaAtosigante: 1, esperaCautelosa: 0.5}
-const costeAccionesAtaque = {moverseRecto: 1, moverseDiagonal: 1.5, pase: 0.5, dribblingRecto: 1, dribblingDiagonal: 1.5, esperarSinBalon: 1, esperarEnTripleAmenaza: 0.5}
-
-
-
-//Funciones para los dados
-// Retorna un número aleatorio entre min (incluido) y max (excluido);
-/*function getRandomArbitrary(min, max) {
-    return Math.random() * (max - min) + min;
-}*/
-/*Función que sirve para lanzar un dado de 20 caras*/
-function dadoDe20(){
-    return Math.random() * (21-1)+1;
-}
+const costeAccionesAtaque = {moverseRecto: 1, moverseDiagonal: 1.5, pase: 0.5, dribblingRecto: 1, dribblingDiagonal: 1.5, esperarSinBalon: 1, esperarEnTripleAmenaza: 0.5, tiro: 1}
 
 
 /*Muestro habilidades de los jugadores*/
@@ -234,6 +243,24 @@ const queEquipoAtaca = ()=> {
         }
     }
 }
+
+const queEquipoAtacaNumero = ()=>{
+    if (queEquipoAtaca() == "A") {
+        return 0;
+    }
+    else {
+        return 1;
+    }
+}
+
+const queEquipoDefiendeNumero = ()=> {
+    if (queEquipoAtacaNumero() == 0){
+        return 1;
+    }
+    else {
+        return 0;
+    }
+}
 /*Agrego función que ponga imagenes de jugadores en la ubicación en la que se encuentren*/
 //El primer bucle lo uso para recorrer estadosAmbosEquipos (elije el equipo)
 const letraEquipo = ["A","B"]; 
@@ -322,7 +349,6 @@ const muestroPosicionesEnCancha = ()=>{
             else {
                 concateno += `<img src="${imgHabilidadesAmbosEquiposDefendiendo[i]["defecto"]}" alt="${ambosEquipos[i][jugador].nombre} se encuentra en ${posicionYAletra()}${estadosAmbosEquipos[i][jugador]["ubicacionX"]}">`;
             }
-            console.log(estadosAmbosEquipos[i][jugador].conPelota);
             if (estadosAmbosEquipos[i][jugador].conPelota == true) {
                 concateno += `<img src="${imgConPelota[i]}" alt="${ambosEquipos[i][jugador].nombre} se encuentra en poseción de la pelota">`;
             }
@@ -365,11 +391,39 @@ while (saltoA == saltoB){
         console.log("Ambos jugadores alcanzan el balón al mismo tiempo, la disputa por el salto sigue!");
     }
 };
+/*Creo función que sirve para generar botón de confirmación*/
+//El parámetro tiene que tener el nombre de la acción a realizar (Va a ser el ID que va a tomar en el HTML)
+const creoBotones = (nombreDelBoton)=>{
+    //Creo un objeto que contiene los nombres que tomarán los botones
+    const nombresIdBotones = {
+        moverse: "Moverse",
+        intentarUnRoboAlPortadorDeLaPelota: "Intentar un robo",
+        intentarInterceptarPase: "Intentar intercepcion",
+        esperaAtosigante: "Espera atosigante",
+        esperaCautelosa: "Espera Cautelosa",
+        pase: "Pase",
+        dribbling: "Dribbling",
+        esperarSinBalon: "Espera sin balón",
+        esperarEnTripleAmenaza: "Espera en triple amenaza",
+        tiro: "Tiro",
+        confirmar: "Confirmar"
+    }
+    const button = document.createElement("button");
+    const divContenedor = getElementById("contenedorBotonesDeAccion");
+    //Le pongo un id con el parámetro
+    button.setAttribute("id", nombreDelBoton);
+    //Utilizando el parámetro le pongo un texto predefinido al botón
+    button.innerHTML(nombresIdBotones[nombreDelBoton]);
+    divContenedor.appendChild(button);
+}
+
+
 /*Creo función que calcule los puntos de acción que tendrán los jugadores en el próximo "instante"*/
 const comienzaInstante = ()=>{
-    for (let i=0; i<=4; i++){
-        listaEstadosJugadoresA[i].nuevospuntosDeAccion();
-        listaEstadosJugadoresB[i].nuevospuntosDeAccion();
+    for (listas in estadosAmbosEquipos) {
+        for (let i=0; i<5; i++){
+            nuevosPuntosDeAccion();
+        }
     }
 }
 
@@ -395,16 +449,47 @@ const algunoTieneTurno = () => {
     return turnoEnAlgunEquipo;
 }
 
+/*Creo función para que los coach vean qué jugadres tienen puntos de acción*/
+//El parámetro contiene la función "queEquipoDefiendeNumero" o "queEquipoAtacaNumero" según toque al coach atacante o defensor.
+const muestroJugadoresConTurno = (ataqueODefensa)=> {
+    for (jugador in estadosAmbosEquipos[ataqueODefensa]) {
+        //De cada jugador tomo sus posiciones X e Y y las junto en un string compatible con los ID de los divs que representan las casillas de la cancha
+        if (estadosAmbosEquipos[ataqueODefensa][jugador].puntosDeAccion > 0) {
+            let idDivs = `${estadosAmbosEquipos[ataqueODefensa][jugador]["ubicacionX"]}_${estadosAmbosEquipos[ataqueODefensa][jugador]["ubicacionY"]}`;
+            let posicionJugador = document.getElementById(idDivs);
+            //Agrego atributo que va a colorear el fondo en la casilla en la que se encuentran estos jugadores
+            posicionJugador.setAttribute("class", "fondoVerde");
+        }
+    }
+}
+//ARREGLAR
+/*Creo función para que los coach seleccionen el jugador con el que van a realizar una acción
+const coachDefensorElijeJugador = ()=>{
+    let jugadoresElegibles = document.getElementsByClassName("fondoVerde");
+    jugadoresElegibles.addEventListener("click", ()=>{
+        creoBotones("confirmar");
+    })
+    let botonConfirmar = document.getElementById("confirmar");
+    botonConfirmar.addEventListener("click", (evt)=>{
+        jugadoresElegibles.setAttribute("class", "");
+        return console.log(evt);
+    })
+}*/
+//Agregar confirmación
+
 //Continúa el partido luego del salto lo pongo en búcle puesto que la dinámica del juego es cíclica
 while (finDePartido == false) {
     muestroPosicionesEnCancha();
     comienzaInstante();
+    
     //AGREGAR bucle de:
-    //AGREGAR función que compara iniciativas
-    //AGREGAR función que selecciona jugador que realiza una acción en este turno
-    //AGREGAR función que elije la acción a realizar por parte de cada jugador elegido
-    //AGREGAR función que realiza acción y sus consecuencias (Si es una acción de implementación inmediata o supeditada y ya se puede calcular)
-    //AGREGAR función que calcula consecuencias de acciones de implementación tardía
-    //AGREGAR función que cuenta cuánto tiempo de juego transcurrió
+        muestroJugadoresConTurno(queEquipoDefiendeNumero());
+        coachDefensorElijeJugador();
+        //WORKING función para que los coach elijan con quién quieren realizar una acción*/
+        //AGREGAR función que compara iniciativas
+        //AGREGAR función que elije la acción a realizar por parte de cada jugador elegido
+        //AGREGAR función que realiza acción y sus consecuencias (Si es una acción de implementación inmediata o supeditada y ya se puede calcular)
+        //AGREGAR función que calcula consecuencias de acciones de implementación tardía
+        //AGREGAR función que cuenta cuánto tiempo de juego transcurrió
     finDePartido = true;
 }

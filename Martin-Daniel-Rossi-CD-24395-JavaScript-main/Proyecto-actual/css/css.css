@@ -90,3 +90,7 @@ body{
     flex-wrap: wrap;
     justify-content: space-around;
 }
+
+.fondoVerde {
+    background-color: rgba(128, 255, 0, 0.527);
+}
