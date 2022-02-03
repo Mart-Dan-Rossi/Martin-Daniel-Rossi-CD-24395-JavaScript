@@ -39,7 +39,7 @@ let turnoUsado;
 let ultimaAccion = "Todavía no realizó ninguna acción";
 let puntosDeAccion;
 
-
+let finDePeriodo= false;
 let finDePartido = false;
 let resultadoDado;
 
@@ -69,6 +69,8 @@ class EstadoDelJugador {
         this.turnoUsado = false;/*Determina si el jugador ya ha realizado una acción en este "Instante"*/
         this.ultimaAccion = "Todavía no realizó ninguna acción";/*Recuerda cuál fué la última acción realizada por el jugador*/
         this.puntosDeAccion = 0;/*Determina de cuántos puntos de acción dispone el jugador en su turno*/
+        this.nombre = "";
+            
     }
 }
 
@@ -145,11 +147,18 @@ const estadoJugadorB3 = new EstadoDelJugador(16, 11);
 const estadoJugadorB4 = new EstadoDelJugador(16, 15);
 const estadoJugadorB5 = new EstadoDelJugador(15, 8);
 
+
 //Creo arraus para guardar esta infomación por equipo
 const listaEstadosJugadoresA = [estadoJugadorA1, estadoJugadorA2, estadoJugadorA3, estadoJugadorA4, estadoJugadorA5];
 const listaEstadosJugadoresB = [estadoJugadorB1, estadoJugadorB2, estadoJugadorB3, estadoJugadorB4, estadoJugadorB5];
 const estadosAmbosEquipos = [listaEstadosJugadoresA, listaEstadosJugadoresB];
 
+//Inserto los nomrbes a los estados de jugadores
+for (i=0; i<2; i++){
+    for (jugador in listaEstadosJugadoresA){
+        estadosAmbosEquipos[i][jugador]["nombre"] = ambosEquipos[i][jugador]["nombre"];
+    }
+}
 //Creo objeto para costos de "puntos de acción" para cada acción
 const costeAccionesDefensa = {moverseRecto: 1, moverseDiagonal: 1.5, intentarUnRoboAlPortadorDeLaPelota: 1, intentarInterceptarPase: 1, esperaAtosigante: 1, esperaCautelosa: 0.5}
 const costeAccionesAtaque = {moverseRecto: 1, moverseDiagonal: 1.5, pase: 0.5, dribblingRecto: 1, dribblingDiagonal: 1.5, esperarSinBalon: 1, esperarEnTripleAmenaza: 0.5, tiro: 1}
@@ -244,6 +253,15 @@ const queEquipoAtaca = ()=> {
     }
 }
 
+queEquipoEs= (ataqueODefensa) =>{
+    if (ataqueODefensa == 0){
+        return "A";
+    }
+    else {
+        return "B";
+    }
+}
+
 const queEquipoAtacaNumero = ()=>{
     if (queEquipoAtaca() == "A") {
         return 0;
@@ -264,7 +282,7 @@ const queEquipoDefiendeNumero = ()=> {
 /*Agrego función que ponga imagenes de jugadores en la ubicación en la que se encuentren*/
 //El primer bucle lo uso para recorrer estadosAmbosEquipos (elije el equipo)
 const letraEquipo = ["A","B"]; 
-
+//Pretengo agregar más imágenes que determinen de forma visual las habilidades de los jugadores, por eso creo estos array.
 const imgHabilidadesDeJugadoresAAtacantes = {
     defecto: `../Img/AAtaca.png`
 };
@@ -392,31 +410,11 @@ while (saltoA == saltoB){
     }
 };
 /*Creo función que sirve para generar botón de confirmación*/
-//El parámetro tiene que tener el nombre de la acción a realizar (Va a ser el ID que va a tomar en el HTML)
-const creoBotones = (nombreDelBoton)=>{
-    //Creo un objeto que contiene los nombres que tomarán los botones
-    const nombresIdBotones = {
-        moverse: "Moverse",
-        intentarUnRoboAlPortadorDeLaPelota: "Intentar un robo",
-        intentarInterceptarPase: "Intentar intercepcion",
-        esperaAtosigante: "Espera atosigante",
-        esperaCautelosa: "Espera Cautelosa",
-        pase: "Pase",
-        dribbling: "Dribbling",
-        esperarSinBalon: "Espera sin balón",
-        esperarEnTripleAmenaza: "Espera en triple amenaza",
-        tiro: "Tiro",
-        confirmar: "Confirmar"
-    }
-    if (document.getElementById(`${nombreDelBoton}`) == null){
-        const button = document.createElement("button");
-        const divContenedor = document.querySelector(".contenedorBotonesDeAccion");
-        //Le pongo un id con el parámetro
-        button.setAttribute("id", nombreDelBoton);
-        //Utilizando el parámetro le pongo un texto predefinido al botón
-        button.innerHTML=`${nombresIdBotones[nombreDelBoton]}`;
-        divContenedor.appendChild(button);
-    }
+//El parámetro tiene que tener el nombre de la acción a realizar (Es el ID del elemento HTML que se va a mostrar en pantalla)
+const muestroBotones = (nombreDelBoton)=>{
+    const button = document.getElementById(nombreDelBoton);
+    //Le saco el class que oculta al botón
+    button.setAttribute("class", "");
 }
 
 
@@ -430,71 +428,111 @@ const comienzaInstante = ()=>{
 }
 
 /*Creo función para determinar si algún jugador aún tiene su "turno" sin usar en este "instante"*/
+
+const jugadoresAConTurno = [];
+const jugadoresBConTurno = [];
+const turnoEnAlgunEquipo = [jugadoresAConTurno, jugadoresBConTurno];
 const algunoTieneTurno = () => {
     //Creo arrays que van a llenarse con los jugadores que cumplan con la condición
-    const jugadoresAConTurno = [];
-    const jugadoresBConTurno = [];
     //Creo búcle que se fijará si los jugadores cumplen con la condición o no
     for (let i=0; i < 5; i++) {
-        if (listaEstadosJugadoresA[i].turnoUsado == false){
+        if (estadosAmbosEquipos[0][i].turnoUsado == false){
             //Si se cumple la condición se guarda la información en los nuevos arrays
-            jugadoresAConTurno.push(`${listaJugadoresA[i].nombre}`);
+            jugadoresAConTurno.push(listaJugadoresA[i]);
         }
-        if (listaEstadosJugadoresB[i].turnoUsado == false){
+    }
+    for (let i=0; i < 5; i++) {
+        if (estadosAmbosEquipos[1][i].turnoUsado == false){
             //Si se cumple la condición se guarda la información en los nuevos arrays
-            jugadoresBConTurno.push(`${listaJugadoresB[i].nombre}`);
+            jugadoresBConTurno.push(listaJugadoresB[i]);
         }
     }
     //Devuelvo ambos array como otro array (que los contiene a ambos) para poder exportar ambos equipos con una única función
-    const turnoEnAlgunEquipo = [jugadoresAConTurno, jugadoresBConTurno];
     //Devuelvo este {ultinmo array}
     return turnoEnAlgunEquipo;
 }
-
 /*Creo función para que los coach vean qué jugadres tienen puntos de acción*/
 //El parámetro contiene la función "queEquipoDefiendeNumero" o "queEquipoAtacaNumero" según toque al coach atacante o defensor.
 const muestroJugadoresConTurno = (ataqueODefensa)=> {
     for (jugador in estadosAmbosEquipos[ataqueODefensa]) {
         //De cada jugador tomo sus posiciones X e Y y las junto en un string compatible con los ID de los divs que representan las casillas de la cancha
-        if (estadosAmbosEquipos[ataqueODefensa][jugador].puntosDeAccion > 0) {
+        if (estadosAmbosEquipos[ataqueODefensa][jugador].turnoUsado == false) {
             let idDivs = `${estadosAmbosEquipos[ataqueODefensa][jugador]["ubicacionX"]}_${estadosAmbosEquipos[ataqueODefensa][jugador]["ubicacionY"]}`;
             let posicionJugador = document.getElementById(idDivs);
             //Agrego atributo que va a colorear el fondo en la casilla en la que se encuentran estos jugadores
-            posicionJugador.setAttribute("class", `fondoVerde jugador${jugador}`);
+            posicionJugador.setAttribute("class", `fondoVerde jugador${queEquipoEs(ataqueODefensa)}${jugador}`);
         }
+    }
+    if (ataqueODefensa == queEquipoAtacaNumero()) {
+        coachElijeJugador(queEquipoAtacaNumero());
     }
 }
 
 
 //ARREGLAR
 /*Creo función para que los coach seleccionen el jugador con el que van a realizar una acción*/
-const coachDefensorElijeJugador = (ataqueODefensa)=>{
-    for (let i=0; i < algunoTieneTurno()[ataqueODefensa].length; i++){
-        let jugadoresElegibles = document.querySelector(`.jugador${i}`);
-        jugadoresElegibles.addEventListener("click", ()=>{
-            creoBotones("confirmar")
-    });
+const coachElijeJugador = (ataqueODefensa)=>{
+    //Con un bucle me fijo cuáles jugadores tienen turnos pendientes en este instante
+    for (let i=0; i < turnoEnAlgunEquipo[ataqueODefensa].length; i++){
+        //Creo una variable que contenga a los jugadores
+        let jugadorElegible = document.querySelector(`.jugador${queEquipoEs(ataqueODefensa)}${Number(turnoEnAlgunEquipo[ataqueODefensa][i]["nombre"][2])-1}`);
+        //Defino esta variable que va a ser de utilidad para nombrar a los jugadores
+        //Creo evento que va a suceder cuando clickeemos en alguno de los divs que contienen a los jugadores
+        jugadorElegible.addEventListener("click", (evt)=>{
+            //Creo el botón llamado confirmar
+            muestroBotones("confirmar")
+            //Reseteo los jugadores a los que muestro por si decide seleccionar a otro que vuelva el primer seleccionado a verse como no seleccionado
+            muestroJugadoresConTurno(ataqueODefensa);
+            //Al jugador seleccionado lo muestro con otro color de fondo
+            evt.composedPath()[1].setAttribute("class", `fondoSeleccionado jugador${queEquipoEs(ataqueODefensa)}${(i+1)}`);
+            sessionStorage.setItem(ataqueODefensa, `${queEquipoEs(ataqueODefensa)}${(i+1)}`);
+        });
         let botonConfirmar = document.querySelector("#confirmar");
-        // botonConfirmar.addEventListener("click", ()=>{
-        //     jugadoresElegibles.setAttribute("class", "")
-        // });
+        botonConfirmar.addEventListener("click", ()=>{
+            guardoJugadorSeleccionado.push(sessionStorage.getItem(ataqueODefensa));
+            let conFondoSeleccionado = document.getElementsByClassName("fondoSeleccionado");
+            let conFondoVerde = document.getElementsByClassName("fondoVerde");
+            for (var i = 0; i<conFondoVerde.length; i++) {
+                conFondoVerde[i].classList.remove("fondoVerde");
+            }
+            for (var i = 0; i<conFondoSeleccionado.length; i++) {
+                conFondoSeleccionado[i].classList.remove("fondoSeleccionado");
+            }
+            botonConfirmar.setAttribute("class", "noDisplay");
+            if (ataqueODefensa == queEquipoDefiendeNumero()){
+                return muestroJugadoresConTurno(queEquipoAtacaNumero())
+            }
+        });
     }
 }
-//Agregar confirmación
 
+const comparoIniciativasDeJugadoresElegidos = ()=>{
+    console.log(guardoJugadorSeleccionado[0])
+}
+
+
+const guardoJugadorSeleccionado = [];
 //Continúa el partido luego del salto lo pongo en búcle puesto que la dinámica del juego es cíclica
 while (finDePartido == false) {
     muestroPosicionesEnCancha();
     comienzaInstante();
     
     //AGREGAR bucle de:
+    while(finDePeriodo == false){
+        //WORKING Eleccion de jugadores que realizan accion este turno
+        algunoTieneTurno();
         muestroJugadoresConTurno(queEquipoDefiendeNumero());
-        coachDefensorElijeJugador(queEquipoDefiendeNumero());
-        //WORKING función para que los coach elijan con quién quieren realizar una acción*/
+        coachElijeJugador(queEquipoDefiendeNumero());
+        
+        
+        
         //AGREGAR función que compara iniciativas
         //AGREGAR función que elije la acción a realizar por parte de cada jugador elegido
         //AGREGAR función que realiza acción y sus consecuencias (Si es una acción de implementación inmediata o supeditada y ya se puede calcular)
         //AGREGAR función que calcula consecuencias de acciones de implementación tardía
         //AGREGAR función que cuenta cuánto tiempo de juego transcurrió
-    finDePartido = true;
+        
+        finDePeriodo = true;//Cuando tenga terminada la estructura poner un if de si el tiempo llega a 0 cambiar esto a true
+    }
+    finDePartido = true;//Cuando tenga terminada la estructura poner un if de si el tiempo llega a 0 cambiar esto a true
 }
