@@ -469,7 +469,6 @@ const muestroJugadoresConTurno = (ataqueODefensa)=> {
 }
 
 
-//ARREGLAR
 /*Creo función para que los coach seleccionen el jugador con el que van a realizar una acción*/
 const coachElijeJugador = (ataqueODefensa)=>{
     //Con un bucle me fijo cuáles jugadores tienen turnos pendientes en este instante
@@ -484,30 +483,40 @@ const coachElijeJugador = (ataqueODefensa)=>{
             //Reseteo los jugadores a los que muestro por si decide seleccionar a otro que vuelva el primer seleccionado a verse como no seleccionado
             muestroJugadoresConTurno(ataqueODefensa);
             //Al jugador seleccionado lo muestro con otro color de fondo
-            evt.composedPath()[1].setAttribute("class", `fondoSeleccionado jugador${queEquipoEs(ataqueODefensa)}${(i+1)}`);
+            evt.currentTarget.setAttribute("class", `fondoSeleccionado jugador${queEquipoEs(ataqueODefensa)}${(i+1)}`);
             sessionStorage.setItem(ataqueODefensa, `${queEquipoEs(ataqueODefensa)}${(i+1)}`);
         });
-        let botonConfirmar = document.querySelector("#confirmar");
-        botonConfirmar.addEventListener("click", ()=>{
-            guardoJugadorSeleccionado.push(sessionStorage.getItem(ataqueODefensa));
-            let conFondoSeleccionado = document.getElementsByClassName("fondoSeleccionado");
-            let conFondoVerde = document.getElementsByClassName("fondoVerde");
-            for (var i = 0; i<conFondoVerde.length; i++) {
-                conFondoVerde[i].classList.remove("fondoVerde");
-            }
-            for (var i = 0; i<conFondoSeleccionado.length; i++) {
-                conFondoSeleccionado[i].classList.remove("fondoSeleccionado");
-            }
-            botonConfirmar.setAttribute("class", "noDisplay");
-            if (ataqueODefensa == queEquipoDefiendeNumero()){
-                return muestroJugadoresConTurno(queEquipoAtacaNumero())
-            }
-        });
     }
+    //Una vez visualizado el botón le doy una funcionalidad
+    let botonConfirmar = document.querySelector("#confirmar");
+    botonConfirmar.addEventListener("click", ()=>{
+        //Guardo en el sesienStorage el jugador seleccionado
+        guardoJugadorSeleccionado.push(sessionStorage.getItem(ataqueODefensa));
+        //Llamo a los divs que tienen class para colorear su fondo
+        let conFondoSeleccionado = document.getElementsByClassName("fondoSeleccionado");
+        let conFondoVerde = document.getElementsByClassName("fondoVerde");
+        //Mientras siga habiendo divs con clases de este estilo voy a seguir borrando el primero que encuentro (Hay q matarlos a todos)
+        while (conFondoVerde.length > 0) {
+            conFondoVerde[0].classList.remove("fondoVerde");
+        }
+        while (conFondoSeleccionado.length > 0) {
+            conFondoSeleccionado[0].classList.remove("fondoSeleccionado");
+        }
+        //Oculto nuevamente el botón
+        botonConfirmar.setAttribute("class", "noDisplay");
+        //Si fue turno del defensor quiero que al activar el botón que confirma vuelva a comenzar el proceso pero para el atacante
+        if (ataqueODefensa == queEquipoDefiendeNumero()){
+            return muestroJugadoresConTurno(queEquipoAtacaNumero())
+        }
+        else if (ataqueODefensa == queEquipoAtacaNumero()){
+            return comparoIniciativasDeJugadoresElegidos();
+        }
+    })
 }
-
+    
+/*Creo una función que compara las iniciativas de los jugadores*/
 const comparoIniciativasDeJugadoresElegidos = ()=>{
-    console.log(guardoJugadorSeleccionado[0])
+    console.log(guardoJugadorSeleccionado[0]);
 }
 
 
@@ -519,14 +528,14 @@ while (finDePartido == false) {
     
     //AGREGAR bucle de:
     while(finDePeriodo == false){
-        //WORKING Eleccion de jugadores que realizan accion este turno
+        //Eleccion de jugadores que realizan accion este turno
         algunoTieneTurno();
         muestroJugadoresConTurno(queEquipoDefiendeNumero());
         coachElijeJugador(queEquipoDefiendeNumero());
-        
-        
-        
-        //AGREGAR función que compara iniciativas
+        //WORKING función que compara iniciativas
+
+
+
         //AGREGAR función que elije la acción a realizar por parte de cada jugador elegido
         //AGREGAR función que realiza acción y sus consecuencias (Si es una acción de implementación inmediata o supeditada y ya se puede calcular)
         //AGREGAR función que calcula consecuencias de acciones de implementación tardía
