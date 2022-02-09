@@ -1,99 +1,19 @@
+/*Estilos generales*/
 * {
     margin: 0;
     padding: 0;
 }
-body{
-    padding: 10px;
-    max-width: 100vw;
-}
-.bgCeleste{background-color: aquamarine;}
+
 .noDisplay{
     display: none;
 }
-#idTablaA, #idTablaB {
-    padding: 20px 0px 10px 0px;
-}
-.tablaHabilidades {
-    border: orange 4px double;
-    border-radius: 5%;
-}
-.tdHabilidades, .thHabilidades {
-    width: 70px;
-    padding: 2px;
-}
-.thHabilidades {
-    border: black 2px solid;
-    font-weight: bolder;
-    font-size: large;
-    text-align: center;
-    background-color: lightgrey;
-}
-.tdHabilidades {
-    border: black 1px ridge;
-    text-align: center;
-    background-color:  #e4ded3;
-}
-.puntosMuyBajos {
-    color: rgb(255, 0, 26);
+
+.noDecoration {
+    text-decoration: none;
+    color: #050259;
 }
 
-.puntosBajos{
-    color: rgb(255, 70, 0);
-}
-
-.puntosMediosBajos {
-    color: rgb(255, 140, 0)     
-}
-
-.puntosMedios {
-    color: rgb(255, 210, 0) 
-}
-
-.puntosMediosAltos {
-    color: rgb(210, 255, 0) 
-}
-
-.puntosAltos {
-    color: rgb(130, 255, 0) 
-}
-
-.puntosMuyAltos {
-    color: rgb(0, 255, 0) 
-}
-
-.contenedorCancha {
-    width: 100%;
-    display: grid;
-    grid-template-columns: auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto;
-    grid-template-rows: auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto;
-    align-content: stretch;
-    justify-content: stretch;
-    height: 52vw;
-    background-image: url(../Img/miCancha.jpg);
-    background-size: cover;
-}
-
-.contenedorCancha div {
-    border: black 1px ridge;
-}
-
-.contenedorCancha div img {
-    position: absolute;
-    width: 4vw;
-    height: 5vh;
-    padding: 2px 0px;
-}
-
-.conPelota {
-    z-index: 2;
-}
-
-.contenedorBotonesDeAccion {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-around;
-}
+.bgCeleste{background-color: aquamarine;}
 
 .fondoVerde {
     background-color: rgba(128, 255, 0, 0.527);
@@ -133,4 +53,138 @@ body{
 
 .tripleExtremadamenteLejosAroA{
     background-color: grey;
+}
+
+body{
+    padding: 10px;
+    max-width: 100vw;
+}
+/*Estilos index*/
+.bodyIndex {
+    background-image: url(../Img/fondo1.jpg);
+    background-repeat: no-repeat;
+    background-size: 120vw;
+    background-position-x: center;
+}
+
+.flexIndex {
+    height: 90vh;
+    width: 97vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-content: space-around;
+}
+
+.logo{
+    width: 10vw;
+}
+
+.titulo{
+    width: 20vw;
+    font-family: 'Petrona', serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 3.5vw;
+    line-height: 4vw;
+    color: #050259;
+}
+
+.opcionesPrincipales {
+    padding: 5%;
+    margin-top: 4%;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0px;
+    width: 28vw;
+    height: 45vh;
+    background: #050259;
+    box-shadow: 0px 4px 4px rgb(0 0 0 / 25%);
+    border-radius: 4px;
+    color: #F2F2F2;
+}
+
+.opcionesPrincipales div {
+    width: 100%;
+    height: 33%;
+    border-radius: 4px;
+}
+
+.opcionesPrincipales div:hover {
+    background: #F2F2F2;
+    color: #050259;
+}
+
+.opcionesPrincipales div p {
+    text-align: center;
+    margin: 15%;
+    font-size: larger;
+}
+
+.footerIndex {
+    margin: 10% 30% 5px 30%;
+}
+
+/*Estilos página de juego*/
+.headerJuego {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logoJuego {
+    width: 55px;
+    height: 55px;
+    margin: 0px 21px;
+}
+
+.spanLeyendaLogo {
+    font-family: 'Petrona', serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 16px;
+    display: flex;
+    text-align: start;
+
+    color: #050259;
+}
+
+.contenedorCancha {
+    width: 100%;
+    display: grid;
+    grid-template-columns: auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto;
+    grid-template-rows: auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto;
+    align-content: stretch;
+    justify-content: stretch;
+    height: 52vw;
+    background-image: url(../Img/miCancha.jpg);
+    background-size: cover;
+}
+
+.contenedorCancha div {
+    border: black 1px ridge;
+}
+
+.contenedorCancha div img {
+    position: absolute;
+    width: 4vw;
+    height: 5vh;
+    padding: 2px 0px;
+}
+
+.conPelota {
+    z-index: 2;
+}
+
+.contenedorBotonesDeAccion {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
 }
