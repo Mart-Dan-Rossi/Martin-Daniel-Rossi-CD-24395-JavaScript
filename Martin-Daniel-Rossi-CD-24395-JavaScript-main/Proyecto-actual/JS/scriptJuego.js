@@ -1,6 +1,18 @@
 //El punto final de este proyecto es conseguir desarrollar un juego de rol de baloncesto.
 
 
+
+//Creo un p con JQuery
+$(`#contenedorBotonesConfiguracion`).append('<button id="colorDeFondoC">Cambiar color de fondo a celeste</button>');
+$(`#contenedorBotonesConfiguracion`).append('<button id="colorDeFondoB">Cambiar a color de fondo por defecto</button>');
+//Cambio el color del fondo al clickear el texto anterior
+let elBody = document.querySelector("body")
+$("#colorDeFondoC").on("click",()=>{
+    elBody.setAttribute("class", "bgCeleste");
+});
+$("#colorDeFondoB").on("click", ()=>{
+    elBody.setAttribute("class", "");
+});
 /*Muestro si es una partida nueva o una continuada en un p*/
 //Creo el p
 const p = document.createElement("p");
@@ -73,7 +85,7 @@ class EstadoDelJugador {
         this.ultimaAccion = "Todavía no realizó ninguna acción";/*Recuerda cuál fué la última acción realizada por el jugador*/
         this.puntosDeAccion = 0;/*Determina de cuántos puntos de acción dispone el jugador en su turno*/
         this.nombre = "";
-            
+        
     }
 }
 
@@ -483,7 +495,8 @@ const muestroJugadoresConTurno = (ataqueODefensa)=> {
             let idDivs = `${estadosAmbosEquipos[ataqueODefensa][jugador]["ubicacionX"]}_${estadosAmbosEquipos[ataqueODefensa][jugador]["ubicacionY"]}`;
             let posicionJugador = document.getElementById(idDivs);
             //Agrego atributo que va a colorear el fondo en la casilla en la que se encuentran estos jugadores
-            posicionJugador.classList.add(`fondoVerde jugador${queEquipoEs(ataqueODefensa)}${jugador}`);
+            posicionJugador.classList.add(`fondoVerde`);
+            posicionJugador.classList.add(`jugador${queEquipoEs(ataqueODefensa)}${jugador}`);
         }
     }
     if (ataqueODefensa == queEquipoAtacaNumero()) {
@@ -750,6 +763,7 @@ const muestroPosiblesAccionesDefensa = (equipo, jugador)=>{
 const guardoJugadorSeleccionado = [];
 //Continúa el partido luego del salto lo pongo en búcle puesto que la dinámica del juego es cíclica
 while (finDePartido == false) {
+
     muestroPosicionesEnCancha();
     comienzaInstante();
     
