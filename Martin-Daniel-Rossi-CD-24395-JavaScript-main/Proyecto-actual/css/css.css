@@ -101,3 +101,35 @@ body{
 .fondoSeleccionado {
     background-color: rgb(73, 146, 0);
 }
+
+.cercaDelAroA{
+    background-color: yellow;    
+}
+
+.dobleLargoAroA{
+    background-color: goldenrod;
+}
+
+.mediaDistanciaAroA{
+    background-color: orange;    
+}
+
+.tripleAroA {
+    background-color: red;
+}
+
+.tripleLargoAroA{
+    background-color: darkgoldenrod;
+}
+
+.tripleMuyLargoAroA{
+    background-color: brown;
+}
+
+.tripleSuperLargoAroA{
+    background-color: purple;
+}
+
+.tripleExtremadamenteLejosAroA{
+    background-color: grey;
+}
