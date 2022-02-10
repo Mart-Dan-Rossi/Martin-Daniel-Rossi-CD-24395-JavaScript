@@ -5,7 +5,7 @@ const continuarJuego = document.querySelector("#continuarJuego");
 
 //Creo arrays que serán usados para crear un bucle
 const opciones = [nuevoJuego, continuarJuego];
-const textoOpciones = ["Nuevo juego","Continuar juego"];
+const textoOpciones = ["Nuevo juego","Continunando juego"];
 
 //Creo bucle para crear eventos de botones nuevoJuego y continuarJuego
 //Agrego el evento

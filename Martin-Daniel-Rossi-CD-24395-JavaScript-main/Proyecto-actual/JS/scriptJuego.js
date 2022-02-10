@@ -3,15 +3,21 @@
 
 
 //Creo un p con JQuery
-$(`#contenedorBotonesConfiguracion`).append('<button id="colorDeFondoC">Cambiar color de fondo a celeste</button>');
-$(`#contenedorBotonesConfiguracion`).append('<button id="colorDeFondoB">Cambiar a color de fondo por defecto</button>');
+$(`#contenedorBotonesConfiguracion`).append('<span id="colorDeFondoC" class="boton">Cambiar color de fondo a celeste</span>');
+$(`#contenedorBotonesConfiguracion`).append('<span id="colorDeFondoD" class="boton">Cambiar a color de fondo por defecto</span>');
 //Cambio el color del fondo al clickear el boton anterior
-let elBody = document.querySelector("body")
+let elBody = document.querySelector("body");
+let botonCambioColorC = document.querySelector("#colorDeFondoC");
+let botonCambioColorD = document.querySelector("#colorDeFondoD");
 $("#colorDeFondoC").on("click",()=>{
     elBody.setAttribute("class", "bgCeleste");
+    botonCambioColorD.setAttribute("class", "boton");
+    botonCambioColorC.setAttribute("class", "botonActivado");
 });
-$("#colorDeFondoB").on("click", ()=>{
-    elBody.setAttribute("class", "");
+$("#colorDeFondoD").on("click", ()=>{
+    elBody.setAttribute("class", "bodyJuego");
+    botonCambioColorC.setAttribute("class", "boton");
+    botonCambioColorD.setAttribute("class", "botonActivado");
 });
 /*Muestro si es una partida nueva o una continuada en un p*/
 //Creo el p
@@ -193,7 +199,7 @@ let dataTablaB = document.getElementById("idTablaB");
 const ambasTablas = [dataTablaA, dataTablaB];
 
 
-/*Agregar Marco zonas de tiro*/
+/*AGREGAR Marco zonas de tiro*/
 
 
 /*Creo funcion para comprobar quién tiene la posesión del balón*/
@@ -375,7 +381,7 @@ const resaltoBotones = (nombreDelBoton)=>{
 const muestroBotonObscuro = (nombreDelBoton)=>{
     const button = document.getElementById(nombreDelBoton);
     //Le saco el class que oculta al botón y pongo uno nuevo que lo opaca
-    button.setAttribute("class", "botonOpaco");
+    button.setAttribute("class", "botonNoSeleccionable");
 }
 
 const ocultoBoton = (nombreDelBoton)=>{

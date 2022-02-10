@@ -15,6 +15,49 @@
 
 .bgCeleste{background-color: aquamarine;}
 
+
+.boton {
+    padding: 5%;
+    box-shadow: 0px 4px 4px rgb(0 0 0 / 25%);
+    border-radius: 4px;
+    background: #050259;
+    color: #F2F2F2;
+}
+
+.botonConfirmar {
+    padding: 5%;
+    box-shadow: 0px 4px 4px rgb(0 0 0 / 25%);
+    border-radius: 4px;
+    background: #2721c9;
+    color: #ffffff;
+}
+
+.botonConfirmar:hover {
+    background: #F2F2F2;
+    color: #2721c9;
+}
+
+.botonNoSeleccionable {
+    padding: 5%;
+    box-shadow: 0px 4px 4px rgb(0 0 0 / 25%);
+    border-radius: 4px;
+    background: #020033;
+    color: #a8a5a5;
+}
+
+.botonActivado {
+    padding: 5%;
+    box-shadow: 0px 4px 4px rgb(0 0 0 / 25%);
+    border-radius: 4px;
+    background: #F2F2F2;
+    color: #050259;
+}
+
+.boton:hover {
+    background: #F2F2F2;
+    color: #050259;
+}
+
 .fondoVerde {
     background-color: rgba(128, 255, 0, 0.527);
 }
@@ -98,7 +141,6 @@ body{
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
-    padding: 0px;
     width: 28vw;
     height: 45vh;
     background: #050259;
@@ -129,12 +171,17 @@ body{
 }
 
 /*Estilos página de juego*/
+.bodyJuego{
+    background-color: #C4C4C4;
+}
+
 .headerJuego {
     display: flex;
     flex-direction: row;
     align-content: center;
     justify-content: space-between;
     align-items: center;
+    margin: 10px;
 }
 
 .logoJuego {
@@ -155,14 +202,22 @@ body{
     color: #050259;
 }
 
+.contenedorBotonesConfiguracion {
+    display: flex;
+    flex-direction: column;
+    align-content: space-around;
+    justify-content: space-between;
+    height: 50px;
+}
+
 .contenedorCancha {
-    width: 100%;
+    width: 80%;
     display: grid;
     grid-template-columns: auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto;
     grid-template-rows: auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto;
     align-content: stretch;
     justify-content: stretch;
-    height: 52vw;
+    height: 42vw;
     background-image: url(../Img/miCancha.jpg);
     background-size: cover;
 }
