@@ -12,12 +12,12 @@ let botonCambioColorD = document.querySelector("#colorDeFondoD");
 $("#colorDeFondoC").on("click",()=>{
     elBody.setAttribute("class", "bgCeleste");
     botonCambioColorD.setAttribute("class", "boton");
-    botonCambioColorC.setAttribute("class", "botonActivado");
+    botonCambioColorC.setAttribute("class", "botonColorActivado");
 });
 $("#colorDeFondoD").on("click", ()=>{
     elBody.setAttribute("class", "bodyJuego");
     botonCambioColorC.setAttribute("class", "boton");
-    botonCambioColorD.setAttribute("class", "botonActivado");
+    botonCambioColorD.setAttribute("class", "botonColorActivado");
 });
 /*Muestro si es una partida nueva o una continuada en un p*/
 //Creo el p
@@ -31,7 +31,7 @@ localStorage.setItem("tipoDePartida", "Continuar juego");
 
 
 //Funciones para los dados
-// Retorna un número aleatorio entre min (incluido) y max (excluido);
+//Retorna un número aleatorio entre min (incluido) y max (excluido);
 /*function getRandomArbitrary(min, max) {
     return Math.random() * (max - min) + min;
 }*/
@@ -375,7 +375,7 @@ while (saltoA == saltoB){
 const resaltoBotones = (nombreDelBoton)=>{
     const button = document.getElementById(nombreDelBoton);
     //Le saco el class que oculta al botón y pongo uno nuevo que lo resalta
-    button.setAttribute("class", "resaltarBoton");
+    button.setAttribute("class", "boton");
 }
 
 const muestroBotonObscuro = (nombreDelBoton)=>{
@@ -583,11 +583,22 @@ const comparoIniciativasDeJugadoresElegidos = ()=>{
     else {
         console.log("Le toca al que ataca");
         //AGREGAR función para que el jugador atacante elija su acción
-        // muestroPosiblesAccionesAtaque(equiposJugadoresElegidos[1], (rolJugadoresElegidos[1]-1));
+        muestroPosiblesAccionesAtaque(equiposJugadoresElegidos[1], (rolJugadoresElegidos[1]-1));
     }
 }
 
 //WORKING /*Función para que el jugador elija la acción que va a realizar*/
+//Creo una función que despinta botones seleccionados previamente y pinta al seleccionado ahora
+const pintoBotonSeleccionado = (ponerComoVariableElEventoDelBoton)=>{
+    let botonClickeadoAhora = document.getElementById(`${ponerComoVariableElEventoDelBoton.target.id}`);
+            let botonesClickeadosAntes = document.querySelector(".botonActivado");
+            if (botonesClickeadosAntes != null){
+                botonesClickeadosAntes.classList.remove("botonActivado");
+                botonesClickeadosAntes.classList.add("boton");
+            }
+            botonClickeadoAhora.classList.remove("boton");
+            botonClickeadoAhora.classList.add("botonActivado");
+}
 //Creo función para mostrar botones de acción posibles para cada jugador (Separar las acciones defensivas de las ofensivas).
 //(Los parámetros son usados para cargar los datos de los jugadores elegidos)
 const muestroPosiblesAccionesDefensa = (equipo, jugador)=>{
@@ -601,7 +612,8 @@ const muestroPosiblesAccionesDefensa = (equipo, jugador)=>{
 
         //TERMINAR
         let botonMoverse = document.getElementById("moverse");
-        botonMoverse.addEventListener("click", ()=>{
+        botonMoverse.addEventListener("click", (evt)=>{
+            pintoBotonSeleccionado(evt);
             mostrarOpcionesDeDondeMoverse(equipo, jugador);
             permitoSeleccionarOpcionesDeDondeMoverse(equipo, jugador);
         })
@@ -634,72 +646,72 @@ const muestroPosiblesAccionesDefensa = (equipo, jugador)=>{
 
 
 
-// let posiblesLugaresALosQueMoverse;
-// const mostrarOpcionesDeDondeMoverse = (equipo, jugador)=>{
-//     //De cada jugador tomo sus posiciones X e Y y las junto para generar strings compatibles con los ID de los divs que representarán las casillas a las que se pueden mover los jugadores
-//     let arrayIdDiv = []
-//     //Creo un bucle para rellenar el array
-//     for (let i = -1; i<2; i++){
-//         iteradorPosicionesX : for (let u = -1; i<2; i++){
-//             //No quiero que sume la posición actual de ninguno de los jugadores. Para eso hago un sistema para comprobar las ubicaciones.
-//             for (equipoComparado in estadosAmbosEquipos) {
-//                 for (jugadorComparado in estadosAmbosEquipos[equipoComparado]) {
-//                     //Si coincide la posición de cualquier jugador con la posicón que estoy escaneando voy a la próxima iteración
-//                     if ((estadosAmbosEquipos[equipoComparado][jugadorComparado]["ubicacionX"] == estadosAmbosEquipos[equipo][jugador][("ubicacionX")] + i) && (estadosAmbosEquipos[equipoComparado][jugadorComparado]["ubicacionY"] == estadosAmbosEquipos[equipo][jugador][("ubicacionY")] + u)){
-//                         continue iteradorPosicionesX ;
-//                     }
-//                     //Introduzco valor al array
-//                     arrayIdDiv.push(`${estadosAmbosEquipos[equipo][jugador][("ubicacionX")] + i }_${estadosAmbosEquipos[equipo][jugador][("ubicacionY")] + u}`);
-//                 }
-//             }
-//         }
-//     }
-//     //A los valores que están en el array les pongo un fondo verde
-//     for (posicionArray in arrayIdDiv){
-//         posiblesLugaresALosQueMoverse = document.getElementById(arrayIdDiv[posicionArray]);
-//         posiblesLugaresALosQueMoverse.className += " fondoVerde";
-//     }
-// }
+let posiblesLugaresALosQueMoverse;
+const mostrarOpcionesDeDondeMoverse = (equipo, jugador)=>{
+    //De cada jugador tomo sus posiciones X e Y y las junto para generar strings compatibles con los ID de los divs que representarán las casillas a las que se pueden mover los jugadores
+    let arrayIdDiv = []
+    //Creo un bucle para rellenar el array
+    for (let i = -1; i<2; i++){
+        iteradorPosicionesX : for (let u = -1; i<2; i++){
+            //No quiero que sume la posición actual de ninguno de los jugadores. Para eso hago un sistema para comprobar las ubicaciones.
+            for (equipoComparado in estadosAmbosEquipos) {
+                for (jugadorComparado in estadosAmbosEquipos[equipoComparado]) {
+                    //Si coincide la posición de cualquier jugador con la posicón que estoy escaneando voy a la próxima iteración
+                    if ((estadosAmbosEquipos[equipoComparado][jugadorComparado]["ubicacionX"] == estadosAmbosEquipos[equipo][jugador][("ubicacionX")] + i) && (estadosAmbosEquipos[equipoComparado][jugadorComparado]["ubicacionY"] == estadosAmbosEquipos[equipo][jugador][("ubicacionY")] + u)){
+                        continue iteradorPosicionesX ;
+                    }
+                    //Introduzco valor al array
+                    arrayIdDiv.push(`${estadosAmbosEquipos[equipo][jugador][("ubicacionX")] + i }_${estadosAmbosEquipos[equipo][jugador][("ubicacionY")] + u}`);
+                }
+            }
+        }
+    }
+    //A los valores que están en el array les pongo un fondo verde
+    for (posicionArray in arrayIdDiv){
+        posiblesLugaresALosQueMoverse = document.getElementById(arrayIdDiv[posicionArray]);
+        posiblesLugaresALosQueMoverse.className += " fondoVerde";
+    }
+}
 
-// const permitoSeleccionarOpcionesDeDondeMoverse= (equipo, jugador)=>{
-//     //Agrego eventos a los nuevos espacios en verde
-//     posiblesLugaresALosQueMoverse = document.querySelector(".fondoVerde");
-//     posiblesLugaresALosQueMoverse.addEventListener("click", (evt)=>{
-//         //Muestro el botón llamado confirmar
-//         resaltoBotones("confirmar");
-//         //Reseteo las casillas que están en verde por si cambia de desición y selecciona otro
-//         mostrarOpcionesDeDondeMoverse(equipo, jugador);
-//         //Al jugador seleccionado lo muestro con otro color de fondo
-//         evt.currentTarget.classList.remove("class", `fondoVerde`);
-//         evt.currentTarget.classList.add("class", `fondoSeleccionado`);
-//         let casillaSeleccionada = evt.currentTarget;
-//         sessionStorage.setItem("casillaAMoverse", casillaSeleccionada);
-//         // let botonConfirmar = document.getElementById("confirmar");
-//         // botonConfirmar.addEventListener("click", ()=>{
+const permitoSeleccionarOpcionesDeDondeMoverse= (equipo, jugador)=>{
+    //Agrego eventos a los nuevos espacios en verde
+    posiblesLugaresALosQueMoverse = document.querySelector(".fondoVerde");
+    posiblesLugaresALosQueMoverse.addEventListener("click", (evt)=>{
+        //Muestro el botón llamado confirmar
+        resaltoBotones("confirmar");
+        //Reseteo las casillas que están en verde por si cambia de desición y selecciona otro
+        mostrarOpcionesDeDondeMoverse(equipo, jugador);
+        //Al jugador seleccionado lo muestro con otro color de fondo
+        evt.currentTarget.classList.remove("class", `fondoVerde`);
+        evt.currentTarget.classList.add("class", `fondoSeleccionado`);
+        let casillaSeleccionada = evt.currentTarget;
+        sessionStorage.setItem("casillaAMoverse", casillaSeleccionada);
+        let botonConfirmar = document.getElementById("confirmar");
+        botonConfirmar.addEventListener("click", ()=>{
     
-//         // })
-//     });
-// }
+        })
+    });
+}
 
     
-// const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
-//     if (estadosAmbosEquipos[equipo][jugador]["puntosDeAccion"] > 0.5) {
-//         if (estadosAmbosEquipos[equipo][jugador]["conPelota"] == true) {
-//             resaltoBotones("pase");
-//             resaltoBotones("esperarEnTripleAmenaza");
-//         }
-//     }
-//     if (estadosAmbosEquipos[equipo][jugador]["puntosDeAccion"] > 1){
-//         if (estadosAmbosEquipos[equipo][jugador]["conPelota"] == true){
-//             resaltoBotones("dribbling");
-//             resaltoBotones("tiro");
-//         }
-//         else {
-//             resaltoBotones("moverse");
-//             resaltoBotones("esperarSinBalon");
-//         }
-//     }
-// }
+const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
+    if (estadosAmbosEquipos[equipo][jugador]["puntosDeAccion"] > 0.5) {
+        if (estadosAmbosEquipos[equipo][jugador]["conPelota"] == true) {
+            resaltoBotones("pase");
+            resaltoBotones("esperarEnTripleAmenaza");
+        }
+    }
+    if (estadosAmbosEquipos[equipo][jugador]["puntosDeAccion"] > 1){
+        if (estadosAmbosEquipos[equipo][jugador]["conPelota"] == true){
+            resaltoBotones("dribbling");
+            resaltoBotones("tiro");
+        }
+        else {
+            resaltoBotones("moverse");
+            resaltoBotones("esperarSinBalon");
+        }
+    }
+}
 
 
 
