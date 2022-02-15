@@ -17,7 +17,7 @@
 
 
 .boton {
-    padding: 5%;
+    padding: 2%;
     box-shadow: 0px 4px 4px rgb(0 0 0 / 25%);
     border-radius: 4px;
     background: #050259;
@@ -25,7 +25,7 @@
 }
 
 .botonConfirmar {
-    padding: 5%;
+    padding: 2%;
     box-shadow: 0px 4px 4px rgb(0 0 0 / 25%);
     border-radius: 4px;
     background: #2721c9;
@@ -38,7 +38,7 @@
 }
 
 .botonNoSeleccionable {
-    padding: 5%;
+    padding: 2%;
     box-shadow: 0px 4px 4px rgb(0 0 0 / 25%);
     border-radius: 4px;
     background: #020033;
@@ -46,7 +46,7 @@
 }
 
 .botonActivado, .botonColorActivado {
-    padding: 5%;
+    padding: 2%;
     box-shadow: 0px 4px 4px rgb(0 0 0 / 25%);
     border-radius: 4px;
     background: #F2F2F2;
@@ -64,6 +64,10 @@
 
 .fondoSeleccionado {
     background-color: rgb(73, 146, 0);
+}
+
+.fondoJugadorActivoA, .fondoJugadorActivoB {
+    background-color: rgba(218, 165, 32, 0.712);
 }
 
 .cercaDelAroA{
@@ -210,26 +214,50 @@ body{
     height: 50px;
 }
 
-.contenedorCancha {
-    width: 80%;
+.contenedorBotonesMostrarStatsJugadores {
+    display: flex;
+    justify-content: space-between;
+    width: 90vw;
+    margin: 30px 5vw 5px 5vw;
+}
+
+.contenedorCanchaCompletaYStats {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.contenedorStatsEquipoA {
+    width: 10%;
+    margin-left: 20px;
+}
+
+.contenedorStatsEquipoB {
+    width: 10%;
+    margin-right: 20px;
+}
+
+
+.contenedorCanchaCompleta {
+    width: 70%;
     display: grid;
     grid-template-columns: auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto;
     grid-template-rows: auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto;
-    align-content: stretch;
     justify-content: stretch;
-    height: 42vw;
+    height: 37vw;
     background-image: url(../Img/miCancha.jpg);
     background-size: cover;
 }
 
-.contenedorCancha div {
+.contenedorCanchaCompleta div {
     border: black 1px ridge;
 }
 
-.contenedorCancha div img {
+.contenedorCanchaCompleta div img {
     position: absolute;
-    width: 4vw;
-    height: 5vh;
+    width: 3vw;
+    height: 4vh;
     padding: 2px 0px;
 }
 
@@ -242,4 +270,5 @@ body{
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-around;
+    margin: 10px 0px;
 }
