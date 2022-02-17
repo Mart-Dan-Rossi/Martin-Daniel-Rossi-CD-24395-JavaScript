@@ -1,6 +1,33 @@
 //El punto final de este proyecto es conseguir desarrollar un juego de rol de baloncesto.
 
+/*Traigo un JSON que contiene info de jugadores*/
+const miJSON = "../JSON/jugadores.json";
 
+$("#formMuestroJugadoresJson").submit((evt)=>{
+    evt.preventDefault();
+    let jugadorJSONelegido;
+    const listaIDJugadoresJSON = ["ginobili", "scola", "nocioni"];
+    for (jugador in listaIDJugadoresJSON){
+        if (document.querySelector('input[name="jugador"]:checked') == document.querySelector(`#${listaIDJugadoresJSON[jugador]}`)){
+            jugadorJSONelegido = parseInt(jugador);
+        }
+    }
+    fetch(miJSON)
+    .then((response)=>response.json())
+    .then((json)=>{
+        $("#muestroJugadores").html("");
+        $("#muestroJugadores").append(`<h3>Informacion de ${json[jugadorJSONelegido].nombre}</h3>
+        <ul>
+            <li><h4>Número en la selección:</h4><p>${json[jugadorJSONelegido].NºSeleccion}</p></li>
+            <li><h4>Lugar y fecha de nacimiento:</h4><p>${json[jugadorJSONelegido].nacimiento}</p></li>
+            <li><h4>Estatura:</h4><p>${json[jugadorJSONelegido].estatura}</p></li>
+            <li><h4>Fecha del retiro:</h4><p>${json[jugadorJSONelegido].retiro}</p></li>
+            <li><h4>Puesto de draft en la NBA:</h4><p>${json[jugadorJSONelegido].draftNBA}</p></li>
+        </ul>
+        <img class="fotoJugadoresSeleccion" src="${json[jugadorJSONelegido].imagen}" alt="foto de ${json[jugadorJSONelegido].nombre}">`)
+    });
+});
+//WORKING
 
 //Creo un p con JQuery
 $(`#contenedorBotonesConfiguracion`).append('<span id="colorDeFondoC" class="boton">Cambiar color de fondo a celeste</span>');
@@ -210,7 +237,6 @@ $(document).ready(function () {
 
 
 /*WORKING Introduzco valores a stats de jugadores al pasar el cursor sobre alguno*/
-let contenedorCancha= document.querySelector(".contenedorCanchaCompleta");
 $("#mostrarStatsJugadoresEquipoA").click(()=>{
     $(".statsQueAparecenA").toggle("slow");
 });
@@ -679,12 +705,12 @@ const comparoIniciativasDeJugadoresElegidos = ()=>{
         let herramientaParaCambiarFondoAlQueJuegaAhora;
         if (equiposJugadoresElegidos[0] == 0){
             herramientaParaCambiarFondoAlQueJuegaAhora = document.querySelector(".fondoJugadorActivoA");
-            herramientaParaCambiarFondoAlQueJuegaAhora.classList.add("fondoSeleccionado");
+            herramientaParaCambiarFondoAlQueJuegaAhora.classList.add("fondoSeleccionadoYLeToca");
             herramientaParaCambiarFondoAlQueJuegaAhora.classList.remove("fondoJugadorActivoA");
         }
         else if (equiposJugadoresElegidos[0] == 1){
             herramientaParaCambiarFondoAlQueJuegaAhora = document.querySelector(".fondoJugadorActivoB");
-            herramientaParaCambiarFondoAlQueJuegaAhora.classList.add("fondoSeleccionado");
+            herramientaParaCambiarFondoAlQueJuegaAhora.classList.add("fondoSeleccionadoYLeToca");
             herramientaParaCambiarFondoAlQueJuegaAhora.classList.remove("fondoJugadorActivoB");
         }
         //AGREGAR función para que el jugador defensor elija su acción
@@ -724,9 +750,8 @@ const pintoBotonSeleccionado = (ponerComoVariableElEventoDelBoton)=>{
 //Creo función para mostrar botones de acción posibles para cada jugador (Separar las acciones defensivas de las ofensivas).
 //(Los parámetros son usados para cargar los datos de los jugadores elegidos)
 const muestroPosiblesAccionesDefensa = (equipo, jugador)=>{
-    //Resalto jugador seleccionado
+    //AGREGAR Resalto jugador seleccionado
 
-    let botonConfirmar = document.querySelector("#confirmar");
     //Comprobar puntos de acción para saber cuáles son las posibles acciones. Poner obscuras las posibilidades que no alcanzan los puntos no ponerles eventos.
     if (estadosAmbosEquipos[equipo][jugador]["puntosDeAccion"] > 1){
         resaltoBotones("moverse");
@@ -806,22 +831,24 @@ const mostrarOpcionesDeDondeMoverse = (equipo, jugador)=>{
 
 const permitoSeleccionarOpcionesDeDondeMoverse= (equipo, jugador)=>{
     //Agrego eventos a los nuevos espacios en verde
-    posiblesLugaresALosQueMoverse = document.querySelector(".fondoVerde");
-    posiblesLugaresALosQueMoverse.addEventListener("click", (evt)=>{
-        //Muestro el botón llamado confirmar
-        resaltoBotones("confirmar");
-        //Reseteo las casillas que están en verde por si cambia de desición y selecciona otro
-        mostrarOpcionesDeDondeMoverse(equipo, jugador);
-        //Al jugador seleccionado lo muestro con otro color de fondo
-        evt.currentTarget.classList.remove("class", `fondoVerde`);
-        evt.currentTarget.classList.add("class", `fondoSeleccionado`);
-        let casillaSeleccionada = evt.currentTarget;
-        sessionStorage.setItem("casillaAMoverse", casillaSeleccionada);
-        let botonConfirmar = document.getElementById("confirmar");
-        botonConfirmar.addEventListener("click", (evt)=>{
+    posiblesLugaresALosQueMoverse = document.querySelectorAll(".fondoVerde");
+    for(let i=0; i < posiblesLugaresALosQueMoverse.length; i++){
+        posiblesLugaresALosQueMoverse[i].addEventListener("click", (evt)=>{
+            //Muestro el botón llamado confirmar
+            resaltoBotones("confirmar");
+            //Reseteo las casillas que están en verde por si cambia de desición y selecciona otro
+            mostrarOpcionesDeDondeMoverse(equipo, jugador);
+            //Al jugador seleccionado lo muestro con otro color de fondo
+            evt.currentTarget.classList.remove("class", `fondoVerde`);
+            evt.currentTarget.classList.add("class", `fondoSeleccionado`);
+            let casillaSeleccionada = evt.currentTarget;
+            sessionStorage.setItem("casillaAMoverse", casillaSeleccionada);
+            let botonConfirmar = document.getElementById("confirmar");
+            botonConfirmar.addEventListener("click", (evt)=>{
             
-        })
-    });
+            })
+        });
+    }
 }
 
     

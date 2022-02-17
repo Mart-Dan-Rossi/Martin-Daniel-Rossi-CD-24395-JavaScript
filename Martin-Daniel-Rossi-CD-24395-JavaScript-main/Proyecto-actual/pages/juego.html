@@ -26,25 +26,25 @@
         </div>
         <div class="contenedorCanchaCompletaYStats">
             <div id="contenedorStatsEquipoA">
-                <h3 class="noDisplay statsQueAparecenA">Nombre</h3>
+                <h3 class="noDisplay statsQueAparecenA">Nombre:</h3>
                 <span class="noDisplay statsQueAparecenA"></span>
-                <h3 class="noDisplay statsQueAparecenA">Altura</h3>
+                <h3 class="noDisplay statsQueAparecenA">Altura:</h3>
                 <span class="noDisplay statsQueAparecenA"></span>
-                <h3 class="noDisplay statsQueAparecenA">Peso</h3>
+                <h3 class="noDisplay statsQueAparecenA">Peso:</h3>
                 <span class="noDisplay statsQueAparecenA"></span>
-                <h3 class="noDisplay statsQueAparecenA">Capacidad Atletica</h3>
+                <h3 class="noDisplay statsQueAparecenA">Capacidad Atletica:</h3>
                 <span class="noDisplay statsQueAparecenA"></span>
-                <h3 class="noDisplay statsQueAparecenA">Defensa Perimetral</h3>
+                <h3 class="noDisplay statsQueAparecenA">Defensa Perimetral:</h3>
                 <span class="noDisplay statsQueAparecenA"></span>
-                <h3 class="noDisplay statsQueAparecenA">Defensa Interna</h3>
+                <h3 class="noDisplay statsQueAparecenA">Defensa Interna:</h3>
                 <span class="noDisplay statsQueAparecenA"></span>
-                <h3 class="noDisplay statsQueAparecenA">Capacidad Reboteadora </h3>
+                <h3 class="noDisplay statsQueAparecenA">Capacidad Reboteadora :</h3>
                 <span class="noDisplay statsQueAparecenA"></span>
-                <h3 class="noDisplay statsQueAparecenA">Anotacion Exterior</h3>
+                <h3 class="noDisplay statsQueAparecenA">Anotacion Exterior:</h3>
                 <span class="noDisplay statsQueAparecenA"></span>
-                <h3 class="noDisplay statsQueAparecenA">Anotacion Interior</h3>
+                <h3 class="noDisplay statsQueAparecenA">Anotacion Interior:</h3>
                 <span class="noDisplay statsQueAparecenA"></span>
-                <h3 class="noDisplay statsQueAparecenA">Creacion De Juego</h3>
+                <h3 class="noDisplay statsQueAparecenA">Creacion De Juego:</h3>
                 <span class="noDisplay statsQueAparecenA"></span>
             </div>
             <div class="contenedorCanchaCompleta">
@@ -470,25 +470,25 @@
                 <div id="28_15" class=""></div>            
             </div>
             <div id="contenedorStatsEquipoB">
-                <h3 class="noDisplay statsQueAparecenB">Nombre</h3>
+                <h3 class="noDisplay statsQueAparecenB">Nombre:</h3>
                 <span class="noDisplay statsQueAparecenB"></span>
-                <h3 class="noDisplay statsQueAparecenB">Altura</h3>
+                <h3 class="noDisplay statsQueAparecenB">Altura:</h3>
                 <span class="noDisplay statsQueAparecenB"></span>
-                <h3 class="noDisplay statsQueAparecenB">Peso</h3>
+                <h3 class="noDisplay statsQueAparecenB">Peso:</h3>
                 <span class="noDisplay statsQueAparecenB"></span>
-                <h3 class="noDisplay statsQueAparecenB">Capacidad Atletica</h3>
+                <h3 class="noDisplay statsQueAparecenB">Capacidad Atletica:</h3>
                 <span class="noDisplay statsQueAparecenB"></span>
-                <h3 class="noDisplay statsQueAparecenB">Defensa Perimetral</h3>
+                <h3 class="noDisplay statsQueAparecenB">Defensa Perimetral:</h3>
                 <span class="noDisplay statsQueAparecenB"></span>
-                <h3 class="noDisplay statsQueAparecenB">Defensa Interna</h3>
+                <h3 class="noDisplay statsQueAparecenB">Defensa Interna:</h3>
                 <span class="noDisplay statsQueAparecenB"></span>
-                <h3 class="noDisplay statsQueAparecenB">Capacidad Reboteadora </h3>
+                <h3 class="noDisplay statsQueAparecenB">Capacidad Reboteadora :</h3>
                 <span class="noDisplay statsQueAparecenB"></span>
-                <h3 class="noDisplay statsQueAparecenB">Anotacion Exterior</h3>
+                <h3 class="noDisplay statsQueAparecenB">Anotacion Exterior:</h3>
                 <span class="noDisplay statsQueAparecenB"></span>
-                <h3 class="noDisplay statsQueAparecenB">Anotacion Interior</h3>
+                <h3 class="noDisplay statsQueAparecenB">Anotacion Interior:</h3>
                 <span class="noDisplay statsQueAparecenB"></span>
-                <h3 class="noDisplay statsQueAparecenB">Creacion De Juego</h3>
+                <h3 class="noDisplay statsQueAparecenB">Creacion De Juego:</h3>
                 <span class="noDisplay statsQueAparecenB"></span>
             </div>
         </div>
@@ -504,6 +504,29 @@
             <span id="esperarEnTripleAmenaza" class="boton noDisplay">Esperar en triple amenaza</span>
             <span id="tiro" class="boton noDisplay">Tiro</span>
             <span id="confirmar" class="boton noDisplay">Confirmar</span>
+        </div>
+        <div id="contenedorMuestroJugadoresJson">
+            <fieldset>
+                <legend>Seleccione el jugador del que quiere saber más:</legend>
+                <form id="formMuestroJugadoresJson">
+                    <ul>
+                        <li>
+                            <label for="ginobili">Ginóbili</label>
+                            <input type="radio" name="jugador" id="ginobili" checked>
+                        </li>
+                        <li>
+                            <label for="scola">Scola</label>
+                            <input type="radio" name="jugador" id="scola">
+                        </li>
+                        <li>
+                            <label for="nocioni">Nocioni</label>
+                            <input type="radio" name="jugador" id="nocioni">
+                        </li>
+                    </ul>
+                    <input type="submit">
+                </form>
+            </fieldset>            
+            <div id="muestroJugadores"><!--No borrar--></div>
         </div>
     </main>
     <script src="../JS/scriptJuego.js"></script>

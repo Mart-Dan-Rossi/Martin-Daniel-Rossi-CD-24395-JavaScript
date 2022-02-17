@@ -1,0 +1,25 @@
+[{
+    "NºSeleccion": "5",
+    "nombre": "Emanuel David Ginóbili",
+    "nacimiento": "28 de julio de 1977, Bahía Blanca",
+    "estatura": "1.98 m",
+    "retiro": "27 de agosto de 2018",
+    "draftNBA": "1999",
+    "imagen": "https://tntsports.com.ar/__export/1584971185016/sites/tntsports/img/2020/03/23/manu-ginobili-sonrisa.jpg_1055166250.jpg"
+},{
+    "NºSeleccion": "4",
+    "nombre": "Luis Alberto Scola",
+    "nacimiento": "30 de abril de 1980, Floresta, Buenos Aires",
+    "estatura": "2.06 m",
+    "retiro": "3 de agosto de 2021",
+    "draftNBA": "2002",
+    "imagen": "https://storage.googleapis.com/diariodemocracia/cache/a1/00/scola-e3e7cc.jpg"
+},{
+    "NºSeleccion": "13",
+    "nombre": "Andrés Marcelo Nocioni",
+    "nacimiento": "30 de noviembre de 1979, Gálvez",
+    "estatura": "2.03 m",
+    "retiro": "16 de junio de 2017",
+    "draftNBA": "No elegido en el año 2001",
+    "imagen": "https://static.ellitoral.com/um/fotos/177118_nocioni_camiseta_argentina_1024_x_600.jpg"
+}]
