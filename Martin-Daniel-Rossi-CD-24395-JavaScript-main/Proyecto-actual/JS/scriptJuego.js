@@ -2,20 +2,25 @@
 
 /*Traigo un JSON que contiene info de jugadores*/
 const miJSON = "../JSON/jugadores.json";
-
+//Le pongo un evento al botón submit
 $("#formMuestroJugadoresJson").submit((evt)=>{
     evt.preventDefault();
     let jugadorJSONelegido;
+    //Creo un array con nombres de jugadores
     const listaIDJugadoresJSON = ["ginobili", "scola", "nocioni"];
+    //Creo un bucle para obtener el dato que necesito (El valor del id del jugador que es seleccionado con los input radious)
     for (jugador in listaIDJugadoresJSON){
         if (document.querySelector('input[name="jugador"]:checked') == document.querySelector(`#${listaIDJugadoresJSON[jugador]}`)){
             jugadorJSONelegido = parseInt(jugador);
         }
     }
+    //Traigo el JSON de jugadores
     fetch(miJSON)
     .then((response)=>response.json())
     .then((json)=>{
+        //Vacío el div
         $("#muestroJugadores").html("");
+        //Introduzco el html necesario con los datos apropiados
         $("#muestroJugadores").append(`<h3>Informacion de ${json[jugadorJSONelegido].nombre}</h3>
         <ul>
             <li><h4>Número en la selección:</h4><p>${json[jugadorJSONelegido].NºSeleccion}</p></li>
@@ -27,7 +32,6 @@ $("#formMuestroJugadoresJson").submit((evt)=>{
         <img class="fotoJugadoresSeleccion" src="${json[jugadorJSONelegido].imagen}" alt="foto de ${json[jugadorJSONelegido].nombre}">`)
     });
 });
-//WORKING
 
 //Creo un p con JQuery
 $(`#contenedorBotonesConfiguracion`).append('<span id="colorDeFondoC" class="boton">Cambiar color de fondo a celeste</span>');
@@ -237,12 +241,14 @@ $(document).ready(function () {
 
 
 /*WORKING Introduzco valores a stats de jugadores al pasar el cursor sobre alguno*/
+//Eventos que permiten tocar botón para que aparezca la información
 $("#mostrarStatsJugadoresEquipoA").click(()=>{
     $(".statsQueAparecenA").toggle("slow");
 });
 $("#mostrarStatsJugadoresEquipoB").click(()=>{
     $(".statsQueAparecenB").toggle("slow");
 });
+//AGREGAR Eventos que permiten mostrar la información de los jugadores
 
 
 /*AGREGAR Marco zonas de tiro*/
@@ -516,71 +522,82 @@ const muestroJugadoresConTurno = (ataqueODefensa)=>{
             posicionJugador.classList.add(`jugador${queEquipoEs(ataqueODefensa)}${jugador}`);
         }
     }
-    return coachElijeJugador(ataqueODefensa);
+    if (ataqueODefensa == queEquipoDefiendeNumero()){
+        coachElijeJugador(queEquipoDefiendeNumero());
+    }
+    else if (ataqueODefensa == queEquipoAtacaNumero()){
+        coachElijeJugador(queEquipoAtacaNumero());
+    }
 }
 
 
 /*Creo función para que los coach seleccionen el jugador con el que van a realizar una acción*/
 const coachElijeJugador = (ataqueODefensa)=>{
+    
+    
     //Con un bucle me fijo cuáles jugadores tienen turnos pendientes en este instante
     //Creo una variable que contenga a los jugadores
     for (let i=0; i < 5; i++){
+        //Creo evento que va a suceder cuando clickeemos en alguno de los divs que contienen a los jugadores
+        function seleccionoJugador(evt){
+            //Reseteo color de a quienes corresponda a seleccionable ("fondoVerde") Para que no figure más de un elegido
+            let jugadorSeleccionado = document.querySelector(".fondoSeleccionado");
+            if (jugadorSeleccionado != null){
+                jugadorSeleccionado.classList.add("fondoVerde");
+                jugadorSeleccionado.classList.remove("fondoSeleccionado");
+            }
+            //Muestro el botón llamado confirmar
+            resaltoBotones("confirmar")
+            //Al jugador seleccionado lo muestro con otro color de fondo
+            evt.currentTarget.classList.remove(`fondoVerde`);
+            evt.currentTarget.classList.add(`fondoSeleccionado`);
+            evt.currentTarget.classList.add(`${queEquipoEs(ataqueODefensa)}${(i+1)}`);
+            sessionStorage.setItem(ataqueODefensa, `${queEquipoEs(ataqueODefensa)}${(i+1)}`)
+            //Creo boton para confirmar la selección de jugadores
+            //Una vez visualizado el botón le voy a dar una funcionalidad con esta función
+            function funcionalidad(){
+                //Guardo en el sesienStorage el jugador seleccionado
+                if (guardoJugadorSeleccionado.length>1){
+                    guardoJugadorSeleccionado.pop();
+                }
+                guardoJugadorSeleccionado.push(sessionStorage.getItem(ataqueODefensa));
+                //Llamo a los divs que tienen class para colorear su fondo (que tienen eventos click)
+                let conFondoSeleccionado = document.getElementsByClassName("fondoSeleccionado");
+                let conFondoVerde = document.getElementsByClassName("fondoVerde");
+                //Mientras siga habiendo divs con clases de este estilo voy a seguir borrando el primero que encuentro (Hay q matarlos a todos) y eliminando los eventos que tenga
+                while (conFondoVerde.length > 0){
+                    conFondoVerde[0].removeEventListener("click", seleccionoJugador);
+                    conFondoVerde[0].classList.remove("fondoVerde");
+                }
+                while (conFondoSeleccionado.length > 0){
+                    conFondoSeleccionado[0].removeEventListener("click", seleccionoJugador);
+                    conFondoSeleccionado[0].classList.add(`fondoJugadorActivo${queEquipoEs(ataqueODefensa)}`);
+                    conFondoSeleccionado[0].classList.remove("fondoSeleccionado");
+                }
+                //Oculto nuevamente el botón
+                botonConfirmar.setAttribute("class", "noDisplay");
+                //Remuevo evento de boton confirmar
+                botonConfirmar.removeEventListener("click", funcionalidad);
+    
+                if (ataqueODefensa == queEquipoDefiendeNumero()){
+                    muestroJugadoresConTurno(queEquipoAtacaNumero());
+                }
+                else if (ataqueODefensa == queEquipoAtacaNumero()){
+                    comparoIniciativasDeJugadoresElegidos();
+                }
+            }
+    
+        //Quiero que esa función se active con el siguiente evento
+        let botonConfirmar = document.querySelector("#confirmar");
+        botonConfirmar.addEventListener("click", funcionalidad);
+        }
         if (estadosAmbosEquipos[ataqueODefensa][i]["turnoUsado"] == false){
             //Defino esta variable que va a ser de utilidad para nombrar a los jugadores
             let jugadorElegible = document.querySelector(`.jugador${queEquipoEs(ataqueODefensa)}${Number(estadosAmbosEquipos[ataqueODefensa][i]["nombre"][2])-1}`);
-            //Creo evento que va a suceder cuando clickeemos en alguno de los divs que contienen a los jugadores
-            jugadorElegible.addEventListener("click", (evt)=>{
-                //Reseteo color de a quienes corresponda a seleccionable ("fondoVerde") Para que no figure más de un elegido
-                let jugadorSeleccionado = document.querySelector(".fondoSeleccionado");
-                if (jugadorSeleccionado != null){
-                    jugadorSeleccionado.classList.add("fondoVerde");
-                    jugadorSeleccionado.classList.remove("fondoSeleccionado");
-                }
-                //Muestro el botón llamado confirmar
-                resaltoBotones("confirmar")
-                //Al jugador seleccionado lo muestro con otro color de fondo
-                evt.currentTarget.classList.remove(`fondoVerde`);
-                evt.currentTarget.classList.add(`fondoSeleccionado`);
-                evt.currentTarget.classList.add(`${queEquipoEs(ataqueODefensa)}${(i+1)}`);
-                sessionStorage.setItem(ataqueODefensa, `${queEquipoEs(ataqueODefensa)}${(i+1)}`);
-            });
+            //Creo evento con la función 
+            jugadorElegible.addEventListener("click", seleccionoJugador);
         }
     }
-    return funcionalidadBotonConfirmarSeleccionJugadores(ataqueODefensa);
-}
-/*Creo boton para confirmar la selección de jugadores*/
-const funcionalidadBotonConfirmarSeleccionJugadores = (ataqueODefensa)=>{
-    //Una vez visualizado el botón le doy una funcionalidad
-    let botonConfirmar = document.querySelector("#confirmar");
-    botonConfirmar.addEventListener("click", ()=>{
-        //Guardo en el sesienStorage el jugador seleccionado
-        if (guardoJugadorSeleccionado.length>1){
-            guardoJugadorSeleccionado.pop();
-        }
-        guardoJugadorSeleccionado.push(sessionStorage.getItem(ataqueODefensa));
-        //Llamo a los divs que tienen class para colorear su fondo
-        let conFondoSeleccionado = document.getElementsByClassName("fondoSeleccionado");
-        let conFondoVerde = document.getElementsByClassName("fondoVerde");
-        //Mientras siga habiendo divs con clases de este estilo voy a seguir borrando el primero que encuentro (Hay q matarlos a todos)
-        while (conFondoVerde.length > 0){
-            conFondoVerde[0].classList.remove("fondoVerde");
-        }
-        while (conFondoSeleccionado.length > 0){
-            conFondoSeleccionado[0].classList.add(`fondoJugadorActivo${queEquipoEs(ataqueODefensa)}`);
-            conFondoSeleccionado[0].classList.remove("fondoSeleccionado");
-        }
-        //Oculto nuevamente el botón
-        botonConfirmar.setAttribute("class", "noDisplay");
-        //Remuevo evento de boton confirmar
-        botonConfirmar.removeEventListener("click", ()=>{});
-        //Retorno a una cosa o la otra dependiendo de cuál es el paso que debería seguir
-        if (ataqueODefensa==queEquipoDefiendeNumero()){
-            return muestroJugadoresConTurno(queEquipoAtacaNumero());
-        }
-        else if (ataqueODefensa==queEquipoAtacaNumero()){
-            return comparoIniciativasDeJugadoresElegidos();
-        }
-    })
 }
 
     
@@ -641,19 +658,19 @@ const comparoIniciativasDeJugadoresElegidos = ()=>{
         
             //Cálculos para jugador atacante
             //Si está cerca del aro
-            if ((estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 3) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] > 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] < 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] > 6) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] < 10)){
+            if ((estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 3) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] > 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] < 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] > 6) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] < 10)){
                 iniciativaJugador2 = dadoDe20()*2 + ((ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["altura"]-165)/0.65) + ((ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["peso"]-65)/0.55) + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["capacidadAtletica"]*1.2 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["anotacionInterior"] + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["creacionDeJuego"];
             }
             //Si está medianamente cerca pero no tanto
-            else if ((estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 4) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 5) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 6) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 2) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 6) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] == 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] > 6) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] < 10) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 6) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 2) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 10) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 4) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 11)){
+            else if ((estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 4) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 5) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 6) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 2) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 6) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] == 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] > 6) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] < 10) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 6) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 2) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 10) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 4) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 11)){
                 iniciativaJugador2 = dadoDe20()*2 + ((ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["altura"]-165)/0.65)*0.75 + ((ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["peso"]-65)/0.55)*0.75 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["capacidadAtletica"]*1.2 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["anotacionInterior"]*0.75 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["anotacionExterior"]*0.25 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["creacionDeJuego"];
             }
             //Si está en media distancia
-            else if ((estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 2) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 3) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 4) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 6) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 3) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 5) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] == 6) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] > 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] < 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 6) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 3) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 12) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] == 1) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 13)){
+            else if ((estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 2) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 3) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 4) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 6) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 3) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 5) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] == 6) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] > 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] < 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 6) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 3) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 12) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] == 1) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 13)){
                 iniciativaJugador2 = dadoDe20()*2 + ((ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["altura"]-165)/0.65)*0.25 + ((ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["peso"]-65)/0.55)*0.25 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["capacidadAtletica"]*1.2 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["anotacionInterior"]*0.25 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["anotacionExterior"]*0.75 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["creacionDeJuego"];
             }
             //Si está lejos
-            else if ((estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 1) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 2) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 14) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] == 15) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 1) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 3) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 4) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 4) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 5) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 6) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] > 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] < 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 4) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 12) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 1) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 13)){
+            else if ((estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 1) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 2) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 14) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] == 15) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 1) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 3) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 4) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 4) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 5) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 6) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] > 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] < 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 4) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 12) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 1) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 13)){
                 iniciativaJugador2 = dadoDe20()*2 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["capacidadAtletica"]*1.2 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["anotacionExterior"]*2*2 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["creacionDeJuego"];
             }
         }
@@ -664,7 +681,7 @@ const comparoIniciativasDeJugadoresElegidos = ()=>{
                 iniciativaJugador1 = dadoDe20()*2 + ((ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["altura"]-165)/0.65) + ((ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["peso"]-65)/0.55) + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["capacidadAtletica"]*1.2 + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["defensaInterna"]*2;
             }
             //Si está medianamente cerca pero no tanto
-            else if ((estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 25) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 5) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 23) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 27) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 6) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] == 24) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] > 6) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] < 10) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 23) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 27) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 10) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 25) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 11)){
+            else if ((estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 24) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 5) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 22) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 27) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 6) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] == 24) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] > 6) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] < 10) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 22) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 27) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 10) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 25) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 11)){
                 iniciativaJugador1 = dadoDe20()*2 + ((ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["altura"]-165)/0.65)*0.75 + ((ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["peso"]-65)/0.55)*0.75 + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["capacidadAtletica"]*1.2 + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["defensaInterna"]*2*0.75 + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["defensaPerimetral"]*2*0.25;
             }
             //Si está en media distancia
@@ -672,7 +689,7 @@ const comparoIniciativasDeJugadoresElegidos = ()=>{
                 iniciativaJugador1 = dadoDe20()*2 + ((ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["altura"]-165)/0.65)*0.25 + ((ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["peso"]-65)/0.55)*0.25 + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["capacidadAtletica"]*1.2 + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["defensaInterna"]*2*0.25 + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["defensaPerimetral"]*2*0.75;
             }
             //Si está lejos
-            else if ((estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 1) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 2) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 14) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] == 15) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 27) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 3) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 24) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 4) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 23) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 5) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 22) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] > 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] < 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 24) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 24) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 12) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 28) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 13)){
+            else if ((estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 1) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 2) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 14) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] == 15) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 28) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 3) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 25) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 4) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 24) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 5) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 23) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] > 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] < 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 24) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 25) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 12) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 28) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 13)){
                 iniciativaJugador1 = dadoDe20()*2 + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["capacidadAtletica"]*1.2 + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["defensaPerimetral"]*2*2;
             }
         
@@ -682,7 +699,7 @@ const comparoIniciativasDeJugadoresElegidos = ()=>{
                 iniciativaJugador2 = dadoDe20()*2 + ((ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["altura"]-165)/0.65) + ((ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["peso"]-65)/0.55) + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["capacidadAtletica"]*1.2 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["anotacionInterior"] + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["creacionDeJuego"];
             }
             //Si está medianamente cerca pero no tanto
-            else if ((estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 25) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 5) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 23) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 27) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 6) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] == 24) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] > 6) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] < 10) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 23) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 27) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 10) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 25) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 11)){
+            else if ((estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 24) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 5) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 22) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 27) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 6) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] == 24) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] > 6) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] < 10) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 22) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 27) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 10) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 25) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 11)){
                 iniciativaJugador2 = dadoDe20()*2 + ((ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["altura"]-165)/0.65)*0.75 + ((ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["peso"]-65)/0.55)*0.75 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["capacidadAtletica"]*1.2 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["anotacionInterior"]*0.75 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["anotacionExterior"]*0.25 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["creacionDeJuego"];
             }
             //Si está en media distancia
@@ -690,7 +707,7 @@ const comparoIniciativasDeJugadoresElegidos = ()=>{
                 iniciativaJugador2 = dadoDe20()*2 + ((ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["altura"]-165)/0.65)*0.25 + ((ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["peso"]-65)/0.55)*0.25 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["capacidadAtletica"]*1.2 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["anotacionInterior"]*0.25 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["anotacionExterior"]*0.75 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["creacionDeJuego"];
             }
             //Si está lejos
-            else if ((estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 1) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 2) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 14) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] == 15) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 27) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 3) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 24) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 4) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 23) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 5) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 22) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] > 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] < 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 24) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 24) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 12) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 28) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 13)){
+            else if ((estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 1) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 2) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 14) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] == 15) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 28) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 3) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 25) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 4) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 24) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 5) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 23) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] > 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] < 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 24) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 25) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 12) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 28) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 13)){
                 iniciativaJugador2 = dadoDe20()*2 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["capacidadAtletica"]*1.2 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["anotacionExterior"]*2*2 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["creacionDeJuego"];
             }
         }
@@ -713,7 +730,7 @@ const comparoIniciativasDeJugadoresElegidos = ()=>{
             herramientaParaCambiarFondoAlQueJuegaAhora.classList.add("fondoSeleccionadoYLeToca");
             herramientaParaCambiarFondoAlQueJuegaAhora.classList.remove("fondoJugadorActivoB");
         }
-        //AGREGAR función para que el jugador defensor elija su acción
+        //Función para que el jugador defensor elija su acción
         muestroPosiblesAccionesDefensa(equiposJugadoresElegidos[0], (rolJugadoresElegidos[0]-1));
     }
     else if (comparoIniciativas < 0){
@@ -730,7 +747,7 @@ const comparoIniciativasDeJugadoresElegidos = ()=>{
             herramientaParaCambiarFondoAlQueJuegaAhora.classList.add("fondoSeleccionado");
             herramientaParaCambiarFondoAlQueJuegaAhora.classList.remove("fondoJugadorActivoB");
         }
-        //AGREGAR función para que el jugador atacante elija su acción
+        //Función para que el jugador atacante elija su acción
         muestroPosiblesAccionesAtaque(equiposJugadoresElegidos[1], (rolJugadoresElegidos[1]-1));
     }
 }
@@ -752,6 +769,7 @@ const pintoBotonSeleccionado = (ponerComoVariableElEventoDelBoton)=>{
 const muestroPosiblesAccionesDefensa = (equipo, jugador)=>{
     //AGREGAR Resalto jugador seleccionado
 
+
     //Comprobar puntos de acción para saber cuáles son las posibles acciones. Poner obscuras las posibilidades que no alcanzan los puntos no ponerles eventos.
     if (estadosAmbosEquipos[equipo][jugador]["puntosDeAccion"] > 1){
         resaltoBotones("moverse");
@@ -769,18 +787,57 @@ const muestroPosiblesAccionesDefensa = (equipo, jugador)=>{
 
 
 
-        resaltoBotones("intentarUnRoboAlPortadorDeLaPelota");
-        resaltoBotones("intentarInterceptarPase");
-        resaltoBotones("esperaAtosigante");
-        resaltoBotones("esperaCautelosa");
+        // resaltoBotones("intentarUnRoboAlPortadorDeLaPelota");
+        // resaltoBotones("intentarInterceptarPase");
+        // resaltoBotones("esperaAtosigante");
+        // resaltoBotones("esperaCautelosa");
         muestroBotonObscuro("confirmar");
     }
     else if (estadosAmbosEquipos[equipo][jugador]["puntosDeAccion"] > 0.5){
         muestroBotonObscuro("moverse");
-        muestroBotonObscuro("intentarUnRoboAlPortadorDeLaPelota");
-        muestroBotonObscuro("intentarInterceptarPase");
-        muestroBotonObscuro("esperaAtosigante");
-        resaltoBotones("esperaCautelosa");
+        // muestroBotonObscuro("intentarUnRoboAlPortadorDeLaPelota");
+        // muestroBotonObscuro("intentarInterceptarPase");
+        // muestroBotonObscuro("esperaAtosigante");
+        // resaltoBotones("esperaCautelosa");
+        muestroBotonObscuro("confirmar");
+    }
+}
+
+const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
+    //AGREGAR Resalto jugador seleccionado
+
+    //Comprobar puntos de acción para saber cuáles son las posibles acciones. Poner obscuras las posibilidades que no alcanzan los puntos no ponerles eventos.
+    if (estadosAmbosEquipos[equipo][jugador]["puntosDeAccion"] > 1){
+        resaltoBotones("moverse");
+        //TERMINAR
+        let botonMoverse = document.getElementById("moverse");
+        botonMoverse.addEventListener("click", (evt)=>{
+            pintoBotonSeleccionado(evt);
+            mostrarOpcionesDeDondeMoverse(equipo, jugador);
+            permitoSeleccionarOpcionesDeDondeMoverse(equipo, jugador);
+        })
+
+        //----TERMINAR----
+
+
+
+        resaltoBotones("pase");
+
+        //WORKING Funcionalidad boton pase
+        let botonPase = document.getElementById("pase");
+        botonPase.addEventListener("click",(evt)=>{
+            pintoBotonSeleccionado(evt);
+            mostrarOpcionesDePase(equipo, jugador);
+
+        });
+
+        resaltoBotones("tiro");
+        muestroBotonObscuro("confirmar");
+    }
+    else if (estadosAmbosEquipos[equipo][jugador]["puntosDeAccion"] > 0.5){
+        muestroBotonObscuro("moverse");
+        resaltoBotones("pase");
+        muestroBotonObscuro("tiro");
         muestroBotonObscuro("confirmar");
     }
 }
@@ -800,28 +857,76 @@ const mostrarOpcionesDeDondeMoverse = (equipo, jugador)=>{
     let arrayIdLugaresOcupados = [];
     //Creo un array en el que estarán los posibles lugares a los que moverse
     let arrayIdPosiblesMovimientos = [];
-    //Creo bucles para las posiciones que rodean al jugador
-    for (let i = -1; i<2; i++){
-        for (let u = -1; u<2; u++){
-            //Creo bucles para recorrer a los jugadores
-            for (equipoComparado in estadosAmbosEquipos){
-                for (jugadorComparado in estadosAmbosEquipos[equipoComparado]){
-                    //Si coincide la posición de cualquier jugador con la posicón que estoy escaneando introduzco valor al array de posiciones ocupadas
-                    if ((estadosAmbosEquipos[equipoComparado][jugadorComparado]["ubicacionX"] == estadosAmbosEquipos[equipo][jugador][("ubicacionX")] + i) && (estadosAmbosEquipos[equipoComparado][jugadorComparado]["ubicacionY"] == estadosAmbosEquipos[equipo][jugador][("ubicacionY")] + u)){
-                        arrayIdLugaresOcupados.push(`Ey! Existo! Voy a conquistar el mundooo!`);
-                    }
+
+    //Creo función que será de utilidad
+    const creoBuclesParaRecorrerLasPosicionesDeLosJugadores =(i, u, equipo, jugador)=>{
+        //Creo bucles para recorrer a los jugadores
+        for (equipoComparado in estadosAmbosEquipos){
+            for (jugadorComparado in estadosAmbosEquipos[equipoComparado]){
+                //Si coincide la posición de cualquier jugador con la posicón que estoy escaneando introduzco valor al array de posiciones ocupadas
+                if ((estadosAmbosEquipos[equipoComparado][jugadorComparado]["ubicacionX"] == estadosAmbosEquipos[equipo][jugador][("ubicacionX")] + i) && (estadosAmbosEquipos[equipoComparado][jugadorComparado]["ubicacionY"] == estadosAmbosEquipos[equipo][jugador][("ubicacionY")] + u)){
+                    arrayIdLugaresOcupados.push(`Ey! Existo! Voy a conquistar el mundooo!`);
                 }
             }
-            //Guardo la ubicación que estoy registrando
-            arrayIdPosiblesMovimientos.push(`${estadosAmbosEquipos[equipo][jugador][("ubicacionX")] + i }_${estadosAmbosEquipos[equipo][jugador][("ubicacionY")] + u}`);
-            //Si en ese lugar se encontró a algún jugador ocupando el espacio borro la ubicación registrada
-            if (arrayIdLugaresOcupados.length > 0){
+        }
+        //Guardo la ubicación que estoy registrando
+        arrayIdPosiblesMovimientos.push(`${estadosAmbosEquipos[equipo][jugador][("ubicacionX")] + i }_${estadosAmbosEquipos[equipo][jugador][("ubicacionY")] + u}`);
+        //Si no tengo puntos suficientes para moverme en diagonal y la ubicación registrada es en diagonal la borro
+        if ((estadosAmbosEquipos[equipo][jugador][("puntosDeAccion")] < 1.5) && (arrayIdLugaresOcupados.length == 0)){
+            if ((i == -1) && (u == -1) || (i == -1) && (u == 1) || (i == 1) && (u == -1) || (i == 1) && (u == 1)){
                 arrayIdPosiblesMovimientos.pop();
-                //Y le digo "pues no mi ciela, ud no va conquistar nada, su existencia es más ínfima que kilo de helado en verano" al array que cuenta los lugares ocupados
-                arrayIdLugaresOcupados.pop();
+            }
+        }
+        //Si en ese lugar se encontró a algún jugador ocupando el espacio borro la ubicación registrada
+        else if (arrayIdLugaresOcupados.length > 0){
+            arrayIdPosiblesMovimientos.pop();
+            //Y le digo "pues no mi ciela, ud. no va conquistar nada, su existencia es más ínfima que kilo de helado en verano" al array que cuenta los lugares ocupados
+            arrayIdLugaresOcupados.pop();
+        }
+    } 
+    
+    //Creo bucles para las posiciones que rodean al jugador
+    //Si se encuentra en el borde izquiero del tablero
+    if (estadosAmbosEquipos[equipo][jugador][("ubicacionX")]==1){
+        for (let i = 0; i<2; i++){
+            for (let u = -1; u<2; u++){
+                creoBuclesParaRecorrerLasPosicionesDeLosJugadores(i, u, equipo, jugador);
             }
         }
     }
+    //Si se encuentra en el borde derecho del tablero
+    else if (estadosAmbosEquipos[equipo][jugador][("ubicacionX")]==28){
+        for (let i = -1; i<1; i++){
+            for (let u = -1; u<2; u++){
+                creoBuclesParaRecorrerLasPosicionesDeLosJugadores(i, u, equipo, jugador);
+            }
+        }
+    }
+    //Si se encuentra en el borde superior del tablero
+    else if (estadosAmbosEquipos[equipo][jugador][("ubicacionY")]==1){
+        for (let i = -1; i<2; i++){
+            for (let u = 0; u<2; u++){
+                creoBuclesParaRecorrerLasPosicionesDeLosJugadores(i, u, equipo, jugador);
+            }
+        }
+    }
+    //Si se encuentra en el borde inferior del tablero
+    else if (estadosAmbosEquipos[equipo][jugador][("ubicacionY")]==15){
+        for (let i = -1; i<2; i++){
+            for (let u = -1; u<1; u++){
+                creoBuclesParaRecorrerLasPosicionesDeLosJugadores(i, u, equipo, jugador);
+            }
+        }
+    }
+    //Si no se encuentra en el borde del tablero
+    else if ((estadosAmbosEquipos[equipo][jugador][("ubicacionX")]!=1)&&(estadosAmbosEquipos[equipo][jugador][("ubicacionX")]!=28)&&(estadosAmbosEquipos[equipo][jugador][("ubicacionY")]!=1)&&(estadosAmbosEquipos[equipo][jugador][("ubicacionY")]!=15)){
+        for (let i = -1; i<2; i++){
+            for (let u = -1; u<2; u++){
+                creoBuclesParaRecorrerLasPosicionesDeLosJugadores(i, u, equipo, jugador);
+            }
+        }
+    }
+
     //A los valores que están en el array de posibles movimientos les pongo un fondo verde
     for (posicionArray in arrayIdPosiblesMovimientos){
         posiblesLugaresALosQueMoverse = document.getElementById(arrayIdPosiblesMovimientos[posicionArray]);
@@ -830,48 +935,32 @@ const mostrarOpcionesDeDondeMoverse = (equipo, jugador)=>{
 }
 
 const permitoSeleccionarOpcionesDeDondeMoverse= (equipo, jugador)=>{
+    //Creo función que va a permitir llevar a cabo esta acción
+    function funcionalidad(evt){
+        //Muestro el botón llamado confirmar
+        resaltoBotones("confirmar");
+        //Reseteo las casillas que están en verde por si cambia de desición y selecciona otro
+        mostrarOpcionesDeDondeMoverse(equipo, jugador);
+        //Al jugador seleccionado lo muestro con otro color de fondo
+        evt.currentTarget.classList.remove("class", `fondoVerde`);
+        evt.currentTarget.classList.add("class", `fondoSeleccionado`);
+        let casillaSeleccionada = evt.currentTarget;
+        sessionStorage.setItem("casillaAMoverse", casillaSeleccionada);
+        let botonConfirmar = document.getElementById("confirmar");
+        botonConfirmar.addEventListener("click", (evt)=>{
+        
+        })
+    }
     //Agrego eventos a los nuevos espacios en verde
     posiblesLugaresALosQueMoverse = document.querySelectorAll(".fondoVerde");
     for(let i=0; i < posiblesLugaresALosQueMoverse.length; i++){
-        posiblesLugaresALosQueMoverse[i].addEventListener("click", (evt)=>{
-            //Muestro el botón llamado confirmar
-            resaltoBotones("confirmar");
-            //Reseteo las casillas que están en verde por si cambia de desición y selecciona otro
-            mostrarOpcionesDeDondeMoverse(equipo, jugador);
-            //Al jugador seleccionado lo muestro con otro color de fondo
-            evt.currentTarget.classList.remove("class", `fondoVerde`);
-            evt.currentTarget.classList.add("class", `fondoSeleccionado`);
-            let casillaSeleccionada = evt.currentTarget;
-            sessionStorage.setItem("casillaAMoverse", casillaSeleccionada);
-            let botonConfirmar = document.getElementById("confirmar");
-            botonConfirmar.addEventListener("click", (evt)=>{
-            
-            })
-        });
+        posiblesLugaresALosQueMoverse[i].addEventListener("click", funcionalidad);
     }
 }
 
-    
-const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
-    if (estadosAmbosEquipos[equipo][jugador]["puntosDeAccion"] > 0.5){
-        if (estadosAmbosEquipos[equipo][jugador]["conPelota"] == true){
-            resaltoBotones("pase");
-            resaltoBotones("esperarEnTripleAmenaza");
-        }
-    }
-    if (estadosAmbosEquipos[equipo][jugador]["puntosDeAccion"] > 1){
-        if (estadosAmbosEquipos[equipo][jugador]["conPelota"] == true){
-            resaltoBotones("dribbling");
-            resaltoBotones("tiro");
-        }
-        else if (estadosAmbosEquipos[equipo][jugador]["conPelota"] == false){
-            resaltoBotones("moverse");
-            resaltoBotones("esperarSinBalon");
-        }
-    }
+const mostrarOpcionesDePase = (equipo, jugador)=>{
+    //WORKING
 }
-
-
 
 const guardoJugadorSeleccionado = [];
 //Continúa el partido luego del salto lo pongo en búcle puesto que la dinámica del juego es cíclica
@@ -882,12 +971,16 @@ while (finDePartido == false){
     
     //AGREGAR Hasta que acabe este medie tiempo bucle de:
     while(finDePeriodo == false){
+        //AGREGAR búcle de para trabajar en el mismo instante hasta que se acaben los turnos disponibles
+        //Borro datos del instante anterior
         localStorage.removeItem(0);
         localStorage. removeItem(1);
-        //Eleccion de jugadores que realizan accion este turno (Esto ya dispara una serie de funciones automáticamente)
+        
+        //Esto dispara funciones (muestroJugadoresConTurno, coachElijeJugador, funcionalidadBotonConfirmarJugador estas para ambos equipos y a continuación comparo iniciativas y muestro opciones que tienen los jugadores
         muestroJugadoresConTurno(queEquipoDefiendeNumero());
-        //AGREGAR función que elije la acción a realizar por parte de cada jugador elegido
 
+
+        //WORKING función que elije la acción a realizar por parte de cada jugador elegido
 
 
         //AGREGAR función que realiza acción y sus consecuencias (Si es una acción de implementación inmediata o supeditada y ya se puede calcular)
