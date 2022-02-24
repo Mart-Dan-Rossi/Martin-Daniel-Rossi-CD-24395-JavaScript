@@ -533,72 +533,79 @@ const muestroJugadoresConTurno = (ataqueODefensa)=>{
 
 /*Creo función para que los coach seleccionen el jugador con el que van a realizar una acción*/
 const coachElijeJugador = (ataqueODefensa)=>{
-    
-    
     //Con un bucle me fijo cuáles jugadores tienen turnos pendientes en este instante
-    //Creo una variable que contenga a los jugadores
     for (let i=0; i < 5; i++){
         //Creo evento que va a suceder cuando clickeemos en alguno de los divs que contienen a los jugadores
-        function seleccionoJugador(evt){
-            //Reseteo color de a quienes corresponda a seleccionable ("fondoVerde") Para que no figure más de un elegido
-            let jugadorSeleccionado = document.querySelector(".fondoSeleccionado");
-            if (jugadorSeleccionado != null){
-                jugadorSeleccionado.classList.add("fondoVerde");
-                jugadorSeleccionado.classList.remove("fondoSeleccionado");
-            }
-            //Muestro el botón llamado confirmar
-            resaltoBotones("confirmar")
-            //Al jugador seleccionado lo muestro con otro color de fondo
-            evt.currentTarget.classList.remove(`fondoVerde`);
-            evt.currentTarget.classList.add(`fondoSeleccionado`);
-            evt.currentTarget.classList.add(`${queEquipoEs(ataqueODefensa)}${(i+1)}`);
-            sessionStorage.setItem(ataqueODefensa, `${queEquipoEs(ataqueODefensa)}${(i+1)}`)
-            //Creo boton para confirmar la selección de jugadores
-            //Una vez visualizado el botón le voy a dar una funcionalidad con esta función
-            function funcionalidad(){
-                //Guardo en el sesienStorage el jugador seleccionado
-                if (guardoJugadorSeleccionado.length>1){
-                    guardoJugadorSeleccionado.pop();
-                }
-                guardoJugadorSeleccionado.push(sessionStorage.getItem(ataqueODefensa));
-                //Llamo a los divs que tienen class para colorear su fondo (que tienen eventos click)
-                let conFondoSeleccionado = document.getElementsByClassName("fondoSeleccionado");
-                let conFondoVerde = document.getElementsByClassName("fondoVerde");
-                //Mientras siga habiendo divs con clases de este estilo voy a seguir borrando el primero que encuentro (Hay q matarlos a todos) y eliminando los eventos que tenga
-                while (conFondoVerde.length > 0){
-                    conFondoVerde[0].removeEventListener("click", seleccionoJugador);
-                    conFondoVerde[0].classList.remove("fondoVerde");
-                }
-                while (conFondoSeleccionado.length > 0){
-                    conFondoSeleccionado[0].removeEventListener("click", seleccionoJugador);
-                    conFondoSeleccionado[0].classList.add(`fondoJugadorActivo${queEquipoEs(ataqueODefensa)}`);
-                    conFondoSeleccionado[0].classList.remove("fondoSeleccionado");
-                }
-                //Oculto nuevamente el botón
-                botonConfirmar.setAttribute("class", "noDisplay");
-                //Remuevo evento de boton confirmar
-                botonConfirmar.removeEventListener("click", funcionalidad);
-    
-                if (ataqueODefensa == queEquipoDefiendeNumero()){
-                    muestroJugadoresConTurno(queEquipoAtacaNumero());
-                }
-                else if (ataqueODefensa == queEquipoAtacaNumero()){
-                    comparoIniciativasDeJugadoresElegidos();
-                }
-            }
-    
-        //Quiero que esa función se active con el siguiente evento
-        let botonConfirmar = document.querySelector("#confirmar");
-        botonConfirmar.addEventListener("click", funcionalidad);
-        }
         if (estadosAmbosEquipos[ataqueODefensa][i]["turnoUsado"] == false){
             //Defino esta variable que va a ser de utilidad para nombrar a los jugadores
             let jugadorElegible = document.querySelector(`.jugador${queEquipoEs(ataqueODefensa)}${Number(estadosAmbosEquipos[ataqueODefensa][i]["nombre"][2])-1}`);
-            //Creo evento con la función 
+            //Creo evento con la función
             jugadorElegible.addEventListener("click", seleccionoJugador);
+        }
+
+    }
+    //Función que se ejecuta con ese evento
+    function seleccionoJugador(evt){
+        //Reseteo color de a quienes corresponda a seleccionable ("fondoVerde") Para que no figure más de un elegido
+        let jugadorSeleccionado = document.querySelector(".fondoSeleccionado");
+        if (jugadorSeleccionado != null){
+            jugadorSeleccionado.classList.add("fondoVerde");
+            jugadorSeleccionado.classList.remove("fondoSeleccionado");
+        }
+        //Muestro el botón llamado confirmar
+        resaltoBotones("confirmar")
+        //Al jugador seleccionado lo muestro con otro color de fondo
+        evt.currentTarget.classList.remove(`fondoVerde`);
+        evt.currentTarget.classList.add(`fondoSeleccionado`);
+        //Guardo temporalmente el jugador seleccionado
+        sessionStorage.setItem(ataqueODefensa, `${queEquipoEs(ataqueODefensa)}${(i+1)}`);
+
+        funcionalidadBotonConfirmarJugador(ataqueODefensa);
+    }
+    /*Pongo evento al botón confirmar*/
+    const funcionalidadBotonConfirmarJugador = (ataqueODefensa)=>{
+        let botonConfirmar = document.querySelector("#confirmar");
+        botonConfirmar.addEventListener("click", funcionalidad);
+        
+        //Función que se ejecuta con ese evento
+        function funcionalidad(){
+            //Guardo en el sesienStorage el jugador seleccionado
+            if (guardoJugadorSeleccionado.length>1){
+                guardoJugadorSeleccionado.pop();
+            }
+            guardoJugadorSeleccionado.push(sessionStorage.getItem(ataqueODefensa));
+        
+            //Llamo a los divs que tienen class para colorear su fondo (que tienen eventos click)
+            let conFondoSeleccionado = document.getElementsByClassName("fondoSeleccionado");
+            let conFondoVerde = document.getElementsByClassName("fondoVerde");
+        
+            //Mientras siga habiendo divs con clases de este estilo voy a seguir borrando el primero que encuentro (Hay q matarlos a todos) y eliminando los eventos que tenga
+            while (conFondoVerde.length > 0){
+                conFondoVerde[0].removeEventListener("click", seleccionoJugador);
+                conFondoVerde[0].classList.remove("fondoVerde");
+            }
+            while (conFondoSeleccionado.length > 0){
+                conFondoSeleccionado[0].removeEventListener("click", seleccionoJugador);
+                conFondoSeleccionado[0].classList.add(`fondoJugadorActivo${queEquipoEs(ataqueODefensa)}`);
+                conFondoSeleccionado[0].classList.remove("fondoSeleccionado");
+            }
+        
+            //Oculto nuevamente el botón
+            botonConfirmar.setAttribute("class", "noDisplay");
+        
+            //Remuevo evento de boton confirmar
+            botonConfirmar.removeEventListener("click", funcionalidad);
+        
+            if (ataqueODefensa == queEquipoDefiendeNumero()){
+                muestroJugadoresConTurno(queEquipoAtacaNumero());
+            }
+            else if (ataqueODefensa == queEquipoAtacaNumero()){
+                comparoIniciativasDeJugadoresElegidos();
+            }
         }
     }
 }
+
 
     
 /*Creo una función que compara las iniciativas de los jugadores*/
