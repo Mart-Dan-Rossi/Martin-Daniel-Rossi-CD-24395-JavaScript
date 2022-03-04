@@ -63,7 +63,7 @@
 }
 
 .fondoSeleccionado, .fondoSeleccionadoYLeToca{
-    background-color: rgb(73, 146, 0);
+    background-color: rgb(73, 146, 0) !important;
 }
 
 .fondoJugadorActivoA, .fondoJugadorActivoB {

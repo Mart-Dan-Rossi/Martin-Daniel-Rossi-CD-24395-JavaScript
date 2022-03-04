@@ -471,6 +471,17 @@ const ocultoBoton = (nombreDelBoton)=>{
     button.setAttribute("class", "noDisplay");
 }
 
+//Creo una función que despinta botones seleccionados previamente y pinta al seleccionado ahora
+const pintoBotonSeleccionado = (ponerComoVariableElEventoDelBoton)=>{
+    let botonClickeadoAhora = document.getElementById(`${ponerComoVariableElEventoDelBoton.target.id}`);
+            let botonesClickeadosAntes = document.querySelector(".botonActivado");
+            if (botonesClickeadosAntes != null){
+                botonesClickeadosAntes.classList.remove("botonActivado");
+                botonesClickeadosAntes.classList.add("boton");
+            }
+            botonClickeadoAhora.classList.remove("boton");
+            botonClickeadoAhora.classList.add("botonActivado");
+}
 
 /*Creo función que calcule los puntos de acción que tendrán los jugadores en el próximo "instante"*/
 const comienzaInstante = ()=>{
@@ -480,6 +491,7 @@ const comienzaInstante = ()=>{
         }
     }
 }
+
 
 /*Creo función para que los coach vean qué jugadres tienen puntos de acción*/
 //El parámetro contiene la función "queEquipoDefiendeNumero" o "queEquipoAtacaNumero" según toque al coach atacante o defensor.
@@ -553,14 +565,24 @@ const coachElijeJugador = (ataqueODefensa)=>{
             //Llamo a los divs que tienen class para colorear su fondo (que tienen eventos click)
             let conFondoSeleccionado = document.getElementsByClassName("fondoSeleccionado");
             let conFondoVerde = document.getElementsByClassName("fondoVerde");
-        
+            
+            /*EMPIEZA ERROR*/
+            for (let i=0; i < 5; i++){
+                //Remuevo evento que sucede cuando clickeemos en alguno de los divs que contienen a los jugadores
+                if (estadosAmbosEquipos[ataqueODefensa][i]["turnoUsado"] == false){
+                    //Llamo a los jugadores que tienen turno
+                    jugadorElegible = document.querySelector(`.jugador${queEquipoEs(ataqueODefensa)}${Number(estadosAmbosEquipos[ataqueODefensa][i]["nombre"][2])-1}`);
+                    //Creo evento con la función seleccionoJugador
+                    jugadorElegible.removeEventListener("click", seleccionoJugador);
+                }
+            }
+            /*TERMINA ERROR*/
+
             //Mientras siga habiendo divs con clases de este estilo voy a seguir borrando el primero que encuentro (Hay q matarlos a todos) y eliminando los eventos que tenga
             while (conFondoVerde.length > 0){
-                conFondoVerde[0].removeEventListener("click", seleccionoJugador);
                 conFondoVerde[0].classList.remove("fondoVerde");
             }
             while (conFondoSeleccionado.length > 0){
-                conFondoSeleccionado[0].removeEventListener("click", seleccionoJugador);
                 conFondoSeleccionado[0].classList.add(`fondoJugadorActivo${queEquipoEs(ataqueODefensa)}`);
                 conFondoSeleccionado[0].classList.remove("fondoSeleccionado");
             }
@@ -749,26 +771,24 @@ const comparoIniciativasDeJugadoresElegidos = ()=>{
 }
 
 //WORKING /*Función para que el jugador elija la acción que va a realizar*/
-//Creo una función que despinta botones seleccionados previamente y pinta al seleccionado ahora
-const pintoBotonSeleccionado = (ponerComoVariableElEventoDelBoton)=>{
-    let botonClickeadoAhora = document.getElementById(`${ponerComoVariableElEventoDelBoton.target.id}`);
-            let botonesClickeadosAntes = document.querySelector(".botonActivado");
-            if (botonesClickeadosAntes != null){
-                botonesClickeadosAntes.classList.remove("botonActivado");
-                botonesClickeadosAntes.classList.add("boton");
-            }
-            botonClickeadoAhora.classList.remove("boton");
-            botonClickeadoAhora.classList.add("botonActivado");
-}
-
 //Creo función para mostrar botones de acción posibles para cada jugador (Separar las acciones defensivas de las ofensivas).
 //(Los parámetros son usados para cargar los datos de los jugadores elegidos)
 const muestroPosiblesAccionesDefensa = (equipo, jugador)=>{
-    //Creo evento que sucederá al activarse el evento del botón "moverse"
-    function funcionalidadBotonMoverse(evt){
+    let botonConfirmar = document.getElementById("confirmar");
+    let botonTerminarTurno = document.getElementById("terminarTurno");
+    /*MOVERSE*/
+    //Creo evento que sucederá al activarse el evento del botón "moverse"  (modificar este evento para que primero permita seleccionarlo y luego ponerle los eventos al tablero con el botón confirmar como los demás botones)
+    // function funcionalidadBotonMoverse(evt){
+    //     pintoBotonSeleccionado(evt);
+    //     mostrarOpcionesDeDondeMoverse(equipo, jugador);
+    //     permitoSeleccionarOpcionesDeDondeMoverse(equipo, jugador);
+    // }
+
+    /*Creo funcionalidad para confirmar que deseo terminar el turno*/
+    function pidoConfirmarEleccionTerminarTurno (evt){
         pintoBotonSeleccionado(evt);
-        mostrarOpcionesDeDondeMoverse(equipo, jugador);
-        permitoSeleccionarOpcionesDeDondeMoverse(equipo, jugador);
+        resaltoBotones("confirmar");
+        botonConfirmar.addEventListener("click", funcionalidadBotonTerminarTurno);
     }
     //Creo función para terminar turno
     function funcionalidadBotonTerminarTurno(){
@@ -787,14 +807,17 @@ const muestroPosiblesAccionesDefensa = (equipo, jugador)=>{
         }
     }
     
+    //Llamo el boton terminar turno para darle funcionalidad básica puesto que siempre será elegible
+    botonTerminarTurno.addEventListener("click", pidoConfirmarEleccionTerminarTurno);
+
     //Comprobar puntos de acción para saber cuáles son las posibles acciones. Poner obscuras las posibilidades que no alcanzan los puntos no ponerles eventos.
     if (estadosAmbosEquipos[equipo][jugador]["puntosDeAccion"] > 1){
-        resaltoBotones("moverse");
-
+        /*MOVERSE*/
+        //resaltoBotones("moverse");
 
         //TERMINAR
-        let botonMoverse = document.getElementById("moverse");
-        botonMoverse.addEventListener("click", funcionalidadBotonMoverse);
+        // let botonMoverse = document.getElementById("moverse");
+        // botonMoverse.addEventListener("click", funcionalidadBotonMoverse);
 
         //----TERMINAR----
 
@@ -804,40 +827,204 @@ const muestroPosiblesAccionesDefensa = (equipo, jugador)=>{
         // resaltoBotones("intentarInterceptarPase");
         // resaltoBotones("esperaAtosigante");
         // resaltoBotones("esperaCautelosa");
-        muestroBotonObscuro("confirmar");
+        // muestroBotonObscuro("confirmar");
+
         resaltoBotones("terminarTurno");
-        let botonTerminarTurno = document.getElementById("terminarTurno");
-        botonTerminarTurno.addEventListener("click", funcionalidadBotonTerminarTurno);
     }
+    
     else if (estadosAmbosEquipos[equipo][jugador]["puntosDeAccion"] > 0.5){
-        muestroBotonObscuro("moverse");
+        /*MOVERSE*/
+        // muestroBotonObscuro("moverse");
         // muestroBotonObscuro("intentarUnRoboAlPortadorDeLaPelota");
         // muestroBotonObscuro("intentarInterceptarPase");
         // muestroBotonObscuro("esperaAtosigante");
         // resaltoBotones("esperaCautelosa");
-        muestroBotonObscuro("confirmar");
+        //muestroBotonObscuro("confirmar");
         resaltoBotones("terminarTurno");
-        let botonTerminarTurno = document.getElementById("terminarTurno");
-        botonTerminarTurno.addEventListener("click", funcionalidadBotonTerminarTurno);
     }
     //WORKING hacer que skipee a la acción correspondiente dependiendo de si es el primer equipo en jugar o el segundo
-    else if (estadosAmbosEquipos[equipo][jugador]["puntosDeAccion"] == 0){
+    else if (estadosAmbosEquipos[equipo][jugador]["puntosDeAccion"] < 0.5){
         funcionalidadBotonTerminarTurno();
     }
 }
 
 const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
-    //Creo evento que sucederá al activarse el evento del botón "moverse"
-    function funcionalidadBotonMoverse(evt){
+    let botonPase = document.getElementById("pase");
+    let botonTiro = document.getElementById("tiro");
+    let botonTerminarTurno = document.getElementById("terminarTurno");
+    let botonConfirmar = document.getElementById("confirmar");
+    /*MOVERSE*/
+    //Creo evento que sucederá al activarse el evento del botón "moverse" (modificar este evento para que primero permita seleccionarlo y luego ponerle los eventos al tablero con el botón confirmar como los demás botones)
+    // function funcionalidadBotonMoverse(evt){
+        //     pintoBotonSeleccionado(evt);
+        //     mostrarOpcionesDeDondeMoverse(equipo, jugador);
+        //     permitoSeleccionarOpcionesDeDondeMoverse(equipo, jugador);
+        // }
+        
+    //Creo función que será de utilidad para armar el choclo que continúa
+    function cambioColoresAApropiados(evt){
+        let botonActivado = document.querySelector(".botonActivado");
+        botonActivado.setAttribute("class", "boton");
         pintoBotonSeleccionado(evt);
-        mostrarOpcionesDeDondeMoverse(equipo, jugador);
-        permitoSeleccionarOpcionesDeDondeMoverse(equipo, jugador);
     }
-    //Creo evento que sucederá al activarse el evento del botón "pase"
+
+    //Creo funcionalidad para confirmar que deseo terminar el turno
+    function pidoConfirmarEleccionTerminarTurno (evt){
+        pintoBotonSeleccionado(evt);
+        resaltoBotones("confirmar");
+        botonConfirmar.addEventListener("click", funcionalidadBotonTerminarTurno);
+        //Quito eventos base de otros botones
+        botonPase.removeEventListener("click", pidoConfirmarEleccionPase);
+        botonTiro.removeEventListener("click", pidoConfirmarEleccionTiro);
+        botonTerminarTurno.removeEventListener("click", pidoConfirmarEleccionTerminarTurno);
+        
+        //Meto eventos que serán transición a cíclicos a otros botones
+        botonPase.addEventListener("click", cambioAEleccionPaseDesdeTerminarTurno);
+        botonTiro.addEventListener("click", cambioAEleccionTiroDesdeTerminarTurno);
+    }
+
+    //Creo funcionalidad para confirmar que deseo hacer un pase
+    function pidoConfirmarEleccionPase (evt){
+        pintoBotonSeleccionado(evt);
+        resaltoBotones("confirmar");
+        botonConfirmar.addEventListener("click", funcionalidadBotonPase);
+        //Quito eventos base de otros botones
+        botonPase.removeEventListener("click", pidoConfirmarEleccionPase)
+        botonTiro.removeEventListener("click", pidoConfirmarEleccionTiro);
+        botonTerminarTurno.removeEventListener("click", pidoConfirmarEleccionTerminarTurno);
+        
+        //Meto eventos que serán transición a cíclicos a otros botones
+        botonTiro.addEventListener("click", cambioAEleccionTiroDesdePase);
+        botonTerminarTurno.addEventListener("click", cambioAEleccionTerminarTurnoDesdePase);
+    }
+
+    //Creo funcionalidad para confirmar que deseo hacer un tiro
+    function pidoConfirmarEleccionTiro (evt){
+        pintoBotonSeleccionado(evt);
+        resaltoBotones("confirmar");
+        botonConfirmar.addEventListener("click", funcionalidadBotonTiro);
+        //Quito eventos base de otros botones
+        botonPase.removeEventListener("click", pidoConfirmarEleccionPase)
+        botonTiro.removeEventListener("click", pidoConfirmarEleccionTiro);
+        botonTerminarTurno.removeEventListener("click", pidoConfirmarEleccionTerminarTurno);
+        
+        //Meto eventos que serán transición a cíclicos a otros botones
+        botonPase.addEventListener("click", cambioAEleccionPaseDesdeTiro);
+        botonTerminarTurno.addEventListener("click", cambioAEleccionTerminarTurnoDesdeTiro);
+    }
+
+    function cambioAEleccionPaseDesdeTerminarTurno(evt){
+        
+        cambioColoresAApropiados(evt);
+        
+        //Cambio evento del boton confirmar
+        botonConfirmar.removeEventListener("click", funcionalidadBotonTerminarTurno);
+        botonConfirmar.addEventListener("click", funcionalidadBotonPase);
+
+        //Cambio eventos de los otros botones a botones cíclicos
+        botonPase.removeEventListener("click", cambioAEleccionPaseDesdeTerminarTurno);
+        botonTiro.removeEventListener("click", cambioAEleccionTiroDesdeTerminarTurno);
+
+        //Agrego nuevos eventos
+        botonTiro.addEventListener("click", cambioAEleccionTiroDesdePase);
+        botonTerminarTurno.addEventListener("click", cambioAEleccionTerminarTurnoDesdePase);
+    }
+
+    function cambioAEleccionTiroDesdeTerminarTurno(evt){
+        
+        cambioColoresAApropiados(evt);
+        
+        //Cambio evento del boton confirmar
+        botonConfirmar.removeEventListener("click", funcionalidadBotonTerminarTurno);
+        botonConfirmar.addEventListener("click", funcionalidadBotonTiro);
+
+        //Cambio eventos de los otros botones a botones cíclicos
+        botonPase.removeEventListener("click", cambioAEleccionPaseDesdeTerminarTurno);
+        botonTiro.removeEventListener("click", cambioAEleccionTiroDesdeTerminarTurno);
+
+        //Agrego nuevos eventos
+        botonPase.addEventListener("click", cambioAEleccionPaseDesdeTiro);
+        botonTerminarTurno.addEventListener("click", cambioAEleccionTerminarTurnoDesdeTiro);
+    }
+
+    function cambioAEleccionTiroDesdePase(evt){
+        
+        cambioColoresAApropiados(evt);
+        
+        //Cambio evento del boton confirmar
+        botonConfirmar.removeEventListener("click", funcionalidadBotonPase);
+        botonConfirmar.addEventListener("click", funcionalidadBotonTiro);
+
+        //Cambio eventos de los otros botones a botones cíclicos
+        botonTiro.removeEventListener("click", cambioAEleccionTiroDesdePase);
+        botonTerminarTurno.removeEventListener("click", cambioAEleccionTerminarTurnoDesdePase);
+
+        //Agrego nuevos eventos
+        botonPase.addEventListener("click", cambioAEleccionPaseDesdeTiro);
+        botonTerminarTurno.addEventListener("click", cambioAEleccionTerminarTurnoDesdeTiro);
+    }
+
+    function cambioAEleccionTerminarTurnoDesdePase(evt){
+        
+        cambioColoresAApropiados(evt);
+        
+        //Cambio evento del boton confirmar
+        botonConfirmar.removeEventListener("click", funcionalidadBotonPase);
+        botonConfirmar.addEventListener("click", funcionalidadBotonTerminarTurno);
+
+        //Cambio eventos de los otros botones a botones cíclicos
+        botonTiro.removeEventListener("click", cambioAEleccionTiroDesdePase);
+        botonTerminarTurno.removeEventListener("click", cambioAEleccionTerminarTurnoDesdePase);
+
+        //Agrego nuevos eventos
+        botonPase.addEventListener("click", cambioAEleccionPaseDesdeTerminarTurno);
+        botonTiro.addEventListener("click", cambioAEleccionTiroDesdeTerminarTurno);
+    }
+
+    function cambioAEleccionPaseDesdeTiro(evt){
+        
+        cambioColoresAApropiados(evt);
+        
+        //Cambio evento del boton confirmar
+        botonConfirmar.removeEventListener("click", funcionalidadBotonTiro);
+        botonConfirmar.addEventListener("click", funcionalidadBotonPase);
+
+        //Cambio eventos de los otros botones a botones cíclicos
+        botonPase.removeEventListener("click", cambioAEleccionPaseDesdeTiro);
+        botonTerminarTurno.removeEventListener("click", cambioAEleccionTerminarTurnoDesdeTiro);
+
+        //Agrego nuevos eventos
+        botonTiro.addEventListener("click", cambioAEleccionTiroDesdePase);
+        botonTerminarTurno.addEventListener("click", cambioAEleccionTerminarTurnoDesdePase);
+    }
+
+    function cambioAEleccionTerminarTurnoDesdeTiro(evt){
+        
+        cambioColoresAApropiados(evt);
+        
+        //Cambio evento del boton confirmar
+        botonConfirmar.removeEventListener("click", funcionalidadBotonTiro);
+        botonConfirmar.addEventListener("click", funcionalidadBotonTerminarTurno);
+
+        //Cambio eventos de los otros botones a botones cíclicos
+        botonPase.removeEventListener("click", cambioAEleccionPaseDesdeTiro);
+        botonTerminarTurno.removeEventListener("click", cambioAEleccionTerminarTurnoDesdeTiro);
+
+        //Agrego nuevos eventos
+        botonTiro.addEventListener("click", cambioAEleccionTiroDesdeTerminarTurno);
+        botonPase.addEventListener("click", cambioAEleccionPaseDesdeTiro);
+    }
+
+    //AGREGAR Creo evento que sucederá al activarse el evento del botón "pase"
     function funcionalidadBotonPase (evt){
-        pintoBotonSeleccionado(evt);
-        mostrarOpcionesDePase(equipo, jugador);
+        
     }
+
+    //AGREGAR Creo evento que sucederá al activarse el evento del botón "tiro"
+    function funcionalidadBotonTiro(evt){
+
+    }
+
     //Creo función para terminar turno
     function funcionalidadBotonTerminarTurno(){
         //Le quito los puntos de acción restantes e indico que el turno ya fue usado
@@ -854,26 +1041,32 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
             muestroPosiblesAccionesDefensa(equiposJugadoresElegidos[0], (rolJugadoresElegidos[0]-1));
         }
     }
+
+    //Llamo el boton terminar turno para darle funcionalidad básica puesto que siempre será elegible
+    botonTerminarTurno.addEventListener("click", pidoConfirmarEleccionTerminarTurno);
+
     //Comprobar puntos de acción para saber cuáles son las posibles acciones. Poner obscuras las posibilidades que no alcanzan los puntos no ponerles eventos.
     if (estadosAmbosEquipos[equipo][jugador]["puntosDeAccion"] > 1){
-        resaltoBotones("moverse");
-        let botonMoverse = document.getElementById("moverse");
-        botonMoverse.addEventListener("click", funcionalidadBotonMoverse);
+        /*MOVERSE*/
+        // resaltoBotones("moverse");
+        // let botonMoverse = document.getElementById("moverse");
+        // botonMoverse.addEventListener("click", funcionalidadBotonMoverse);
 
 
         if (estadosAmbosEquipos[equipo][jugador]["conPelota"] == true){
             resaltoBotones("pase");
+            botonPase.addEventListener("click", pidoConfirmarEleccionPase);
         }
         else if (estadosAmbosEquipos[equipo][jugador]["conPelota"] != true){
             muestroBotonObscuro("pase");
         }
 
         //WORKING Funcionalidad boton pase
-        let botonPase = document.getElementById("pase");
         botonPase.addEventListener("click", funcionalidadBotonPase);
 
         if (estadosAmbosEquipos[equipo][jugador]["conPelota"] == true){
             resaltoBotones("tiro");
+            botonTiro.addEventListener("click", pidoConfirmarEleccionTiro);
         }
 
 
@@ -886,14 +1079,13 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
 
 
         resaltoBotones("terminarTurno");
-        let botonTerminarTurno = document.getElementById("terminarTurno");
-        botonTerminarTurno.addEventListener("click", funcionalidadBotonTerminarTurno);
-
     }
     else if (estadosAmbosEquipos[equipo][jugador]["puntosDeAccion"] > 0.5){
-        muestroBotonObscuro("moverse");
+        /*MOVERSE*/
+        // muestroBotonObscuro("moverse");
         if (estadosAmbosEquipos[equipo][jugador]["conPelota"] == true){
             resaltoBotones("pase");
+            botonPase.addEventListener("click", pidoConfirmarEleccionPase);
         }
         else if (estadosAmbosEquipos[equipo][jugador]["conPelota"] != true){
             muestroBotonObscuro("pase");
@@ -901,231 +1093,232 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
         muestroBotonObscuro("tiro");
         muestroBotonObscuro("confirmar");
         resaltoBotones("terminarTurno");
-        let botonTerminarTurno = document.getElementById("terminarTurno");
-        botonTerminarTurno.addEventListener("click", funcionalidadBotonTerminarTurno);
     }
     //WORKING hacer que skipee a la acción correspondiente dependiendo de si es el primer equipo en jugar o el segundo
-    else if (estadosAmbosEquipos[equipo][jugador]["puntosDeAccion"] == 0){
+    else if (estadosAmbosEquipos[equipo][jugador]["puntosDeAccion"] < 0.5){
         funcionalidadBotonTerminarTurno();
     }
 }
 
-let lugarEnElQueEstaba;
-let posiblesLugaresALosQueMoverse;
-const mostrarOpcionesDeDondeMoverse = (equipo, jugador)=>{
-    //AGREGAR borrar acciones activadas por otros event listeners de otras opciones de acción
+/*MOVERSE*/
+// let lugarEnElQueEstaba;
+// let posiblesLugaresALosQueMoverse;
+// const mostrarOpcionesDeDondeMoverse = (equipo, jugador)=>{
+//     //AGREGAR borrar acciones activadas por otros event listeners de otras opciones de acción
 
-    //De cada jugador tomo sus posiciones X e Y y las junto para generar strings compatibles con los ID de los divs que representarán las casillas a las que se pueden mover los jugadores
-    //Creo un array en el que se contarán las ubicaciones ocupadas de las que rodean al jugador elegido
-    const arrayIdLugaresOcupados = [];
-    //Creo un array en el que estarán los posibles lugares a los que moverse
-    const arrayIdPosiblesMovimientos = [];
+//     //De cada jugador tomo sus posiciones X e Y y las junto para generar strings compatibles con los ID de los divs que representarán las casillas a las que se pueden mover los jugadores
+//     //Creo un array en el que se contarán las ubicaciones ocupadas de las que rodean al jugador elegido
+//     const arrayIdLugaresOcupados = [];
+//     //Creo un array en el que estarán los posibles lugares a los que moverse
+//     const arrayIdPosiblesMovimientos = [];
 
-    //Guardo la posición en la que estaba para luego calcular si se mueve en diagonal o a los costados
-    lugarEnElQueEstaba = [estadosAmbosEquipos[equipo][jugador][("ubicacionX")], estadosAmbosEquipos[equipo][jugador][("ubicacionY")]];
+//     //Guardo la posición en la que estaba para luego calcular si se mueve en diagonal o a los costados
+//     lugarEnElQueEstaba = [estadosAmbosEquipos[equipo][jugador][("ubicacionX")], estadosAmbosEquipos[equipo][jugador][("ubicacionY")]];
 
-    //Creo función que será de utilidad
-    const creoBuclesParaRecorrerLasPosicionesDeLosJugadores =(i, u, equipo, jugador)=>{
-        //Creo bucles para recorrer a los jugadores
-        for (equipoComparado in estadosAmbosEquipos){
-            for (jugadorComparado in estadosAmbosEquipos[equipoComparado]){
-                //Si coincide la posición de cualquier jugador con la posicón que estoy escaneando introduzco valor al array de posiciones ocupadas
-                if ((estadosAmbosEquipos[equipoComparado][jugadorComparado]["ubicacionX"] == estadosAmbosEquipos[equipo][jugador][("ubicacionX")] + i) && (estadosAmbosEquipos[equipoComparado][jugadorComparado]["ubicacionY"] == estadosAmbosEquipos[equipo][jugador][("ubicacionY")] + u)){
-                    arrayIdLugaresOcupados.push(`Ey! Existo! Voy a conquistar el mundooo!`);
-                }
-            }
-        }
-        //Guardo la ubicación que estoy registrando
-        arrayIdPosiblesMovimientos.push(`${estadosAmbosEquipos[equipo][jugador][("ubicacionX")] + i }_${estadosAmbosEquipos[equipo][jugador][("ubicacionY")] + u}`);
-        //Si no tengo puntos suficientes para moverme en diagonal y la ubicación registrada es en diagonal la borro
-        if ((estadosAmbosEquipos[equipo][jugador][("puntosDeAccion")] < 1.5) && (arrayIdLugaresOcupados.length == 0)){
-            if ((i == -1) && (u == -1) || (i == -1) && (u == 1) || (i == 1) && (u == -1) || (i == 1) && (u == 1)){
-                arrayIdPosiblesMovimientos.pop();
-            }
-        }
-        //Si en ese lugar se encontró a algún jugador ocupando el espacio borro la ubicación registrada
-        else if (arrayIdLugaresOcupados.length > 0){
-            arrayIdPosiblesMovimientos.pop();
-            //Y le digo "pues no mi ciela, ud. no va conquistar nada, su existencia es más ínfima que kilo de helado en verano" al array que cuenta los lugares ocupados
-            arrayIdLugaresOcupados.pop();
-        }
-    } 
+//     //Creo función que será de utilidad
+//     const creoBuclesParaRecorrerLasPosicionesDeLosJugadores =(i, u, equipo, jugador)=>{
+//         //Creo bucles para recorrer a los jugadores
+//         for (equipoComparado in estadosAmbosEquipos){
+//             for (jugadorComparado in estadosAmbosEquipos[equipoComparado]){
+//                 //Si coincide la posición de cualquier jugador con la posicón que estoy escaneando introduzco valor al array de posiciones ocupadas
+//                 if ((estadosAmbosEquipos[equipoComparado][jugadorComparado]["ubicacionX"] == estadosAmbosEquipos[equipo][jugador][("ubicacionX")] + i) && (estadosAmbosEquipos[equipoComparado][jugadorComparado]["ubicacionY"] == estadosAmbosEquipos[equipo][jugador][("ubicacionY")] + u)){
+//                     arrayIdLugaresOcupados.push(`Ey! Existo! Voy a conquistar el mundooo!`);
+//                 }
+//             }
+//         }
+//         //Guardo la ubicación que estoy registrando
+//         arrayIdPosiblesMovimientos.push(`${estadosAmbosEquipos[equipo][jugador][("ubicacionX")] + i }_${estadosAmbosEquipos[equipo][jugador][("ubicacionY")] + u}`);
+//         //Si no tengo puntos suficientes para moverme en diagonal y la ubicación registrada es en diagonal la borro
+//         if ((estadosAmbosEquipos[equipo][jugador][("puntosDeAccion")] < 1.5) && (arrayIdLugaresOcupados.length == 0)){
+//             if ((i == -1) && (u == -1) || (i == -1) && (u == 1) || (i == 1) && (u == -1) || (i == 1) && (u == 1)){
+//                 arrayIdPosiblesMovimientos.pop();
+//             }
+//         }
+//         //Si en ese lugar se encontró a algún jugador ocupando el espacio borro la ubicación registrada
+//         else if (arrayIdLugaresOcupados.length > 0){
+//             arrayIdPosiblesMovimientos.pop();
+//             //Y le digo "pues no mi ciela, ud. no va conquistar nada, su existencia es más ínfima que kilo de helado en verano" al array que cuenta los lugares ocupados
+//             arrayIdLugaresOcupados.pop();
+//         }
+//     } 
     
-    //Creo bucles para las posiciones que rodean al jugador
-    //Si se encuentra en el borde izquiero del tablero
-    if (estadosAmbosEquipos[equipo][jugador][("ubicacionX")]==1){
-        for (let i = 0; i<2; i++){
-            for (let u = -1; u<2; u++){
-                creoBuclesParaRecorrerLasPosicionesDeLosJugadores(i, u, equipo, jugador);
-            }
-        }
-    }
-    //Si se encuentra en el borde derecho del tablero
-    else if (estadosAmbosEquipos[equipo][jugador][("ubicacionX")]==28){
-        for (let i = -1; i<1; i++){
-            for (let u = -1; u<2; u++){
-                creoBuclesParaRecorrerLasPosicionesDeLosJugadores(i, u, equipo, jugador);
-            }
-        }
-    }
-    //Si se encuentra en el borde superior del tablero
-    else if (estadosAmbosEquipos[equipo][jugador][("ubicacionY")]==1){
-        for (let i = -1; i<2; i++){
-            for (let u = 0; u<2; u++){
-                creoBuclesParaRecorrerLasPosicionesDeLosJugadores(i, u, equipo, jugador);
-            }
-        }
-    }
-    //Si se encuentra en el borde inferior del tablero
-    else if (estadosAmbosEquipos[equipo][jugador][("ubicacionY")]==15){
-        for (let i = -1; i<2; i++){
-            for (let u = -1; u<1; u++){
-                creoBuclesParaRecorrerLasPosicionesDeLosJugadores(i, u, equipo, jugador);
-            }
-        }
-    }
-    //Si no se encuentra en el borde del tablero
-    else if ((estadosAmbosEquipos[equipo][jugador][("ubicacionX")]!=1)&&(estadosAmbosEquipos[equipo][jugador][("ubicacionX")]!=28)&&(estadosAmbosEquipos[equipo][jugador][("ubicacionY")]!=1)&&(estadosAmbosEquipos[equipo][jugador][("ubicacionY")]!=15)){
-        for (let i = -1; i<2; i++){
-            for (let u = -1; u<2; u++){
-                creoBuclesParaRecorrerLasPosicionesDeLosJugadores(i, u, equipo, jugador);
-            }
-        }
-    }
+//     //Creo bucles para las posiciones que rodean al jugador
+//     //Si se encuentra en el borde izquiero del tablero
+//     if (estadosAmbosEquipos[equipo][jugador][("ubicacionX")]==1){
+//         for (let i = 0; i<2; i++){
+//             for (let u = -1; u<2; u++){
+//                 creoBuclesParaRecorrerLasPosicionesDeLosJugadores(i, u, equipo, jugador);
+//             }
+//         }
+//     }
+//     //Si se encuentra en el borde derecho del tablero
+//     else if (estadosAmbosEquipos[equipo][jugador][("ubicacionX")]==28){
+//         for (let i = -1; i<1; i++){
+//             for (let u = -1; u<2; u++){
+//                 creoBuclesParaRecorrerLasPosicionesDeLosJugadores(i, u, equipo, jugador);
+//             }
+//         }
+//     }
+//     //Si se encuentra en el borde superior del tablero
+//     else if (estadosAmbosEquipos[equipo][jugador][("ubicacionY")]==1){
+//         for (let i = -1; i<2; i++){
+//             for (let u = 0; u<2; u++){
+//                 creoBuclesParaRecorrerLasPosicionesDeLosJugadores(i, u, equipo, jugador);
+//             }
+//         }
+//     }
+//     //Si se encuentra en el borde inferior del tablero
+//     else if (estadosAmbosEquipos[equipo][jugador][("ubicacionY")]==15){
+//         for (let i = -1; i<2; i++){
+//             for (let u = -1; u<1; u++){
+//                 creoBuclesParaRecorrerLasPosicionesDeLosJugadores(i, u, equipo, jugador);
+//             }
+//         }
+//     }
+//     //Si no se encuentra en el borde del tablero
+//     else if ((estadosAmbosEquipos[equipo][jugador][("ubicacionX")]!=1)&&(estadosAmbosEquipos[equipo][jugador][("ubicacionX")]!=28)&&(estadosAmbosEquipos[equipo][jugador][("ubicacionY")]!=1)&&(estadosAmbosEquipos[equipo][jugador][("ubicacionY")]!=15)){
+//         for (let i = -1; i<2; i++){
+//             for (let u = -1; u<2; u++){
+//                 creoBuclesParaRecorrerLasPosicionesDeLosJugadores(i, u, equipo, jugador);
+//             }
+//         }
+//     }
 
-    //A los valores que están en el array de posibles movimientos les pongo un fondo verde
-    for (posicionArray in arrayIdPosiblesMovimientos){
-        posiblesLugaresALosQueMoverse = document.getElementById(arrayIdPosiblesMovimientos[posicionArray]);
-        posiblesLugaresALosQueMoverse.className += " fondoVerde";
-    }
-}
+//     //A los valores que están en el array de posibles movimientos les pongo un fondo verde
+//     for (posicionArray in arrayIdPosiblesMovimientos){
+//         posiblesLugaresALosQueMoverse = document.getElementById(arrayIdPosiblesMovimientos[posicionArray]);
+//         posiblesLugaresALosQueMoverse.className += " fondoVerde";
+//     }
+// }
 
-const permitoSeleccionarOpcionesDeDondeMoverse= (equipo, jugador)=>{
-    let casillaSeleccionada;
-    //Agrego eventos a los nuevos espacios en verde
-    posiblesLugaresALosQueMoverse = document.querySelectorAll(".fondoVerde");
-    for(let i=0; i < posiblesLugaresALosQueMoverse.length; i++){
-        posiblesLugaresALosQueMoverse[i].addEventListener("click", funcionalidad);
-    }
+// const permitoSeleccionarOpcionesDeDondeMoverse= (equipo, jugador)=>{
+//     let casillaSeleccionada;
+//     //Agrego eventos a los nuevos espacios en verde
+//     posiblesLugaresALosQueMoverse = document.querySelectorAll(".fondoVerde");
+//     for(let i=0; i < posiblesLugaresALosQueMoverse.length; i++){
+//         posiblesLugaresALosQueMoverse[i].addEventListener("click", funcionalidad);
+//     }
 
-    //Creo función que va a permitir llevar a cabo esta acción
-    function funcionalidad(evt){
-        //Muestro el botón llamado confirmar
-        resaltoBotones("confirmar");
-        //Reseteo las casillas que están en verde por si cambia de desición y selecciona otro
-        let conFondoSeleccionado = document.querySelector(".fondoSeleccionado");
-        //Pongo una puerta lógica para que no falle en la primera selección
-        if (conFondoSeleccionado != null){
-            conFondoSeleccionado.classList.add("class", `fondoVerde`);
-            conFondoSeleccionado.classList.remove("class", `fondoSeleccionado`);
-        }
-        //Al jugador seleccionado lo muestro con otro color de fondo
-        evt.currentTarget.classList.remove("class", `fondoVerde`);
-        evt.currentTarget.classList.add("class", `fondoSeleccionado`);
-        casillaSeleccionada = evt.currentTarget;
+//     //Creo función que va a permitir llevar a cabo esta acción
+//     function funcionalidad(evt){
+//         //Muestro el botón llamado confirmar
+//         resaltoBotones("confirmar");
+//         //Reseteo las casillas que están en verde por si cambia de desición y selecciona otro
+//         let conFondoSeleccionado = document.querySelector(".fondoSeleccionado");
+//         //Pongo una puerta lógica para que no falle en la primera selección
+//         if (conFondoSeleccionado != null){
+//             conFondoSeleccionado.classList.add("class", `fondoVerde`);
+//             conFondoSeleccionado.classList.remove("class", `fondoSeleccionado`);
+//         }
+//         //Al jugador seleccionado lo muestro con otro color de fondo
+//         evt.currentTarget.classList.remove("class", `fondoVerde`);
+//         evt.currentTarget.classList.add("class", `fondoSeleccionado`);
+//         casillaSeleccionada = evt.currentTarget;
         
-        funcionParaConfirmarSeleccionDeDondeMoverse();
-    }
+//         funcionParaConfirmarSeleccionDeDondeMoverse();
+//     }
     
-    //Separo de esta forma para que funcione el removeEventListener
-    //Pongo evento al botón confirmar
-    const funcionParaConfirmarSeleccionDeDondeMoverse= ()=>{
-        let botonConfirmar = document.getElementById("confirmar");
-        botonConfirmar.addEventListener("click", confirmarSeleccionarDondeMoverse);
+//     //Separo de esta forma para que funcione el removeEventListener
+//     //Pongo evento al botón confirmar
+//     const funcionParaConfirmarSeleccionDeDondeMoverse= ()=>{
+//         let botonConfirmar = document.getElementById("confirmar");
+//         botonConfirmar.addEventListener("click", confirmarSeleccionarDondeMoverse);
 
-        //Función que se ejecuta con este evento
-        function confirmarSeleccionarDondeMoverse(){
-            //Llamo distintos elementos que serán modificados
-            let conFondoVerde = document.getElementsByClassName("fondoVerde");
-            let conFondoSeleccionado = document.getElementsByClassName("fondoSeleccionado");
-            let conFondoJugadorActual = document.querySelector(".fondoSeleccionadoYLeToca");
-            let claseATransferir = "";
+//         //Función que se ejecuta con este evento
+//         function confirmarSeleccionarDondeMoverse(){
+//             //Llamo distintos elementos que serán modificados
+//             let conFondoVerde = document.getElementsByClassName("fondoVerde");
+//             let conFondoSeleccionado = document.getElementsByClassName("fondoSeleccionado");
+//             let conFondoJugadorActual = document.querySelector(".fondoSeleccionadoYLeToca");
+//             let claseATransferir = "";
             
-            //WORKING restar los puntos de acción correspondientes
-            //Para eso veo a dónde es que se confirmó el movimiento y comparo sus ubicaciones x e y con las posiciones x e y de la ubicación en la que estába hasta este momento
-            for (x=-1; x < 2; x++){
-                for (y=-1; y < 2; y++){
-                    //Si la posición obtenida por id (formada por el x y el y de la posición anterior sumando las x e y de los búcles) es igual a la nueva posición y las x e y de los bucles indican que es una diagonal
-                    if ((document.getElementById(`${lugarEnElQueEstaba[0] + x}_${lugarEnElQueEstaba[1] + y}`) == conFondoSeleccionado[0]) && (x == -1) && (y == -1) || (document.getElementById(`${lugarEnElQueEstaba[0] + x}_${lugarEnElQueEstaba[1] + y}`) == conFondoSeleccionado[0]) && (x == -1) && (y == 1) || (document.getElementById(`${lugarEnElQueEstaba[0] + x}_${lugarEnElQueEstaba[1] + y}`) == conFondoSeleccionado[0]) && (x == 1) && (y == -1) || (document.getElementById(`${lugarEnElQueEstaba[0] + x}_${lugarEnElQueEstaba[1] + y}`) == conFondoSeleccionado[0]) && (x == 1) && (y == 1)){
-                        //Si el equipo es el atacante quiero que reste los puntos por moverse en diagonal indicado en el obj costeAccionesAtaque
-                        if (equipo == queEquipoAtacaNumero()){
-                            estadosAmbosEquipos[equipo][jugador].puntosDeAccion -= costeAccionesAtaque.moverseDiagonal;
-                        }
-                        //Hago lo propio para la defensa
-                        else if (equipo == queEquipoDefiendeNumero()){
-                            estadosAmbosEquipos[equipo][jugador].puntosDeAccion -= costeAccionesDefensa.moverseDiagonal;
-                        }
-                    }
-                    //Idem pero si se mueve sólo en un eje
-                    else if ((document.getElementById(`${lugarEnElQueEstaba[0] + x}_${lugarEnElQueEstaba[1] + y}`) == conFondoSeleccionado[0]) && (x == -1) && (y == 0) || (document.getElementById(`${lugarEnElQueEstaba[0] + x}_${lugarEnElQueEstaba[1] + y}`) == conFondoSeleccionado[0]) && (x == 1) && (y == 0) || (document.getElementById(`${lugarEnElQueEstaba[0] + x}_${lugarEnElQueEstaba[1] + y}`) == conFondoSeleccionado[0]) && (x == 0) && (y == -1) || (document.getElementById(`${lugarEnElQueEstaba[0] + x}_${lugarEnElQueEstaba[1] + y}`) == conFondoSeleccionado[0]) && (x == 0) && (y == 1)){
-                        //Si el equipo es el atacante quiero que reste los puntos por moverse a los lados indicado en el obj costeAccionesAtaque
-                        if (equipo == queEquipoAtacaNumero()){
-                            estadosAmbosEquipos[equipo][jugador].puntosDeAccion -= costeAccionesAtaque.moverseRecto;
+//             //WORKING restar los puntos de acción correspondientes
+//             //Para eso veo a dónde es que se confirmó el movimiento y comparo sus ubicaciones x e y con las posiciones x e y de la ubicación en la que estába hasta este momento
+//             for (x=-1; x < 2; x++){
+//                 for (y=-1; y < 2; y++){
+//                     //Si la posición obtenida por id (formada por el x y el y de la posición anterior sumando las x e y de los búcles) es igual a la nueva posición y las x e y de los bucles indican que es una diagonal
+//                     if ((document.getElementById(`${lugarEnElQueEstaba[0] + x}_${lugarEnElQueEstaba[1] + y}`) == conFondoSeleccionado[0]) && (x == -1) && (y == -1) || (document.getElementById(`${lugarEnElQueEstaba[0] + x}_${lugarEnElQueEstaba[1] + y}`) == conFondoSeleccionado[0]) && (x == -1) && (y == 1) || (document.getElementById(`${lugarEnElQueEstaba[0] + x}_${lugarEnElQueEstaba[1] + y}`) == conFondoSeleccionado[0]) && (x == 1) && (y == -1) || (document.getElementById(`${lugarEnElQueEstaba[0] + x}_${lugarEnElQueEstaba[1] + y}`) == conFondoSeleccionado[0]) && (x == 1) && (y == 1)){
+//                         //Si el equipo es el atacante quiero que reste los puntos por moverse en diagonal indicado en el obj costeAccionesAtaque
+//                         if (equipo == queEquipoAtacaNumero()){
+//                             estadosAmbosEquipos[equipo][jugador].puntosDeAccion -= costeAccionesAtaque.moverseDiagonal;
+//                         }
+//                         //Hago lo propio para la defensa
+//                         else if (equipo == queEquipoDefiendeNumero()){
+//                             estadosAmbosEquipos[equipo][jugador].puntosDeAccion -= costeAccionesDefensa.moverseDiagonal;
+//                         }
+//                     }
+//                     //Idem pero si se mueve sólo en un eje
+//                     else if ((document.getElementById(`${lugarEnElQueEstaba[0] + x}_${lugarEnElQueEstaba[1] + y}`) == conFondoSeleccionado[0]) && (x == -1) && (y == 0) || (document.getElementById(`${lugarEnElQueEstaba[0] + x}_${lugarEnElQueEstaba[1] + y}`) == conFondoSeleccionado[0]) && (x == 1) && (y == 0) || (document.getElementById(`${lugarEnElQueEstaba[0] + x}_${lugarEnElQueEstaba[1] + y}`) == conFondoSeleccionado[0]) && (x == 0) && (y == -1) || (document.getElementById(`${lugarEnElQueEstaba[0] + x}_${lugarEnElQueEstaba[1] + y}`) == conFondoSeleccionado[0]) && (x == 0) && (y == 1)){
+//                         //Si el equipo es el atacante quiero que reste los puntos por moverse a los lados indicado en el obj costeAccionesAtaque
+//                         if (equipo == queEquipoAtacaNumero()){
+//                             estadosAmbosEquipos[equipo][jugador].puntosDeAccion -= costeAccionesAtaque.moverseRecto;
 
-                        }
-                        //Hago lo propio para la defensa
-                        else if (equipo == queEquipoDefiendeNumero()){
-                            estadosAmbosEquipos[equipo][jugador].puntosDeAccion -= costeAccionesDefensa.moverseRecto;
-                        }
-                    }
-                    if (document.getElementById(`${lugarEnElQueEstaba[0] + x}_${lugarEnElQueEstaba[1] + y}`) == conFondoSeleccionado[0]){
-                        estadosAmbosEquipos[equipo][jugador].ubicacionX += x;
-                        estadosAmbosEquipos[equipo][jugador].ubicacionY += y;
-                    }
-                }
-            }
+//                         }
+//                         //Hago lo propio para la defensa
+//                         else if (equipo == queEquipoDefiendeNumero()){
+//                             estadosAmbosEquipos[equipo][jugador].puntosDeAccion -= costeAccionesDefensa.moverseRecto;
+//                         }
+//                     }
+//                     if (document.getElementById(`${lugarEnElQueEstaba[0] + x}_${lugarEnElQueEstaba[1] + y}`) == conFondoSeleccionado[0]){
+//                         estadosAmbosEquipos[equipo][jugador].ubicacionX += x;
+//                         estadosAmbosEquipos[equipo][jugador].ubicacionY += y;
+//                     }
+//                 }
+//             }
 
 
-            //Paso el contenido de la etiqueta del jugador desde la casilla anteriror a la nueva
-            casillaSeleccionada.innerHTML= conFondoJugadorActual.innerHTML
+//             //Paso el contenido de la etiqueta del jugador desde la casilla anteriror a la nueva
+//             casillaSeleccionada.innerHTML= conFondoJugadorActual.innerHTML
             
-            
-            //Mientras siga habiendo fondos coloreados los voy a borrar y a sus eventos
-            while (conFondoVerde.length > 0){
-                conFondoVerde[0].removeEventListener("click", funcionalidad);
-                conFondoVerde[0].classList.remove("class", "fondoVerde");
-            }    
-            //Guardo las clases de la casilla anterior a la nueva
-            for (let clases = 0; conFondoJugadorActual.classList.length > clases; clases++){
-                if (claseATransferir != ""){
-                    claseATransferir += ` ${conFondoJugadorActual.classList[clases]}`;
-                }    
-                else if (claseATransferir == ""){
-                    claseATransferir += conFondoJugadorActual.classList[clases];
-                }    
-            }    
-            //Borro esta clase que está pintando la casilla anterior
-            conFondoJugadorActual.setAttribute("class", "");
+//             /*EL ERROR ANTES LO ESCRIBÍ LITERALMENTE IGUAL A ESTO Y TAMPOCO FUNCIONABA PERO ACÁ SÍ FUNCIONA POR ALGÚN MOTIVO*/
+//             //Mientras siga habiendo fondos coloreados los voy a borrar y a sus eventos
+//             while (conFondoVerde.length > 0){
+//                 conFondoVerde[0].removeEventListener("click", funcionalidad);
+//                 conFondoVerde[0].classList.remove("class", "fondoVerde");
+//             }   
+//             /*FIN ACOTACIÓN DE ERROR*/ 
 
-            //Termino de pasar clases y borro eventos
-            while (conFondoSeleccionado.length > 0){
-                conFondoSeleccionado[0].removeEventListener("click", funcionalidad);
-                conFondoSeleccionado[0].setAttribute("class", `${claseATransferir}`);
-            }    
-            
-            //Borro el evento del boton confirmar
-            botonConfirmar.removeEventListener("click", confirmarSeleccionarDondeMoverse);
-            //Oculto nuevamente el botón
-            botonConfirmar.setAttribute("class", "noDisplay");
-            
-            //Borro la información del jugador de la casilla anterior
-            conFondoJugadorActual.innerHTML = "";
+//             //Guardo las clases de la casilla anterior a la nueva
+//             for (let clases = 0; conFondoJugadorActual.classList.length > clases; clases++){
+//                 if (claseATransferir != ""){
+//                     claseATransferir += ` ${conFondoJugadorActual.classList[clases]}`;
+//                 }    
+//                 else if (claseATransferir == ""){
+//                     claseATransferir += conFondoJugadorActual.classList[clases];
+//                 }    
+//             }    
+//             //Borro esta clase que está pintando la casilla anterior
+//             conFondoJugadorActual.setAttribute("class", "");
 
-            //Oculto boton moverse
-            ocultoBoton("moverse");
+//             //Termino de pasar clases y borro eventos
+//             while (conFondoSeleccionado.length > 0){
+//                 conFondoSeleccionado[0].removeEventListener("click", funcionalidad);
+//                 conFondoSeleccionado[0].setAttribute("class", `${claseATransferir}`);
+//             }    
             
-            //Vuelvo a corrar la función que corresponda (Recuerdo que estas llevarán a donde corresponda dependiendo de si hay puntos para otra acción o no)
-            if (equipo == queEquipoAtacaNumero()){
-                ocultoBoton("pase");
-                ocultoBoton("tiro");
-                muestroPosiblesAccionesAtaque(equipo, jugador);
-            }
-            else if (equipo == queEquipoDefiendeNumero()){
-                muestroPosiblesAccionesDefensa(equipo, jugador);
-            }
-        }
-    }
-}
+//             //Borro el evento del boton confirmar
+//             botonConfirmar.removeEventListener("click", confirmarSeleccionarDondeMoverse);
+//             //Oculto nuevamente el botón
+//             botonConfirmar.setAttribute("class", "noDisplay");
+            
+//             //Borro la información del jugador de la casilla anterior
+//             conFondoJugadorActual.innerHTML = "";
+
+//             //Oculto boton moverse
+//             ocultoBoton("moverse");
+            
+//             //Vuelvo a corrar la función que corresponda (Recuerdo que estas llevarán a donde corresponda dependiendo de si hay puntos para otra acción o no)
+//             if (equipo == queEquipoAtacaNumero()){
+//                 ocultoBoton("pase");
+//                 ocultoBoton("tiro");
+//                 muestroPosiblesAccionesAtaque(equipo, jugador);
+//             }
+//             else if (equipo == queEquipoDefiendeNumero()){
+//                 muestroPosiblesAccionesDefensa(equipo, jugador);
+//             }
+//         }
+//     }
+// }
 
 const mostrarOpcionesDePase = (equipo, jugador)=>{
     //WORKING
