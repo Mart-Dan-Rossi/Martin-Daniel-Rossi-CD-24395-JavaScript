@@ -240,14 +240,56 @@ $(document).ready(function () {
 });
 
 
-/*WORKING Introduzco valores a stats de jugadores al pasar el cursor sobre alguno*/
-//Eventos que permiten tocar botón para que aparezca la información
+/*Eventos que permiten tocar botón para que aparezca la información de los jugadores al pasar el cursor sobre ellos*/
 $("#mostrarStatsJugadoresEquipoA").click(()=>{
     $(".statsQueAparecenA").toggle("slow");
 });
 $("#mostrarStatsJugadoresEquipoB").click(()=>{
     $(".statsQueAparecenB").toggle("slow");
 });
+
+//Agrego eventos a jugadores para seleccionar la información requerida
+const funciónParaAgregarEventosQueMuestranInfoDeLosJugadores = ()=>{
+    //Hago bucle para recorrer jugadores
+    for (let equipo=0; equipo <2; equipo++){
+        for (let i=0; i < 5; i++){
+            //Llamo a cada jugador de cada equipo
+            let jugadoresParaMostrarInfo = document.getElementById(`${estadosAmbosEquipos[equipo][i]["ubicacionX"]}_${estadosAmbosEquipos[equipo][i]["ubicacionY"]}`);
+            //Creo el evento de cada jugador
+            jugadoresParaMostrarInfo.addEventListener("mouseover", muestroInfo);
+            //El evento de cada jugador disparará lo siguiente
+            function muestroInfo(){
+                //Si es del equipo A
+                if (equipo==0){
+                    document.getElementById("nombreA").innerHTML= ambosEquipos[equipo][i]["nombre"];
+                    document.getElementById("alturaA").innerHTML= ambosEquipos[equipo][i]["altura"];
+                    document.getElementById("pesoA").innerHTML= ambosEquipos[equipo][i]["peso"];
+                    document.getElementById("capacidadAtleticaA").innerHTML= ambosEquipos[equipo][i]["capacidadAtletica"];
+                    document.getElementById("defensaPerimetralA").innerHTML= ambosEquipos[equipo][i]["defensaPerimetral"];
+                    document.getElementById("defensaInternaA").innerHTML= ambosEquipos[equipo][i]["defensaInterna"];
+                    document.getElementById("capacidadReboteadoraA").innerHTML= ambosEquipos[equipo][i]["capacidadReboteadora"];
+                    document.getElementById("anotacionExteriorA").innerHTML= ambosEquipos[equipo][i]["anotacionExterior"];
+                    document.getElementById("anotacionInteriorA").innerHTML= ambosEquipos[equipo][i]["anotacionInterior"];
+                    document.getElementById("creacionDeJuegoA").innerHTML= ambosEquipos[equipo][i]["creacionDeJuego"];
+                }
+                //Si es del equipo B
+                else if (equipo==1){
+                    document.getElementById("nombreB").innerHTML= ambosEquipos[equipo][i]["nombre"];
+                    document.getElementById("alturaB").innerHTML= ambosEquipos[equipo][i]["altura"];
+                    document.getElementById("pesoB").innerHTML= ambosEquipos[equipo][i]["peso"];
+                    document.getElementById("capacidadAtleticaB").innerHTML= ambosEquipos[equipo][i]["capacidadAtletica"];
+                    document.getElementById("defensaPerimetralB").innerHTML= ambosEquipos[equipo][i]["defensaPerimetral"];
+                    document.getElementById("defensaInternaB").innerHTML= ambosEquipos[equipo][i]["defensaInterna"];
+                    document.getElementById("capacidadReboteadoraB").innerHTML= ambosEquipos[equipo][i]["capacidadReboteadora"];
+                    document.getElementById("anotacionExteriorB").innerHTML= ambosEquipos[equipo][i]["anotacionExterior"];
+                    document.getElementById("anotacionInteriorB").innerHTML= ambosEquipos[equipo][i]["anotacionInterior"];
+                    document.getElementById("creacionDeJuegoB").innerHTML= ambosEquipos[equipo][i]["creacionDeJuego"];
+                }
+            }      
+        }
+    }
+}
+
 
 
 /*AGREGAR Marco zonas de tiro*/
@@ -499,8 +541,7 @@ const muestroJugadoresConTurno = (ataqueODefensa)=>{
     for (jugador in estadosAmbosEquipos[ataqueODefensa]){
         //De cada jugador tomo sus posiciones X e Y y las junto en un string compatible con los ID de los divs que representan las casillas de la cancha
         if (estadosAmbosEquipos[ataqueODefensa][jugador].turnoUsado == false){
-            let idDivs = `${estadosAmbosEquipos[ataqueODefensa][jugador]["ubicacionX"]}_${estadosAmbosEquipos[ataqueODefensa][jugador]["ubicacionY"]}`;
-            let posicionJugador = document.getElementById(idDivs);
+            let posicionJugador = document.getElementById(`${estadosAmbosEquipos[ataqueODefensa][jugador]["ubicacionX"]}_${estadosAmbosEquipos[ataqueODefensa][jugador]["ubicacionY"]}`);
             //Agrego atributo que va a colorear el fondo en la casilla en la que se encuentran estos jugadores
             posicionJugador.classList.add(`fondoVerde`);
             posicionJugador.classList.add(`jugador${queEquipoEs(ataqueODefensa)}${jugador}`);
@@ -770,7 +811,7 @@ const comparoIniciativasDeJugadoresElegidos = ()=>{
     }
 }
 
-//WORKING /*Función para que el jugador elija la acción que va a realizar*/
+/*Función para que el jugador elija la acción que va a realizar*/
 //Creo función para mostrar botones de acción posibles para cada jugador (Separar las acciones defensivas de las ofensivas).
 //(Los parámetros son usados para cargar los datos de los jugadores elegidos)
 const muestroPosiblesAccionesDefensa = (equipo, jugador)=>{
@@ -797,7 +838,6 @@ const muestroPosiblesAccionesDefensa = (equipo, jugador)=>{
         estadosAmbosEquipos[equipo][jugador]["turnoUsado"] = true;
         //Si el equipo que comenzó eligiendo sus acciones fué el atacante
         if (comparoIniciativas < 0){
-            //AGREGAR borrar botones y sus eventos
             //AGREGAR Continúo al próximo instante
         }
         //Si el equipo que comenzó eligiendo sus acciones fué el defensor
@@ -1015,14 +1055,14 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
         botonPase.addEventListener("click", cambioAEleccionPaseDesdeTiro);
     }
 
-    //AGREGAR Creo evento que sucederá al activarse el evento del botón "pase"
+    //Creo evento que sucederá al activarse el evento del botón "pase"
     function funcionalidadBotonPase (evt){
-        
+        //WORKING
     }
 
-    //AGREGAR Creo evento que sucederá al activarse el evento del botón "tiro"
+    //Creo evento que sucederá al activarse el evento del botón "tiro"
     function funcionalidadBotonTiro(evt){
-
+        //WORKING
     }
     
     //Creo función para terminar turno
@@ -1032,7 +1072,6 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
         estadosAmbosEquipos[equipo][jugador]["turnoUsado"] = true;
         //Si el equipo que comenzó eligiendo sus acciones fué el defensor
         if (comparoIniciativas > 0){
-            //AGREGAR borrar botones y sus eventos
             //AGREGAR Continúo al próximo instante
         }
         //Si el equipo que comenzó eligiendo sus acciones fué el atacante
@@ -1061,7 +1100,7 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
             muestroBotonObscuro("pase");
         }
 
-        //WORKING Funcionalidad boton pase
+        //Funcionalidad boton pase
         botonPase.addEventListener("click", funcionalidadBotonPase);
 
         if (estadosAmbosEquipos[equipo][jugador]["conPelota"] == true){
@@ -1330,6 +1369,7 @@ while (finDePartido == false){
 
     muestroPosicionesEnCancha();
     comienzaInstante();
+    funciónParaAgregarEventosQueMuestranInfoDeLosJugadores();
     
     //AGREGAR Hasta que acabe este medie tiempo bucle de:
     while(finDePeriodo == false){
