@@ -1024,7 +1024,7 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
     function funcionalidadBotonTiro(evt){
 
     }
-
+    
     //Creo función para terminar turno
     function funcionalidadBotonTerminarTurno(){
         //Le quito los puntos de acción restantes e indico que el turno ya fue usado
