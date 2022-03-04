@@ -525,10 +525,13 @@ const pintoBotonSeleccionado = (ponerComoVariableElEventoDelBoton)=>{
             botonClickeadoAhora.classList.add("botonActivado");
 }
 
-/*Creo función que calcule los puntos de acción que tendrán los jugadores en el próximo "instante"*/
+/*Creo función refresca estados de los jugadores en el "instante" que está comenzando*/
 const comienzaInstante = ()=>{
     for (listas in estadosAmbosEquipos){
         for (let i=0; i<5; i++){
+            //Indico que los jugadores todavía no usaron su turno en este nuevo instante
+            estadosAmbosEquipos[equipo][jugador]["turnoUsado"] = false;
+            //Doy nuevos puntos de acción
             nuevosPuntosDeAccion();
         }
     }
@@ -538,20 +541,31 @@ const comienzaInstante = ()=>{
 /*Creo función para que los coach vean qué jugadres tienen puntos de acción*/
 //El parámetro contiene la función "queEquipoDefiendeNumero" o "queEquipoAtacaNumero" según toque al coach atacante o defensor.
 const muestroJugadoresConTurno = (ataqueODefensa)=>{
+    //Utilizo esta herramienta para contar la cantidad de jugadores a los que les queda turno en este instante
+    let cuentoJugadoresConTurno = 0;
     for (jugador in estadosAmbosEquipos[ataqueODefensa]){
-        //De cada jugador tomo sus posiciones X e Y y las junto en un string compatible con los ID de los divs que representan las casillas de la cancha
         if (estadosAmbosEquipos[ataqueODefensa][jugador].turnoUsado == false){
+            //Sumo cantidad de jugadores con turno
+            cuentoJugadoresConTurno++;
+            
+            //De cada jugador tomo sus posiciones X e Y y las junto en un string compatible con los ID de los divs que representan las casillas de la cancha
             let posicionJugador = document.getElementById(`${estadosAmbosEquipos[ataqueODefensa][jugador]["ubicacionX"]}_${estadosAmbosEquipos[ataqueODefensa][jugador]["ubicacionY"]}`);
             //Agrego atributo que va a colorear el fondo en la casilla en la que se encuentran estos jugadores
             posicionJugador.classList.add(`fondoVerde`);
             posicionJugador.classList.add(`jugador${queEquipoEs(ataqueODefensa)}${jugador}`);
+            
         }
     }
-    if (ataqueODefensa == queEquipoDefiendeNumero()){
+    //Considero si hay jugadores con turno o no y a quién toca jugar para ver por dónde continúo
+    if ((ataqueODefensa == queEquipoDefiendeNumero()) && (cuentoJugadoresConTurno != 0)){
         coachElijeJugador(queEquipoDefiendeNumero());
     }
-    else if (ataqueODefensa == queEquipoAtacaNumero()){
+    //Considero si hay jugadores con turno o no y a quién toca jugar para ver por dónde continúo
+    else if ((ataqueODefensa == queEquipoAtacaNumero()) && (cuentoJugadoresConTurno != 0)){
         coachElijeJugador(queEquipoAtacaNumero());
+    }
+    else if (cuentoJugadoresConTurno == 0){
+
     }
 }
 
@@ -838,10 +852,11 @@ const muestroPosiblesAccionesDefensa = (equipo, jugador)=>{
         estadosAmbosEquipos[equipo][jugador]["turnoUsado"] = true;
         //Si el equipo que comenzó eligiendo sus acciones fué el atacante
         if (comparoIniciativas < 0){
-            //AGREGAR Continúo al próximo instante
+            //Continúo al próximo instante
+            muestroJugadoresConTurno(queEquipoDefiendeNumero());
         }
         //Si el equipo que comenzó eligiendo sus acciones fué el defensor
-        else if (comparoIniciativas < 0){
+        else if (comparoIniciativas > 0){
             //Continúo por que el atacante elija sus acciones
             muestroPosiblesAccionesAtaque(equiposJugadoresElegidos[1], (rolJugadoresElegidos[1]-1));
         }
@@ -1072,7 +1087,8 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
         estadosAmbosEquipos[equipo][jugador]["turnoUsado"] = true;
         //Si el equipo que comenzó eligiendo sus acciones fué el defensor
         if (comparoIniciativas > 0){
-            //AGREGAR Continúo al próximo instante
+            //Continúo al próximo instante
+            muestroJugadoresConTurno(queEquipoDefiendeNumero());
         }
         //Si el equipo que comenzó eligiendo sus acciones fué el atacante
         else if (comparoIniciativas < 0){
@@ -1133,7 +1149,7 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
         muestroBotonObscuro("confirmar");
         resaltoBotones("terminarTurno");
     }
-    //WORKING hacer que skipee a la acción correspondiente dependiendo de si es el primer equipo en jugar o el segundo
+    //Hago que skipee a la acción correspondiente dependiendo de si es el primer equipo en jugar o el segundo
     else if (estadosAmbosEquipos[equipo][jugador]["puntosDeAccion"] < 0.5){
         funcionalidadBotonTerminarTurno();
     }
@@ -1359,37 +1375,37 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
 //     }
 // }
 
-const mostrarOpcionesDePase = (equipo, jugador)=>{
-    //WORKING
-}
 
+let instantesEnPeriodo = 360;
+let periodo = 1;
 const guardoJugadorSeleccionado = [];
 //Continúa el partido luego del salto lo pongo en búcle puesto que la dinámica del juego es cíclica
-while (finDePartido == false){
-
-    muestroPosicionesEnCancha();
-    comienzaInstante();
-    funciónParaAgregarEventosQueMuestranInfoDeLosJugadores();
-    
-    //AGREGAR Hasta que acabe este medie tiempo bucle de:
+while (finDePartido == false){    
+    //AGREGAR contador de período
     while(finDePeriodo == false){
-        //AGREGAR búcle de para trabajar en el mismo instante hasta que se acaben los turnos disponibles
-        //AGREGAR borrar datos del instante anterior
+        //Refresco datos para el instante acutal
+        muestroPosicionesEnCancha();
+        funciónParaAgregarEventosQueMuestranInfoDeLosJugadores();
+        comienzaInstante();
         
-        //Esto dispara funciones (muestroJugadoresConTurno, coachElijeJugador, funcionalidadBotonConfirmarJugador estas para ambos equipos y a continuación comparo iniciativas y muestro opciones que tienen los jugadores
+        //Esto dispara funciones (muestroJugadoresConTurno, coachElijeJugador, funcionalidadBotonConfirmarJugador estas para ambos equipos y a continuación comparo iniciativas y muestro opciones que tienen los jugadores)
         muestroJugadoresConTurno(queEquipoDefiendeNumero());
-
-
-        //WORKING función que elije la acción a realizar por parte de cada jugador elegido
-
-
-        //AGREGAR función que realiza acción y sus consecuencias (Si es una acción de implementación inmediata o supeditada y ya se puede calcular)
-        //AGREGAR bucle para repetir lo anterior hasta que no haya más turnos en este instante
-
-        //AGREGAR función que calcula consecuencias de acciones de implementación tardía
-        //AGREGAR función que cuenta cuánto tiempo de juego transcurrió
+        //La cadena de funciones previa completa todas las acciones de este instante
         
-        finDePeriodo = true;//Cuando tenga terminada la estructura poner un if de si el tiempo llega a 0 cambiar esto a true
+        //Resto un instante al contador de instantes
+        instantesEnPeriodo--;        
+        //AGREGAR reloj de período
+        
+        //Si se acaban los instantes en el período cambio el valor de finDePeriodo para cortar el bucle
+        if (instantesEnPeriodo == 0){
+            finDePeriodo==true;
+        }
     }
-    finDePartido = true;//Cuando tenga terminada la estructura poner un if de si el tiempo llega a 0 cambiar esto a true
+    //Al terminarse el bucle anterior que corresponde al periodo previo sumo uno al contador de periodos
+    periodo++;
+    //Si ya pasaron 2 periodos cambio el valor de finDePartido para terminar el juego
+    if (periodo == 3){
+        finDePartido = true;
+    }
+    //AGREGAR indico quién ganó el partido
 }
