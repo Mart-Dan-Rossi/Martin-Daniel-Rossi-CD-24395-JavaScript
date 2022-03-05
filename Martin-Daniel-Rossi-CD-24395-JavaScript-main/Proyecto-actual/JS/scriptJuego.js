@@ -1,75 +1,5 @@
-//El punto final de este proyecto es conseguir desarrollar un juego de rol de baloncesto.
+//El punto final de este proyecto es conseguir desarrollar un juego de rol de baloncesto. Resolución mínima recomendada de 1452px de ancho (De momento no es responsive, muy probablemente nunca lo sea)
 
-/*Traigo un JSON que contiene info de jugadores*/
-const miJSON = "../JSON/jugadores.json";
-//Le pongo un evento al botón submit
-$("#formMuestroJugadoresJson").submit((evt)=>{
-    evt.preventDefault();
-    let jugadorJSONelegido;
-    //Creo un array con nombres de jugadores
-    const listaIDJugadoresJSON = ["ginobili", "scola", "nocioni"];
-    //Creo un bucle para obtener el dato que necesito (El valor del id del jugador que es seleccionado con los input radious)
-    for (jugador in listaIDJugadoresJSON){
-        if (document.querySelector('input[name="jugador"]:checked') == document.querySelector(`#${listaIDJugadoresJSON[jugador]}`)){
-            jugadorJSONelegido = parseInt(jugador);
-        }
-    }
-    //Traigo el JSON de jugadores
-    fetch(miJSON)
-    .then((response)=>response.json())
-    .then((json)=>{
-        //Vacío el div
-        $("#muestroJugadores").html("");
-        //Introduzco el html necesario con los datos apropiados
-        $("#muestroJugadores").append(`<h3>Informacion de ${json[jugadorJSONelegido].nombre}</h3>
-        <ul>
-            <li><h4>Número en la selección:</h4><p>${json[jugadorJSONelegido].NºSeleccion}</p></li>
-            <li><h4>Lugar y fecha de nacimiento:</h4><p>${json[jugadorJSONelegido].nacimiento}</p></li>
-            <li><h4>Estatura:</h4><p>${json[jugadorJSONelegido].estatura}</p></li>
-            <li><h4>Fecha del retiro:</h4><p>${json[jugadorJSONelegido].retiro}</p></li>
-            <li><h4>Puesto de draft en la NBA:</h4><p>${json[jugadorJSONelegido].draftNBA}</p></li>
-        </ul>
-        <img class="fotoJugadoresSeleccion" src="${json[jugadorJSONelegido].imagen}" alt="foto de ${json[jugadorJSONelegido].nombre}">`)
-    });
-});
-
-//Creo un p con JQuery
-$(`#contenedorBotonesConfiguracion`).append('<span id="colorDeFondoC" class="boton">Cambiar color de fondo a celeste</span>');
-$(`#contenedorBotonesConfiguracion`).append('<span id="colorDeFondoD" class="boton">Cambiar a color de fondo por defecto</span>');
-//Cambio el color del fondo al clickear el boton anterior
-let elBody = document.querySelector("body");
-let botonCambioColorC = document.querySelector("#colorDeFondoC");
-let botonCambioColorD = document.querySelector("#colorDeFondoD");
-$("#colorDeFondoC").on("click",()=>{
-    elBody.setAttribute("class", "bgCeleste");
-    botonCambioColorD.setAttribute("class", "boton");
-    botonCambioColorC.setAttribute("class", "botonColorActivado");
-});
-$("#colorDeFondoD").on("click", ()=>{
-    elBody.setAttribute("class", "bodyJuego");
-    botonCambioColorC.setAttribute("class", "boton");
-    botonCambioColorD.setAttribute("class", "botonColorActivado");
-});
-/*Muestro si es una partida nueva o una continuada en un p*/
-//Creo el p
-const p = document.createElement("p");
-//Le pongo contenido al p
-p.innerText = localStorage.getItem("tipoDePartida");
-//Ubico el p en el HTML
-document.querySelector("header").appendChild(p);
-//Pongo el "tipoDePartida" del local storage como continuar juego. En un futuro voy a permitir reanudar partidas y por defecto quiero que se continúe por si entran a este html andes de pasar por la página de inicio.
-localStorage.setItem("tipoDePartida", "Continuar juego");
-
-
-//Funciones para los dados
-//Retorna un número aleatorio entre min (incluido) y max (excluido);
-/*function getRandomArbitrary(min, max){
-    return Math.random() * (max - min) + min;
-}*/
-/*Función que sirve para lanzar un dado de 20 caras*/
-function dadoDe20(){
-    return Math.random() * (21-1)+1;
-}
 
 /*Defino valiables necesarias*/
 let nombre;
@@ -89,12 +19,39 @@ let turnoUsado;
 let ultimaAccion = "Todavía no realizó ninguna acción";
 let puntosDeAccion;
 
-let finDePeriodo= false;
-let finDePartido = false;
 let resultadoDado;
+let instantesEnPeriodo = 360;
+let periodo = 1;
+const guardoJugadorSeleccionado = [];
 
+let saltoA = 0;
+let saltoB = 0;
 
+let comparoIniciativas;
+let equiposJugadoresElegidos;
+let rolJugadoresElegidos;
 
+const letraEquipo = ["A","B"];
+//Pretengo agregar más imágenes que determinen de forma visual las habilidades de los jugadores, por eso creo estos array.
+const imgHabilidadesDeJugadoresAAtacantes ={
+    defecto: `../Img/AAtaca.png`
+};
+const imgHabilidadesDeJugadoresBAtacantes ={
+    defecto: `../Img/BAtaca.png`
+};
+const imgHabilidadesAmbosEquiposAtacando = [imgHabilidadesDeJugadoresAAtacantes, imgHabilidadesDeJugadoresBAtacantes];
+const imgHabilidadesDeJugadoresADefensores ={
+    defecto: `../Img/ADefiende.png`
+}
+const imgHabilidadesDeJugadoresBDefensores ={
+    defecto: `../Img/BDefiende.png`
+}
+const imgHabilidadesAmbosEquiposDefendiendo = [imgHabilidadesDeJugadoresADefensores, imgHabilidadesDeJugadoresBDefensores];
+const imgConPelota = [`../Img/ACHabilAtacaCPelota.png`, `../Img/BCHabilAtacaCPelota.png`];
+
+//Creo objeto para costos de "puntos de acción" para cada acción
+const costeAccionesDefensa ={moverseRecto: 1, moverseDiagonal: 1.5, intentarUnRoboAlPortadorDeLaPelota: 1, intentarInterceptarPase: 1, esperaAtosigante: 1, esperaCautelosa: 0.5};
+const costeAccionesAtaque ={moverseRecto: 1, moverseDiagonal: 1.5, pase: 0.5, dribblingRecto: 1, dribblingDiagonal: 1.5, esperarSinBalon: 1, esperarEnTripleAmenaza: 0.5, tiro: 1};
 
 //Creación de jugadores
 class Jugador{
@@ -212,23 +169,18 @@ for (i=0; i<2; i++){
         estadosAmbosEquipos[i][jugador]["nombre"] = ambosEquipos[i][jugador]["nombre"];
     }
 }
-//Creo objeto para costos de "puntos de acción" para cada acción
-const costeAccionesDefensa ={moverseRecto: 1, moverseDiagonal: 1.5, intentarUnRoboAlPortadorDeLaPelota: 1, intentarInterceptarPase: 1, esperaAtosigante: 1, esperaCautelosa: 0.5};
-const costeAccionesAtaque ={moverseRecto: 1, moverseDiagonal: 1.5, pase: 0.5, dribblingRecto: 1, dribblingDiagonal: 1.5, esperarSinBalon: 1, esperarEnTripleAmenaza: 0.5, tiro: 1};
 
 
-/*Muestro habilidades de los jugadores*/
-//Creo arrays que van a servir para hacer esto
-const listaHabilidades = ["nombre", "altura", "peso", "capacidadAtletica", "defensaPerimetral", "defensaInterna", "capacidadReboteadora", "anotacionExterior", "anotacionInterior", "creacionDeJuego"];
-const habilidadesResumidas = ["Nombre", "Alt", "Peso", "Cap atl", "Def per", "Def int", "Cap reb", "3ple", "Anot int", "Creación"];
-const rangosHabilidad = ["puntosMuyBajos", "puntosBajos", "puntosMediosBajos", "puntosMedios", "puntosMediosAltos", "puntosAltos", "puntosMuyAltos", "sobreHumano"];
-const rangosAlturas = [0, 164, 175, 184, 194, 203, 213, 222, 232];
-const rangosPesos = [0, 73, 82, 91, 99, 108, 116, 125, 140];
-const rangosSobreCien = [0, 14, 29, 43, 57, 71, 86, 100, 115];
+//Funciones para los dados
+//Retorna un número aleatorio entre min (incluido) y max (excluido);
+/*function getRandomArbitrary(min, max){
+    return Math.random() * (max - min) + min;
+}*/
+/*Función que sirve para lanzar un dado de 20 caras*/
+function dadoDe20(){
+    return Math.random() * (21-1)+1;
+}
 
-let dataTablaA = document.getElementById("idTablaA");
-let dataTablaB = document.getElementById("idTablaB");
-const ambasTablas = [dataTablaA, dataTablaB];
 
 /*Animo el logo del juego*/
 $(document).ready(function () {
@@ -238,6 +190,68 @@ $(document).ready(function () {
         })
     });
 });
+
+
+/*Traigo un JSON que contiene info de jugadores*/
+const miJSON = "../JSON/jugadores.json";
+//Le pongo un evento al botón submit
+$("#formMuestroJugadoresJson").submit((evt)=>{
+    evt.preventDefault();
+    let jugadorJSONelegido;
+    //Creo un array con nombres de jugadores
+    const listaIDJugadoresJSON = ["ginobili", "scola", "nocioni"];
+    //Creo un bucle para obtener el dato que necesito (El valor del id del jugador que es seleccionado con los input radious)
+    for (jugador in listaIDJugadoresJSON){
+        if (document.querySelector('input[name="jugador"]:checked') == document.querySelector(`#${listaIDJugadoresJSON[jugador]}`)){
+            jugadorJSONelegido = parseInt(jugador);
+        }
+    }
+    //Traigo el JSON de jugadores
+    fetch(miJSON)
+    .then((response)=>response.json())
+    .then((json)=>{
+        //Vacío el div
+        $("#muestroJugadores").html("");
+        //Introduzco el html necesario con los datos apropiados
+        $("#muestroJugadores").append(`<h3>Informacion de ${json[jugadorJSONelegido].nombre}</h3>
+        <ul>
+            <li><h4>Número en la selección:</h4><p>${json[jugadorJSONelegido].NºSeleccion}</p></li>
+            <li><h4>Lugar y fecha de nacimiento:</h4><p>${json[jugadorJSONelegido].nacimiento}</p></li>
+            <li><h4>Estatura:</h4><p>${json[jugadorJSONelegido].estatura}</p></li>
+            <li><h4>Fecha del retiro:</h4><p>${json[jugadorJSONelegido].retiro}</p></li>
+            <li><h4>Puesto de draft en la NBA:</h4><p>${json[jugadorJSONelegido].draftNBA}</p></li>
+        </ul>
+        <img class="fotoJugadoresSeleccion" src="${json[jugadorJSONelegido].imagen}" alt="foto de ${json[jugadorJSONelegido].nombre}">`)
+    });
+});
+
+//Creo un p con JQuery
+$(`#contenedorBotonesConfiguracion`).append('<span id="colorDeFondoC" class="boton">Cambiar color de fondo a celeste</span>');
+$(`#contenedorBotonesConfiguracion`).append('<span id="colorDeFondoD" class="boton">Cambiar a color de fondo por defecto</span>');
+//Cambio el color del fondo al clickear el boton anterior
+let elBody = document.querySelector("body");
+let botonCambioColorC = document.querySelector("#colorDeFondoC");
+let botonCambioColorD = document.querySelector("#colorDeFondoD");
+$("#colorDeFondoC").on("click",()=>{
+    elBody.setAttribute("class", "bgCeleste");
+    botonCambioColorD.setAttribute("class", "boton");
+    botonCambioColorC.setAttribute("class", "botonColorActivado");
+});
+$("#colorDeFondoD").on("click", ()=>{
+    elBody.setAttribute("class", "bodyJuego");
+    botonCambioColorC.setAttribute("class", "boton");
+    botonCambioColorD.setAttribute("class", "botonColorActivado");
+});
+/*Muestro si es una partida nueva o una continuada en un p*/
+//Creo el p
+const p = document.createElement("p");
+//Le pongo contenido al p
+p.innerText = localStorage.getItem("tipoDePartida");
+//Ubico el p en el HTML
+document.querySelector("header").appendChild(p);
+//Pongo el "tipoDePartida" del local storage como continuar juego. En un futuro voy a permitir reanudar partidas y por defecto quiero que se continúe por si entran a este html andes de pasar por la página de inicio.
+localStorage.setItem("tipoDePartida", "Continuar juego");
+
 
 
 /*Eventos que permiten tocar botón para que aparezca la información de los jugadores al pasar el cursor sobre ellos*/
@@ -259,31 +273,18 @@ const funciónParaAgregarEventosQueMuestranInfoDeLosJugadores = ()=>{
             jugadoresParaMostrarInfo.addEventListener("mouseover", muestroInfo);
             //El evento de cada jugador disparará lo siguiente
             function muestroInfo(){
-                //Si es del equipo A
-                if (equipo==0){
-                    document.getElementById("nombreA").innerHTML= ambosEquipos[equipo][i]["nombre"];
-                    document.getElementById("alturaA").innerHTML= ambosEquipos[equipo][i]["altura"];
-                    document.getElementById("pesoA").innerHTML= ambosEquipos[equipo][i]["peso"];
-                    document.getElementById("capacidadAtleticaA").innerHTML= ambosEquipos[equipo][i]["capacidadAtletica"];
-                    document.getElementById("defensaPerimetralA").innerHTML= ambosEquipos[equipo][i]["defensaPerimetral"];
-                    document.getElementById("defensaInternaA").innerHTML= ambosEquipos[equipo][i]["defensaInterna"];
-                    document.getElementById("capacidadReboteadoraA").innerHTML= ambosEquipos[equipo][i]["capacidadReboteadora"];
-                    document.getElementById("anotacionExteriorA").innerHTML= ambosEquipos[equipo][i]["anotacionExterior"];
-                    document.getElementById("anotacionInteriorA").innerHTML= ambosEquipos[equipo][i]["anotacionInterior"];
-                    document.getElementById("creacionDeJuegoA").innerHTML= ambosEquipos[equipo][i]["creacionDeJuego"];
-                }
-                //Si es del equipo B
-                else if (equipo==1){
-                    document.getElementById("nombreB").innerHTML= ambosEquipos[equipo][i]["nombre"];
-                    document.getElementById("alturaB").innerHTML= ambosEquipos[equipo][i]["altura"];
-                    document.getElementById("pesoB").innerHTML= ambosEquipos[equipo][i]["peso"];
-                    document.getElementById("capacidadAtleticaB").innerHTML= ambosEquipos[equipo][i]["capacidadAtletica"];
-                    document.getElementById("defensaPerimetralB").innerHTML= ambosEquipos[equipo][i]["defensaPerimetral"];
-                    document.getElementById("defensaInternaB").innerHTML= ambosEquipos[equipo][i]["defensaInterna"];
-                    document.getElementById("capacidadReboteadoraB").innerHTML= ambosEquipos[equipo][i]["capacidadReboteadora"];
-                    document.getElementById("anotacionExteriorB").innerHTML= ambosEquipos[equipo][i]["anotacionExterior"];
-                    document.getElementById("anotacionInteriorB").innerHTML= ambosEquipos[equipo][i]["anotacionInterior"];
-                    document.getElementById("creacionDeJuegoB").innerHTML= ambosEquipos[equipo][i]["creacionDeJuego"];
+                const arrayNombresStats = ["nombre", "altura", "peso", "capacidadAtletica", "defensaPerimetral", "defensaInterna", "capacidadReboteadora", "anotacionExterior", "anotacionInterior", "creacionDeJuego"]
+                const arrayNombresStatsA = ["nombreA", "alturaA", "pesoA", "capacidadAtleticaA", "defensaPerimetralA", "defensaInternaA", "capacidadReboteadoraA", "anotacionExteriorA", "anotacionInteriorA", "creacionDeJuegoA"]
+                const arrayNombresStatsB = ["nombreB", "alturaB", "pesoB", "capacidadAtleticaB", "defensaPerimetralB", "defensaInternaB", "capacidadReboteadoraB", "anotacionExteriorB", "anotacionInteriorB", "creacionDeJuegoB"]
+                for (stat in arrayNombresStats){
+                    //Si es del equipo A
+                    if (equipo==0){
+                        document.getElementById(`${arrayNombresStatsA[stat]}`).innerHTML= ambosEquipos[equipo][i][`${arrayNombresStats[stat]}`];
+                    }
+                    //Si es del equipo B
+                    else if (equipo==1){
+                            document.getElementById(`${arrayNombresStatsB[stat]}`).innerHTML= ambosEquipos[equipo][i][`${arrayNombresStats[stat]}`];
+                    }
                 }
             }      
         }
@@ -363,80 +364,17 @@ const queEquipoDefiendeNumero = ()=>{
         }
     }
 }
-/*Agrego función que ponga imagenes de jugadores en la ubicación en la que se encuentren*/
-//El primer bucle lo uso para recorrer estadosAmbosEquipos (elije el equipo)
-const letraEquipo = ["A","B"]; 
-//Pretengo agregar más imágenes que determinen de forma visual las habilidades de los jugadores, por eso creo estos array.
-const imgHabilidadesDeJugadoresAAtacantes ={
-    defecto: `../Img/AAtaca.png`
-};
-const imgHabilidadesDeJugadoresBAtacantes ={
-    defecto: `../Img/BAtaca.png`
-};
-
-const imgHabilidadesAmbosEquiposAtacando = [imgHabilidadesDeJugadoresAAtacantes, imgHabilidadesDeJugadoresBAtacantes];
-
-
-const imgHabilidadesDeJugadoresADefensores ={
-    defecto: `../Img/ADefiende.png`
-}
-const imgHabilidadesDeJugadoresBDefensores ={
-    defecto: `../Img/BDefiende.png`
-}
-
-const imgHabilidadesAmbosEquiposDefendiendo = [imgHabilidadesDeJugadoresADefensores, imgHabilidadesDeJugadoresBDefensores];
-
-const imgConPelota = [`../Img/ACHabilAtacaCPelota.png`, `../Img/BCHabilAtacaCPelota.png`];
-
-const posicionYAletra = ()=>{
-    for (let i=0; i < 2; i++){
-        if (estadosAmbosEquipos[i][jugador]["ubicacionY"] == 1){
-            return "A";       
-        }
-        else if (estadosAmbosEquipos[i][jugador]["ubicacionY"] == 2){
-            return "B";
-        }
-        else if (estadosAmbosEquipos[i][jugador]["ubicacionY"] == 3){
-            return "C";
-        }
-        else if (estadosAmbosEquipos[i][jugador]["ubicacionY"] == 4){
-            return "D";
-        }
-        else if (estadosAmbosEquipos[i][jugador]["ubicacionY"] == 5){
-            return "E";
-        }
-        else if (estadosAmbosEquipos[i][jugador]["ubicacionY"] == 6){
-            return "F";
-        }
-        else if (estadosAmbosEquipos[i][jugador]["ubicacionY"] == 7){
-            return "G";
-        }
-        else if (estadosAmbosEquipos[i][jugador]["ubicacionY"] == 8){
-            return "H";
-        }
-        else if (estadosAmbosEquipos[i][jugador]["ubicacionY"] == 9){
-            return "I";
-        }
-        else if (estadosAmbosEquipos[i][jugador]["ubicacionY"] == 10){
-            return "J";
-        }
-        else if (estadosAmbosEquipos[i][jugador]["ubicacionY"] == 11){
-            return "K";
-        }
-        else if (estadosAmbosEquipos[i][jugador]["ubicacionY"] == 12){
-            return "L";
-        }
-        else if (estadosAmbosEquipos[i][jugador]["ubicacionY"] == 13){
-            return "M";
-        }
-        else if (estadosAmbosEquipos[i][jugador]["ubicacionY"] == 14){
-            return "N";
-        }
-        else if (estadosAmbosEquipos[i][jugador]["ubicacionY"] == 15){
-            return "O";
+const posicionYALetra = (i)=>{
+    let arrayLetrasParaNombrarCasillasEjeY= ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O"]
+    //El bucle lo uso para recorrer este array de letras
+    for (cantidadLetras in arrayLetrasParaNombrarCasillasEjeY){
+        if (estadosAmbosEquipos[i][jugador]["ubicacionY"] == Number(cantidadLetras) + 1){
+            return `${arrayLetrasParaNombrarCasillasEjeY[cantidadLetras]}`;       
         }
     }
 }
+
+/*Agrego función que ponga imagenes de jugadores en la ubicación en la que se encuentren*/
 const muestroPosicionesEnCancha = ()=>{
     for (let i=0; i < 2; i++){
         //El segundo bucle lo uso para recorrer listaEstadosJugadores(A/B) (elije el jugador)
@@ -446,10 +384,10 @@ const muestroPosicionesEnCancha = ()=>{
             let posicionJugador = document.getElementById(idDivs);
             let concateno = "";
             if (queEquipoAtaca() == letraEquipo[i]){
-                concateno += `<img src="${imgHabilidadesAmbosEquiposAtacando[i]["defecto"]}" alt="${ambosEquipos[i][jugador].nombre} se encuentra en ${posicionYAletra()}${estadosAmbosEquipos[i][jugador]["ubicacionX"]}">`;
+                concateno += `<img src="${imgHabilidadesAmbosEquiposAtacando[i]["defecto"]}" alt="${ambosEquipos[i][jugador].nombre} se encuentra en ${posicionYALetra(i)}${estadosAmbosEquipos[i][jugador]["ubicacionX"]}">`;
             }
             else if (queEquipoDefiende() == letraEquipo[i]){
-                concateno += `<img src="${imgHabilidadesAmbosEquiposDefendiendo[i]["defecto"]}" alt="${ambosEquipos[i][jugador].nombre} se encuentra en ${posicionYAletra()}${estadosAmbosEquipos[i][jugador]["ubicacionX"]}">`;
+                concateno += `<img src="${imgHabilidadesAmbosEquiposDefendiendo[i]["defecto"]}" alt="${ambosEquipos[i][jugador].nombre} se encuentra en ${posicionYALetra(i)}${estadosAmbosEquipos[i][jugador]["ubicacionX"]}">`;
             }
             if (estadosAmbosEquipos[i][jugador].conPelota == true){
                 concateno += `<img src="${imgConPelota[i]}" alt="${ambosEquipos[i][jugador].nombre} se encuentra en poseción de la pelota">`;
@@ -459,40 +397,7 @@ const muestroPosicionesEnCancha = ()=>{
     }
 }
 
-/*Se disputa el salto entre 2 para comenzar el partido*/
-console.log("El árbitro se dispone en mitad de cancha a lanzar el balón hacia arriba para iniciar del encuentro. Lo lanza y..");
-//Creo un bucle para resolver quién consigue más puntos considerando las estadísticas que influyen en esta acción y lo que sacan con el dado
-let saltoA = 0;
-let saltoB = 0;
-//Si empatan vuelve a comenzar el ciclo
-while (saltoA == saltoB){
-    //Calculo cuántos puntos consigue cada jugador para esta acción
-    saltoA = dadoDe20() + listaJugadoresA[4].altura+listaJugadoresA[4].capacidadAtletica;
-    console.log(`${listaJugadoresA[4].nombre} consigue ${saltoA} puntos en el salto`);
-    saltoB = dadoDe20() + listaJugadoresB[4].altura+listaJugadoresB[4].capacidadAtletica;
-    console.log(`${listaJugadoresB[4].nombre} consigue ${saltoB} puntos en el salto`);
-    //Comparo el desempeño de los jugadores y devuelvo lo que ocurre considerando los resultados
-    let resultadoSalto = saltoA-saltoB;
-    if (resultadoSalto > 0){
-        console.log(`El salto lo gana el equipo A y la pelota ahora está en posesión de ${listaJugadoresA[0].nombre}`);
-        listaEstadosJugadoresA[0].conPelota = true;
-        listaEstadosJugadoresA[0].ultimaAccion = `${listaJugadoresA[0].nombre} recibe un pase`;
-        console.log(`${listaEstadosJugadoresA[0].ultimaAccion}`);
-        listaEstadosJugadoresA[4].ultimaAccion = `${listaJugadoresA[4].nombre} gana el salto`;
-        console.log(`${listaEstadosJugadoresA[4].ultimaAccion}`);
-    }
-    else if (resultadoSalto < 0){
-        console.log(`El salto lo gana el equipo B y la pelota ahora está en posesión de ${listaJugadoresB[0].nombre}`);
-        listaEstadosJugadoresB[0].conPelota = true;
-        listaEstadosJugadoresB[0].ultimaAccion = `${listaJugadoresB[0].nombre} recibe un pase`;
-        console.log(`${listaEstadosJugadoresB[0].ultimaAccion}`);
-        listaEstadosJugadoresB[4].ultimaAccion = `${listaJugadoresB[4].nombre} gana el salto`;
-        console.log(`${listaEstadosJugadoresB[4].ultimaAccion}`);
-    }
-    else{
-        console.log("Ambos jugadores alcanzan el balón al mismo tiempo, la disputa por el salto sigue!");
-    }
-};
+
 /*Creo función que sirve para generar botón resaltado*/
 //El parámetro tiene que tener el nombre de la acción a realizar (Es el ID del elemento HTML que se va a mostrar en pantalla)
 const resaltoBotones = (nombreDelBoton)=>{
@@ -527,7 +432,7 @@ const pintoBotonSeleccionado = (ponerComoVariableElEventoDelBoton)=>{
 
 /*Creo función refresca estados de los jugadores en el "instante" que está comenzando*/
 const comienzaInstante = ()=>{
-    for (listas in estadosAmbosEquipos){
+    for (equipo in estadosAmbosEquipos){
         for (let i=0; i<5; i++){
             //Indico que los jugadores todavía no usaron su turno en este nuevo instante
             estadosAmbosEquipos[equipo][jugador]["turnoUsado"] = false;
@@ -660,9 +565,6 @@ const coachElijeJugador = (ataqueODefensa)=>{
 
     
 /*Creo una función que compara las iniciativas de los jugadores*/
-let comparoIniciativas;
-let equiposJugadoresElegidos;
-let rolJugadoresElegidos;
 const comparoIniciativasDeJugadoresElegidos = ()=>{
     //Guardo a ambos jugadores por separado en variables
     let jugador1 = guardoJugadorSeleccionado[0];
@@ -854,6 +756,7 @@ const muestroPosiblesAccionesDefensa = (equipo, jugador)=>{
         if (comparoIniciativas < 0){
             //Continúo al próximo instante
             muestroJugadoresConTurno(queEquipoDefiendeNumero());
+            funcionGestionReloj();
         }
         //Si el equipo que comenzó eligiendo sus acciones fué el defensor
         else if (comparoIniciativas > 0){
@@ -1089,6 +992,7 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
         if (comparoIniciativas > 0){
             //Continúo al próximo instante
             muestroJugadoresConTurno(queEquipoDefiendeNumero());
+            funcionGestionReloj();
         }
         //Si el equipo que comenzó eligiendo sus acciones fué el atacante
         else if (comparoIniciativas < 0){
@@ -1375,37 +1279,73 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
 //     }
 // }
 
-
-let instantesEnPeriodo = 360;
-let periodo = 1;
-const guardoJugadorSeleccionado = [];
-//Continúa el partido luego del salto lo pongo en búcle puesto que la dinámica del juego es cíclica
-while (finDePartido == false){    
-    //AGREGAR contador de período
-    while(finDePeriodo == false){
-        //Refresco datos para el instante acutal
-        muestroPosicionesEnCancha();
-        funciónParaAgregarEventosQueMuestranInfoDeLosJugadores();
-        comienzaInstante();
-        
-        //Esto dispara funciones (muestroJugadoresConTurno, coachElijeJugador, funcionalidadBotonConfirmarJugador estas para ambos equipos y a continuación comparo iniciativas y muestro opciones que tienen los jugadores)
-        muestroJugadoresConTurno(queEquipoDefiendeNumero());
-        //La cadena de funciones previa completa todas las acciones de este instante
-        
-        //Resto un instante al contador de instantes
-        instantesEnPeriodo--;        
-        //AGREGAR reloj de período
-        
-        //Si se acaban los instantes en el período cambio el valor de finDePeriodo para cortar el bucle
-        if (instantesEnPeriodo == 0){
-            finDePeriodo==true;
+const funcionGestionReloj= ()=>{
+    //Resto un instante al contador de instantes
+    instantesEnPeriodo--;
+    //AGREGAR reloj de período
+    
+    //Si se acaban los instantes en el período
+    if (instantesEnPeriodo == 0){
+        //Reseteo el reloj del periodo
+        instantesEnPeriodo = 360;
+        //Sumo uno al contador de periodos
+        periodo++;
+        //Si el periodo que termino fue el 1ro
+        if (periodo == 2){
+            mitadPartido()
+        }
+        //Si ya pasaron 2 periodos cambio el valor de finDePartido para terminar el juego
+        if (periodo == 3){
+            //AGREGAR esta función
+            terminoPartido();
         }
     }
-    //Al terminarse el bucle anterior que corresponde al periodo previo sumo uno al contador de periodos
-    periodo++;
-    //Si ya pasaron 2 periodos cambio el valor de finDePartido para terminar el juego
-    if (periodo == 3){
-        finDePartido = true;
-    }
-    //AGREGAR indico quién ganó el partido
 }
+
+
+/*Se disputa el salto entre 2 para comenzar el partido*/
+console.log("El árbitro se dispone en mitad de cancha a lanzar el balón hacia arriba para iniciar del encuentro. Lo lanza y..");
+//Creo un bucle para resolver quién consigue más puntos considerando las estadísticas que influyen en esta acción y lo que sacan con el dado
+
+//Si empatan vuelve a comenzar el ciclo
+while (saltoA == saltoB){
+    //Calculo cuántos puntos consigue cada jugador para esta acción
+    saltoA = dadoDe20() + listaJugadoresA[4].altura+listaJugadoresA[4].capacidadAtletica;
+    console.log(`${listaJugadoresA[4].nombre} consigue ${saltoA} puntos en el salto`);
+    saltoB = dadoDe20() + listaJugadoresB[4].altura+listaJugadoresB[4].capacidadAtletica;
+    console.log(`${listaJugadoresB[4].nombre} consigue ${saltoB} puntos en el salto`);
+    //Comparo el desempeño de los jugadores y devuelvo lo que ocurre considerando los resultados
+    let resultadoSalto = saltoA-saltoB;
+    if (resultadoSalto > 0){
+        console.log(`El salto lo gana el equipo A y la pelota ahora está en posesión de ${listaJugadoresA[0].nombre}`);
+        listaEstadosJugadoresA[0].conPelota = true;
+        listaEstadosJugadoresA[0].ultimaAccion = `${listaJugadoresA[0].nombre} recibe un pase`;
+        console.log(`${listaEstadosJugadoresA[0].ultimaAccion}`);
+        listaEstadosJugadoresA[4].ultimaAccion = `${listaJugadoresA[4].nombre} gana el salto`;
+        console.log(`${listaEstadosJugadoresA[4].ultimaAccion}`);
+    }
+    else if (resultadoSalto < 0){
+        console.log(`El salto lo gana el equipo B y la pelota ahora está en posesión de ${listaJugadoresB[0].nombre}`);
+        listaEstadosJugadoresB[0].conPelota = true;
+        listaEstadosJugadoresB[0].ultimaAccion = `${listaJugadoresB[0].nombre} recibe un pase`;
+        console.log(`${listaEstadosJugadoresB[0].ultimaAccion}`);
+        listaEstadosJugadoresB[4].ultimaAccion = `${listaJugadoresB[4].nombre} gana el salto`;
+        console.log(`${listaEstadosJugadoresB[4].ultimaAccion}`);
+    }
+    else{
+        console.log("Ambos jugadores alcanzan el balón al mismo tiempo, la disputa por el salto sigue!");
+    }
+};
+//Continúa el partido luego del salto
+
+//Refresco datos para el instante acutal
+muestroPosicionesEnCancha();
+funciónParaAgregarEventosQueMuestranInfoDeLosJugadores();
+comienzaInstante();
+
+//Esto dispara funciones (muestroJugadoresConTurno, coachElijeJugador, funcionalidadBotonConfirmarJugador estas para ambos equipos y a continuación comparo iniciativas y muestro opciones que tienen los jugadores)
+muestroJugadoresConTurno(queEquipoDefiendeNumero());
+//La cadena de funciones previa completa todas las acciones de este instante
+
+
+//AGREGAR Indico quién ganó el partido
