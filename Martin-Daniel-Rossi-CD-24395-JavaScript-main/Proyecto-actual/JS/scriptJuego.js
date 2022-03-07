@@ -1,6 +1,13 @@
 //El punto final de este proyecto es conseguir desarrollar un juego de rol de baloncesto. Resolución mínima recomendada de 1452px de ancho (De momento no es responsive, muy probablemente nunca lo sea)
 
 
+//PARA PROBAR LA PARTE DE MOVERSE PONÉ EN EL BUSCADOR "/*MOVERSE*/" Y DESCOMENTÁ ESAS SECCIONES QUE TERMINAN EN "/*FIN SECCION MOVERSE*/".
+//COMO SEGUÍ TRABAJANDO LUEGO DE TOMAR LA DESICIÓN DE QUITAR ESA PARTE
+//TAL VEZ SEA RECOMENDABLE COMENTAR LAS LÍNEAS QUE AGREGAN LOS EVENTOS DISPARADORES DE LAS OTRAS POSIBLES ACCIONES.
+//EL ERROR PUNTUALMENTE ESTÁ MARCADO CON "/*EMPIEZA ERROR*/" Y "/*TERMINA ERROR*/"
+//TAMBIÉN DEJÉ UNA ACOTACIÓN RELEVANTE A LA EXPLICACIÓN DEL ERROR. LA PODES ENCONTRAR BUSCANDO "/*EL ERROR ANTES" ETC.
+
+
 /*Defino valiables necesarias*/
 let nombre;
 let altura;
@@ -20,9 +27,11 @@ let ultimaAccion = "Todavía no realizó ninguna acción";
 let puntosDeAccion;
 
 let resultadoDado;
+const guardoJugadorSeleccionado = [];
+
 let instantesEnPeriodo = 360;
 let periodo = 1;
-const guardoJugadorSeleccionado = [];
+
 
 let saltoA = 0;
 let saltoB = 0;
@@ -32,7 +41,7 @@ let equiposJugadoresElegidos;
 let rolJugadoresElegidos;
 
 const letraEquipo = ["A","B"];
-//Pretengo agregar más imágenes que determinen de forma visual las habilidades de los jugadores, por eso creo estos array.
+//Pretendo agregar más imágenes que determinen de forma visual las habilidades de los jugadores, por eso creo estos array.
 const imgHabilidadesDeJugadoresAAtacantes ={
     defecto: `../Img/AAtaca.png`
 };
@@ -390,7 +399,7 @@ const muestroPosicionesEnCancha = ()=>{
                 concateno += `<img src="${imgHabilidadesAmbosEquiposDefendiendo[i]["defecto"]}" alt="${ambosEquipos[i][jugador].nombre} se encuentra en ${posicionYALetra(i)}${estadosAmbosEquipos[i][jugador]["ubicacionX"]}">`;
             }
             if (estadosAmbosEquipos[i][jugador].conPelota == true){
-                concateno += `<img src="${imgConPelota[i]}" alt="${ambosEquipos[i][jugador].nombre} se encuentra en poseción de la pelota">`;
+                concateno += `<img src="${imgConPelota[i]}" alt="${ambosEquipos[i][jugador].nombre} se encuentra en posesión de la pelota">`;
             }
             posicionJugador.innerHTML = concateno;
         }
@@ -615,7 +624,7 @@ const comparoIniciativasDeJugadoresElegidos = ()=>{
                 iniciativaJugador1 = dadoDe20()*2 + ((ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["altura"]-165)/0.65)*0.25 + ((ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["peso"]-65)/0.55)*0.25 + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["capacidadAtletica"]*1.2 + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["defensaInterna"]*2*0.25 + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["defensaPerimetral"]*2*0.75;
             }
             //Si está lejos
-            else if ((estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 1) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 2) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 14) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] == 15) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 1) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 3) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 4) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 4) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 5) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 6) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] > 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] < 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 4) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 12) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 1) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 13)){
+            else if ((estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 1) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 2) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 14) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 15) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 1) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 3) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 4) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 4) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 5) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 6) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] > 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] < 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 4) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 12) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 1) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 13)){
                 iniciativaJugador1 = dadoDe20()*2 + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["capacidadAtletica"]*1.2 + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["defensaPerimetral"]*2*2;
             }
         
@@ -633,7 +642,7 @@ const comparoIniciativasDeJugadoresElegidos = ()=>{
                 iniciativaJugador2 = dadoDe20()*2 + ((ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["altura"]-165)/0.65)*0.25 + ((ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["peso"]-65)/0.55)*0.25 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["capacidadAtletica"]*1.2 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["anotacionInterior"]*0.25 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["anotacionExterior"]*0.75 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["creacionDeJuego"];
             }
             //Si está lejos
-            else if ((estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 1) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 2) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 14) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] == 15) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 1) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 3) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 4) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 4) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 5) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 6) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] > 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] < 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 4) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 12) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 1) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 13)){
+            else if ((estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 1) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 2) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 14) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 15) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 1) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 3) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 4) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 4) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 5) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 6) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] > 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] < 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 4) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 12) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 1) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 13)){
                 iniciativaJugador2 = dadoDe20()*2 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["capacidadAtletica"]*1.2 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["anotacionExterior"]*2*2 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["creacionDeJuego"];
             }
         }
@@ -652,7 +661,7 @@ const comparoIniciativasDeJugadoresElegidos = ()=>{
                 iniciativaJugador1 = dadoDe20()*2 + ((ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["altura"]-165)/0.65)*0.25 + ((ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["peso"]-65)/0.55)*0.25 + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["capacidadAtletica"]*1.2 + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["defensaInterna"]*2*0.25 + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["defensaPerimetral"]*2*0.75;
             }
             //Si está lejos
-            else if ((estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 1) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 2) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 14) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] == 15) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 28) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 3) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 25) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 4) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 24) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 5) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 23) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] > 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] < 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 24) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 25) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 12) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 28) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 13)){
+            else if ((estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 1) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 2) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 14) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 15) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 28) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 3) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 25) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 4) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 24) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 5) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 23) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] > 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] < 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 24) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 25) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 12) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 28) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 13)){
                 iniciativaJugador1 = dadoDe20()*2 + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["capacidadAtletica"]*1.2 + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["defensaPerimetral"]*2*2;
             }
         
@@ -670,7 +679,7 @@ const comparoIniciativasDeJugadoresElegidos = ()=>{
                 iniciativaJugador2 = dadoDe20()*2 + ((ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["altura"]-165)/0.65)*0.25 + ((ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["peso"]-65)/0.55)*0.25 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["capacidadAtletica"]*1.2 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["anotacionInterior"]*0.25 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["anotacionExterior"]*0.75 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["creacionDeJuego"];
             }
             //Si está lejos
-            else if ((estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 1) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 2) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 14) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] == 15) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 28) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 3) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 25) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 4) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 24) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 5) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 23) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] > 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] < 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 24) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 25) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 12) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 28) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 13)){
+            else if ((estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 1) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 2) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 14) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 15) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 28) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 3) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 25) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 4) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 24) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 5) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 23) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] > 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] < 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 24) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 25) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 12) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 28) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 13)){
                 iniciativaJugador2 = dadoDe20()*2 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["capacidadAtletica"]*1.2 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["anotacionExterior"]*2*2 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["creacionDeJuego"];
             }
         }
@@ -740,15 +749,16 @@ const muestroPosiblesAccionesDefensa = (equipo, jugador)=>{
     //     mostrarOpcionesDeDondeMoverse(equipo, jugador);
     //     permitoSeleccionarOpcionesDeDondeMoverse(equipo, jugador);
     // }
+    /*FIN SEGMENTO MOVERSE*/
 
-    /*Creo funcionalidad para confirmar que deseo terminar el turno*/
-    function pidoConfirmarEleccionTerminarTurno (evt){
-        pintoBotonSeleccionado(evt);
-        resaltoBotones("confirmar");
-        botonConfirmar.addEventListener("click", funcionalidadBotonTerminarTurno);
-    }
-    //Creo función para terminar turno
+    /*Creo funciónes para terminar turno*/
     function funcionalidadBotonTerminarTurno(){
+        //Llamo a los jugadores con fondo seleccionado para poder quitarle el fondo
+        let jugadoresConFondoElegido= document.getElementsByClassName(`fondoSeleccionadoYLeToca`);
+        //Quito el color de fondo del jugador que acaba de terminar su turno
+        jugadoresConFondoElegido[0].classList.remove(`fondoSeleccionadoYLeToca`);
+        
+        
         //Le quito los puntos de acción restantes e indico que el turno ya fue usado
         estadosAmbosEquipos[equipo][jugador]["puntosDeAccion"] = 0;
         estadosAmbosEquipos[equipo][jugador]["turnoUsado"] = true;
@@ -760,13 +770,35 @@ const muestroPosiblesAccionesDefensa = (equipo, jugador)=>{
         }
         //Si el equipo que comenzó eligiendo sus acciones fué el defensor
         else if (comparoIniciativas > 0){
+            //Pinto como seleccionado y que le toca al jugador elegido rival quitandole el otro fondo
+            let otroJugador = document.getElementsByClassName(`fondoJugadorActivo${queEquipoEs(equiposJugadoresElegidos[1])}`);
+            otroJugador[0].classList.add("fondoSeleccionadoYLeToca");
+            otroJugador[0].classList.remove(`fondoJugadorActivo${queEquipoEs(equiposJugadoresElegidos[1])}`);
+
             //Continúo por que el atacante elija sus acciones
             muestroPosiblesAccionesAtaque(equiposJugadoresElegidos[1], (rolJugadoresElegidos[1]-1));
         }
     }
     
+    //Creo función que será de utilidad para la que le
+    function quitoBotonesTerminarTurno (){
+        //Quito eventos de los botones y los oculto
+        botonConfirmar.removeEventListener("click", quitoBotonesTerminarTurno);
+        ocultoBoton("terminarTurno");
+        ocultoBoton("confirmar");
+        funcionalidadBotonTerminarTurno();
+    }
+    //Creo funcionalidad para confirmar que deseo terminar el turno
+    function pidoConfirmarEleccionTerminarTurno (evt){
+        pintoBotonSeleccionado(evt);
+        resaltoBotones("confirmar");
+        botonTerminarTurno.removeEventListener("click", pidoConfirmarEleccionTerminarTurno);
+        botonConfirmar.addEventListener("click", quitoBotonesTerminarTurno);
+    }
+    
     //Llamo el boton terminar turno para darle funcionalidad básica puesto que siempre será elegible
     botonTerminarTurno.addEventListener("click", pidoConfirmarEleccionTerminarTurno);
+    resaltoBotones("terminarTurno");
 
     //Comprobar puntos de acción para saber cuáles son las posibles acciones. Poner obscuras las posibilidades que no alcanzan los puntos no ponerles eventos.
     if (estadosAmbosEquipos[equipo][jugador]["puntosDeAccion"] > 1){
@@ -787,10 +819,10 @@ const muestroPosiblesAccionesDefensa = (equipo, jugador)=>{
         // resaltoBotones("esperaCautelosa");
         // muestroBotonObscuro("confirmar");
 
-        resaltoBotones("terminarTurno");
+        /*FIN SEGMENTO MOVERSE*/
     }
     
-    else if (estadosAmbosEquipos[equipo][jugador]["puntosDeAccion"] > 0.5){
+    else if ((estadosAmbosEquipos[equipo][jugador]["puntosDeAccion"] > 0.5) && (estadosAmbosEquipos[equipo][jugador]["puntosDeAccion"] <1)){
         /*MOVERSE*/
         // muestroBotonObscuro("moverse");
         // muestroBotonObscuro("intentarUnRoboAlPortadorDeLaPelota");
@@ -798,7 +830,8 @@ const muestroPosiblesAccionesDefensa = (equipo, jugador)=>{
         // muestroBotonObscuro("esperaAtosigante");
         // resaltoBotones("esperaCautelosa");
         //muestroBotonObscuro("confirmar");
-        resaltoBotones("terminarTurno");
+
+        /*FIN SEGMENTO MOVERSE*/
     }
     //WORKING hacer que skipee a la acción correspondiente dependiendo de si es el primer equipo en jugar o el segundo
     else if (estadosAmbosEquipos[equipo][jugador]["puntosDeAccion"] < 0.5){
@@ -818,6 +851,7 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
         //     mostrarOpcionesDeDondeMoverse(equipo, jugador);
         //     permitoSeleccionarOpcionesDeDondeMoverse(equipo, jugador);
         // }
+    /*FIN SEGMENTO MOVERSE*/
         
     //Creo función que será de utilidad para armar el choclo que continúa
     function cambioColoresAApropiados(evt){
@@ -825,79 +859,144 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
         botonActivado.setAttribute("class", "boton");
         pintoBotonSeleccionado(evt);
     }
-
+/*Estas funciones se van a aplicar cuando el jugador tenga 1 o más puntos de acción y la posesión de la pelota*/
+    //Creo función que se complementa con la que le sigue
+    function quitoBotonesTerminarTurnoConPelotaYMasDeUnPuntoDeAccion(){
+        //Quito eventos de los botones y los oculto
+        botonConfirmar.removeEventListener("click", quitoBotonesTerminarTurnoConPelotaYMasDeUnPuntoDeAccion);
+        ocultoBoton("confirmar")
+        botonPase.removeEventListener("click", cambioAEleccionPaseConMasDeUnPuntoDeAccionDesdeTerminarTurno);
+        ocultoBoton("pase");
+        botonTiro.removeEventListener("click", cambioAEleccionTiroDesdeTerminarTurno);
+        ocultoBoton("tiro");
+        ocultoBoton("terminarTurno");
+        //Ejecuto función que termina el turno
+        funcionalidadBotonTerminarTurno()
+    }
     //Creo funcionalidad para confirmar que deseo terminar el turno
-    function pidoConfirmarEleccionTerminarTurno (evt){
+    function pidoConfirmarEleccionTerminarTurnoConPelotaYMasDeUnPuntoDeAccion (evt){
         pintoBotonSeleccionado(evt);
         resaltoBotones("confirmar");
-        botonConfirmar.addEventListener("click", funcionalidadBotonTerminarTurno);
+        botonConfirmar.addEventListener("click", quitoBotonesTerminarTurnoConPelotaYMasDeUnPuntoDeAccion);
         //Quito eventos base de otros botones
-        botonPase.removeEventListener("click", pidoConfirmarEleccionPase);
+        botonPase.removeEventListener("click", pidoConfirmarEleccionPaseConMasDeUnPuntoDeAccion);
         botonTiro.removeEventListener("click", pidoConfirmarEleccionTiro);
-        botonTerminarTurno.removeEventListener("click", pidoConfirmarEleccionTerminarTurno);
+        botonTerminarTurno.removeEventListener("click", pidoConfirmarEleccionTerminarTurnoConPelotaYMasDeUnPuntoDeAccion);
         
-        //Meto eventos que serán transición a cíclicos a otros botones
-        botonPase.addEventListener("click", cambioAEleccionPaseDesdeTerminarTurno);
+        //Meto eventos que serán transición cíclica a otros botones
+        botonPase.addEventListener("click", cambioAEleccionPaseConMasDeUnPuntoDeAccionDesdeTerminarTurno);
         botonTiro.addEventListener("click", cambioAEleccionTiroDesdeTerminarTurno);
     }
 
+    //Creo función que se complementa con la que le sigue
+    function quitoBotonesPaseConMasDeUnPuntoDeAccion(){
+        //Quito eventos de los botones y los oculto
+        botonConfirmar.removeEventListener("click", quitoBotonesPaseConMasDeUnPuntoDeAccion);
+        ocultoBoton("confirmar")
+        ocultoBoton("pase");
+        botonTiro.removeEventListener("click", cambioAEleccionTiroDesdePase);
+        ocultoBoton("tiro");
+        botonTerminarTurno.removeEventListener("click", cambioAEleccionTerminarTurnoConMasDeUnPuntoDeAccionDesdePase);
+        ocultoBoton("terminarTurno");
+        //Ejecuto función que termina el turno
+        funcionalidadBotonPase()
+    }
     //Creo funcionalidad para confirmar que deseo hacer un pase
-    function pidoConfirmarEleccionPase (evt){
+    function pidoConfirmarEleccionPaseConMasDeUnPuntoDeAccion (evt){
         pintoBotonSeleccionado(evt);
         resaltoBotones("confirmar");
-        botonConfirmar.addEventListener("click", funcionalidadBotonPase);
+        botonConfirmar.addEventListener("click", quitoBotonesPaseConMasDeUnPuntoDeAccion);
         //Quito eventos base de otros botones
-        botonPase.removeEventListener("click", pidoConfirmarEleccionPase)
+        botonPase.removeEventListener("click", pidoConfirmarEleccionPaseConMasDeUnPuntoDeAccion)
         botonTiro.removeEventListener("click", pidoConfirmarEleccionTiro);
-        botonTerminarTurno.removeEventListener("click", pidoConfirmarEleccionTerminarTurno);
+        botonTerminarTurno.removeEventListener("click", pidoConfirmarEleccionTerminarTurnoConPelotaYMasDeUnPuntoDeAccion);
         
-        //Meto eventos que serán transición a cíclicos a otros botones
+        //Meto eventos que serán transición cíclica a otros botones
         botonTiro.addEventListener("click", cambioAEleccionTiroDesdePase);
-        botonTerminarTurno.addEventListener("click", cambioAEleccionTerminarTurnoDesdePase);
+        botonTerminarTurno.addEventListener("click", cambioAEleccionTerminarTurnoConMasDeUnPuntoDeAccionDesdePase);
     }
 
+    //Creo función que se complementa con la que le sigue
+    function quitoBotonesEleccionTiro(){
+        //Quito eventos de los botones y los oculto
+        botonConfirmar.removeEventListener("click", quitoBotonesEleccionTiro);
+        ocultoBoton("confirmar")
+        botonPase.removeEventListener("click", cambioAEleccionPaseDesdeTiro);
+        ocultoBoton("pase");
+        ocultoBoton("tiro");
+        botonTerminarTurno.removeEventListener("click", cambioAEleccionTerminarTurnoDesdeTiro);
+        ocultoBoton("terminarTurno");
+        //Ejecuto función que termina el turno
+        funcionalidadBotonTiro()
+    }
     //Creo funcionalidad para confirmar que deseo hacer un tiro
     function pidoConfirmarEleccionTiro (evt){
         pintoBotonSeleccionado(evt);
         resaltoBotones("confirmar");
-        botonConfirmar.addEventListener("click", funcionalidadBotonTiro);
+        botonConfirmar.addEventListener("click", quitoBotonesEleccionTiro);
         //Quito eventos base de otros botones
-        botonPase.removeEventListener("click", pidoConfirmarEleccionPase)
+        botonPase.removeEventListener("click", pidoConfirmarEleccionPaseConMasDeUnPuntoDeAccion)
         botonTiro.removeEventListener("click", pidoConfirmarEleccionTiro);
-        botonTerminarTurno.removeEventListener("click", pidoConfirmarEleccionTerminarTurno);
+        botonTerminarTurno.removeEventListener("click", pidoConfirmarEleccionTerminarTurnoConPelotaYMasDeUnPuntoDeAccion);
         
-        //Meto eventos que serán transición a cíclicos a otros botones
+        //Meto eventos que serán transición cíclica a otros botones
         botonPase.addEventListener("click", cambioAEleccionPaseDesdeTiro);
         botonTerminarTurno.addEventListener("click", cambioAEleccionTerminarTurnoDesdeTiro);
     }
 
-    function cambioAEleccionPaseDesdeTerminarTurno(evt){
+    //Creo función que se complementa con la que le sigue
+    function quitoBotonesPaseConMasDeUnPuntoDeAccionDesdeTerminarTurno(){
+        //Quito eventos de los botones y los oculto
+        botonConfirmar.removeEventListener("click", quitoBotonesPaseConMasDeUnPuntoDeAccionDesdeTerminarTurno);
+        ocultoBoton("confirmar")
+        ocultoBoton("pase");
+        botonTiro.removeEventListener("click", cambioAEleccionTiroDesdePase);
+        ocultoBoton("tiro");
+        botonTerminarTurno.removeEventListener("click", cambioAEleccionTerminarTurnoConMasDeUnPuntoDeAccionDesdePase);
+        ocultoBoton("terminarTurno");
+        //Ejecuto función que termina el turno
+        funcionalidadBotonPase()
+    }
+    function cambioAEleccionPaseConMasDeUnPuntoDeAccionDesdeTerminarTurno(evt){
         
         cambioColoresAApropiados(evt);
         
         //Cambio evento del boton confirmar
-        botonConfirmar.removeEventListener("click", funcionalidadBotonTerminarTurno);
-        botonConfirmar.addEventListener("click", funcionalidadBotonPase);
+        botonConfirmar.removeEventListener("click", quitoBotonesTerminarTurnoConPelotaYMasDeUnPuntoDeAccion);
+        botonConfirmar.addEventListener("click", quitoBotonesPaseConMasDeUnPuntoDeAccionDesdeTerminarTurno);
 
         //Cambio eventos de los otros botones a botones cíclicos
-        botonPase.removeEventListener("click", cambioAEleccionPaseDesdeTerminarTurno);
+        botonPase.removeEventListener("click", cambioAEleccionPaseConMasDeUnPuntoDeAccionDesdeTerminarTurno);
         botonTiro.removeEventListener("click", cambioAEleccionTiroDesdeTerminarTurno);
 
         //Agrego nuevos eventos
         botonTiro.addEventListener("click", cambioAEleccionTiroDesdePase);
-        botonTerminarTurno.addEventListener("click", cambioAEleccionTerminarTurnoDesdePase);
+        botonTerminarTurno.addEventListener("click", cambioAEleccionTerminarTurnoConMasDeUnPuntoDeAccionDesdePase);
     }
 
+    //Creo función que se complementa con la que le sigue
+    function quitoBotonesTiroDesdeTerminarTurno(){
+        //Quito eventos de los botones y los oculto
+        botonConfirmar.removeEventListener("click", quitoBotonesTiroDesdeTerminarTurno);
+        ocultoBoton("confirmar");
+        botonPase.removeEventListener("click", cambioAEleccionPaseDesdeTiro);
+        ocultoBoton("pase");
+        ocultoBoton("tiro");
+        botonTerminarTurno.removeEventListener("click", cambioAEleccionTerminarTurnoDesdeTiro);
+        ocultoBoton("terminarTurno");
+        //Ejecuto función que termina el turno
+        funcionalidadBotonTiro()
+    }
     function cambioAEleccionTiroDesdeTerminarTurno(evt){
         
         cambioColoresAApropiados(evt);
         
         //Cambio evento del boton confirmar
-        botonConfirmar.removeEventListener("click", funcionalidadBotonTerminarTurno);
-        botonConfirmar.addEventListener("click", funcionalidadBotonTiro);
+        botonConfirmar.removeEventListener("click", quitoBotonesTerminarTurnoConPelotaYMasDeUnPuntoDeAccion);
+        botonConfirmar.addEventListener("click", quitoBotonesTiroDesdeTerminarTurno);
 
         //Cambio eventos de los otros botones a botones cíclicos
-        botonPase.removeEventListener("click", cambioAEleccionPaseDesdeTerminarTurno);
+        botonPase.removeEventListener("click", cambioAEleccionPaseConMasDeUnPuntoDeAccionDesdeTerminarTurno);
         botonTiro.removeEventListener("click", cambioAEleccionTiroDesdeTerminarTurno);
 
         //Agrego nuevos eventos
@@ -905,47 +1004,86 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
         botonTerminarTurno.addEventListener("click", cambioAEleccionTerminarTurnoDesdeTiro);
     }
 
+    //Creo función que se complementa con la que le sigue
+    function quitoBotonesTiroDesdePase(){
+        //Quito eventos de los botones y los oculto
+        botonConfirmar.removeEventListener("click", quitoBotonesTiroDesdePase);
+        ocultoBoton("confirmar");
+        botonPase.removeEventListener("click", cambioAEleccionPaseDesdeTiro);
+        ocultoBoton("pase");
+        ocultoBoton("tiro");
+        botonTerminarTurno.removeEventListener("click", cambioAEleccionTerminarTurnoDesdeTiro);
+        ocultoBoton("terminarTurno");
+        //Ejecuto función que termina el turno
+        funcionalidadBotonTiro()
+    }
     function cambioAEleccionTiroDesdePase(evt){
         
         cambioColoresAApropiados(evt);
         
         //Cambio evento del boton confirmar
-        botonConfirmar.removeEventListener("click", funcionalidadBotonPase);
-        botonConfirmar.addEventListener("click", funcionalidadBotonTiro);
+        botonConfirmar.removeEventListener("click", quitoBotonesPaseConMasDeUnPuntoDeAccion);
+        botonConfirmar.addEventListener("click", quitoBotonesTiroDesdePase);
 
         //Cambio eventos de los otros botones a botones cíclicos
         botonTiro.removeEventListener("click", cambioAEleccionTiroDesdePase);
-        botonTerminarTurno.removeEventListener("click", cambioAEleccionTerminarTurnoDesdePase);
+        botonTerminarTurno.removeEventListener("click", cambioAEleccionTerminarTurnoConMasDeUnPuntoDeAccionDesdePase);
 
         //Agrego nuevos eventos
         botonPase.addEventListener("click", cambioAEleccionPaseDesdeTiro);
         botonTerminarTurno.addEventListener("click", cambioAEleccionTerminarTurnoDesdeTiro);
     }
 
-    function cambioAEleccionTerminarTurnoDesdePase(evt){
+    //Creo función que se complementa con la que le sigue
+    function quitoBotonesTerminarTurnoConPelotaYMasDeUnPuntoDeAccionDesdePase(){
+        //Quito eventos de los botones y los oculto
+        botonConfirmar.removeEventListener("click", quitoBotonesTerminarTurnoConPelotaYMasDeUnPuntoDeAccionDesdePase);
+        ocultoBoton("confirmar");
+        botonPase.removeEventListener("click", cambioAEleccionPaseConMasDeUnPuntoDeAccionDesdeTerminarTurno);
+        ocultoBoton("pase");
+        botonTiro.removeEventListener("click", cambioAEleccionTiroDesdeTerminarTurno);
+        ocultoBoton("tiro");
+        ocultoBoton("terminarTurno");
+        //Ejecuto función que termina el turno
+        funcionalidadBotonTerminarTurno()
+    }
+    function cambioAEleccionTerminarTurnoConMasDeUnPuntoDeAccionDesdePase(evt){
         
         cambioColoresAApropiados(evt);
         
         //Cambio evento del boton confirmar
-        botonConfirmar.removeEventListener("click", funcionalidadBotonPase);
-        botonConfirmar.addEventListener("click", funcionalidadBotonTerminarTurno);
+        botonConfirmar.removeEventListener("click", quitoBotonesPaseConMasDeUnPuntoDeAccion);
+        botonConfirmar.addEventListener("click", quitoBotonesTerminarTurnoConPelotaYMasDeUnPuntoDeAccionDesdePase);
 
         //Cambio eventos de los otros botones a botones cíclicos
         botonTiro.removeEventListener("click", cambioAEleccionTiroDesdePase);
-        botonTerminarTurno.removeEventListener("click", cambioAEleccionTerminarTurnoDesdePase);
+        botonTerminarTurno.removeEventListener("click", cambioAEleccionTerminarTurnoConMasDeUnPuntoDeAccionDesdePase);
 
         //Agrego nuevos eventos
-        botonPase.addEventListener("click", cambioAEleccionPaseDesdeTerminarTurno);
+        botonPase.addEventListener("click", cambioAEleccionPaseConMasDeUnPuntoDeAccionDesdeTerminarTurno);
         botonTiro.addEventListener("click", cambioAEleccionTiroDesdeTerminarTurno);
     }
 
+    //Creo función que se complementa con la que le sigue
+    function quitoBotonesPaseDesdeTiro(){
+        //Quito eventos de los botones y los oculto
+        botonConfirmar.removeEventListener("click", quitoBotonesPaseDesdeTiro);
+        ocultoBoton("confirmar");
+        ocultoBoton("pase");
+        botonTiro.removeEventListener("click", cambioAEleccionTiroDesdePase);
+        ocultoBoton("tiro");
+        botonTerminarTurno.removeEventListener("click", cambioAEleccionTerminarTurnoConMasDeUnPuntoDeAccionDesdePase);
+        ocultoBoton("terminarTurno");
+        //Ejecuto función que termina el turno
+        funcionalidadBotonPase()
+    }
     function cambioAEleccionPaseDesdeTiro(evt){
         
         cambioColoresAApropiados(evt);
         
         //Cambio evento del boton confirmar
-        botonConfirmar.removeEventListener("click", funcionalidadBotonTiro);
-        botonConfirmar.addEventListener("click", funcionalidadBotonPase);
+        botonConfirmar.removeEventListener("click", quitoBotonesEleccionTiro);
+        botonConfirmar.addEventListener("click", quitoBotonesPaseDesdeTiro);
 
         //Cambio eventos de los otros botones a botones cíclicos
         botonPase.removeEventListener("click", cambioAEleccionPaseDesdeTiro);
@@ -953,16 +1091,28 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
 
         //Agrego nuevos eventos
         botonTiro.addEventListener("click", cambioAEleccionTiroDesdePase);
-        botonTerminarTurno.addEventListener("click", cambioAEleccionTerminarTurnoDesdePase);
+        botonTerminarTurno.addEventListener("click", cambioAEleccionTerminarTurnoConMasDeUnPuntoDeAccionDesdePase);
     }
 
+    function quitoBotonesTerminarTurnoDesdeTiro(){
+        //Quito eventos de los botones y los oculto
+        botonConfirmar.removeEventListener("click", quitoBotonesTerminarTurnoDesdeTiro);
+        ocultoBoton("confirmar");
+        botonPase.removeEventListener("click", cambioAEleccionPaseDesdeTiro);
+        ocultoBoton("pase");
+        botonTiro.removeEventListener("click", cambioAEleccionTiroDesdeTerminarTurno);
+        ocultoBoton("tiro");
+        ocultoBoton("terminarTurno");
+        //Ejecuto función que termina el turno
+        funcionalidadBotonTiro()
+    }
     function cambioAEleccionTerminarTurnoDesdeTiro(evt){
         
         cambioColoresAApropiados(evt);
         
         //Cambio evento del boton confirmar
-        botonConfirmar.removeEventListener("click", funcionalidadBotonTiro);
-        botonConfirmar.addEventListener("click", funcionalidadBotonTerminarTurno);
+        botonConfirmar.removeEventListener("click", quitoBotonesEleccionTiro);
+        botonConfirmar.addEventListener("click", quitoBotonesTerminarTurnoDesdeTiro);
 
         //Cambio eventos de los otros botones a botones cíclicos
         botonPase.removeEventListener("click", cambioAEleccionPaseDesdeTiro);
@@ -972,6 +1122,132 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
         botonTiro.addEventListener("click", cambioAEleccionTiroDesdeTerminarTurno);
         botonPase.addEventListener("click", cambioAEleccionPaseDesdeTiro);
     }
+/*Fin de funciones que actúan cuando el jugador tiene 1 o más puntos de accióin y la posesión de la pelota*/
+
+
+
+/*Estas funciones se van a aplicar cuando el jugador tenga menos de 1 punto de acción y la posesión de la pelota*/
+    function quitoBotonesTerminarTurnoConPelotaConMenosDeUnPuntoDeAccion(){
+        //Quito eventos de los botones y los oculto
+        botonConfirmar.removeEventListener("click", quitoBotonesTerminarTurnoConPelotaConMenosDeUnPuntoDeAccion);
+        ocultoBoton("confirmar")
+        botonPase.removeEventListener("click", cambioAEleccionPaseConMenosDeUnPuntoDeAccionDesdeTerminarTurno);
+        ocultoBoton("pase");
+        ocultoBoton("tiro");
+        ocultoBoton("terminarTurno");
+        //Ejecuto función que termina el turno
+        funcionalidadBotonTerminarTurno()
+    }
+    function pidoConfirmarEleccionTerminarTurnoConPelotaConMenosDeUnPuntoDeAccion (evt){
+        pintoBotonSeleccionado(evt);
+        resaltoBotones("confirmar");
+        botonConfirmar.addEventListener("click", quitoBotonesTerminarTurnoConPelotaConMenosDeUnPuntoDeAccion);
+        //Quito eventos base de otros botones
+        botonPase.removeEventListener("click", pidoConfirmarEleccionPaseConMenosDeUnPuntoDeAccion);
+        botonTerminarTurno.removeEventListener("click", pidoConfirmarEleccionTerminarTurnoConPelotaConMenosDeUnPuntoDeAccion);
+
+        //Meto eventos que serán transición cíclica a otros botones
+        botonPase.addEventListener("click", cambioAEleccionPaseConMenosDeUnPuntoDeAccionDesdeTerminarTurno);
+    }
+
+    function quitoBotonesPaseConMenosDeUnPuntoDeAccion(){
+        //Quito eventos de los botones y los oculto
+        botonConfirmar.removeEventListener("click", quitoBotonesPaseConMenosDeUnPuntoDeAccion);
+        ocultoBoton("confirmar")
+        ocultoBoton("pase");
+        ocultoBoton("tiro");
+        botonTerminarTurno.removeEventListener("click", cambioAEleccionTerminarTurnoConMenosDeUnPuntoDeAccionDesdePase);
+        ocultoBoton("terminarTurno");
+        //Ejecuto función que termina el turno
+        funcionalidadBotonPase()
+    }
+    function pidoConfirmarEleccionPaseConMenosDeUnPuntoDeAccion (evt){
+        pintoBotonSeleccionado(evt);
+        resaltoBotones("pase");
+        botonConfirmar.addEventListener("click", quitoBotonesPaseConMenosDeUnPuntoDeAccion);
+        //Quito eventos base de otros botones
+        botonPase.removeEventListener("click", pidoConfirmarEleccionPaseConMenosDeUnPuntoDeAccion);
+        botonTerminarTurno.removeEventListener("click", pidoConfirmarEleccionTerminarTurnoConPelotaConMenosDeUnPuntoDeAccion);
+
+        //Meto eventos que serán transición cíclica a otros botones
+        botonTerminarTurno.addEventListener("click", cambioAEleccionTerminarTurnoConMenosDeUnPuntoDeAccionDesdePase);
+    }
+
+    function quitoBotonesPaseConMenosDeUnPuntoDeAccionDesdeTerminarTurno(){
+        //Quito eventos de los botones y los oculto
+        botonConfirmar.removeEventListener("click", quitoBotonesPaseConMenosDeUnPuntoDeAccionDesdeTerminarTurno);
+        ocultoBoton("confirmar")
+        ocultoBoton("pase");
+        ocultoBoton("tiro");
+        botonTerminarTurno.removeEventListener("click", cambioAEleccionTerminarTurnoConMenosDeUnPuntoDeAccionDesdePase);
+        ocultoBoton("terminarTurno");
+        //Ejecuto función que termina el turno
+        funcionalidadBotonPase()
+    }
+    function cambioAEleccionPaseConMenosDeUnPuntoDeAccionDesdeTerminarTurno (evt){
+        
+        cambioColoresAApropiados(evt);
+        
+        //Cambio evento del boton confirmar
+        botonConfirmar.removeEventListener("click", quitoBotonesTerminarTurnoConPelotaConMenosDeUnPuntoDeAccion);
+        botonConfirmar.addEventListener("click", quitoBotonesPaseConMenosDeUnPuntoDeAccionDesdeTerminarTurno);
+
+        //Cambio eventos de los otros botones a botones cíclicos
+        botonPase.removeEventListener("click", cambioAEleccionPaseConMenosDeUnPuntoDeAccionDesdeTerminarTurno);
+
+        //Agrego nuevos eventos
+        botonTerminarTurno.addEventListener("click", cambioAEleccionTerminarTurnoConMenosDeUnPuntoDeAccionDesdePase);
+    }
+
+    function quitoBotonesTerminarTurnoConMenosDeUnPuntoDeAccionDesdePase(){
+        //Quito eventos de los botones y los oculto
+        botonConfirmar.removeEventListener("click", quitoBotonesTerminarTurnoConMenosDeUnPuntoDeAccionDesdePase);
+        ocultoBoton("confirmar")        
+        botonPase.removeEventListener("click", cambioAEleccionPaseConMenosDeUnPuntoDeAccionDesdeTerminarTurno);
+        ocultoBoton("pase");
+        ocultoBoton("tiro");
+        ocultoBoton("terminarTurno");
+        //Ejecuto función que termina el turno
+        funcionalidadBotonTerminarTurno()
+    }
+    function cambioAEleccionTerminarTurnoConMenosDeUnPuntoDeAccionDesdePase (evt){
+        
+        cambioColoresAApropiados(evt);
+        
+        //Cambio evento del boton confirmar
+        botonConfirmar.removeEventListener("click", quitoBotonesPaseConMenosDeUnPuntoDeAccion);
+        botonConfirmar.addEventListener("click", quitoBotonesTerminarTurnoConMenosDeUnPuntoDeAccionDesdePase);
+
+        //Cambio eventos de los otros botones a botones cíclicos
+        botonTerminarTurno.removeEventListener("click", cambioAEleccionTerminarTurnoConMenosDeUnPuntoDeAccionDesdePase);
+
+        //Agrego nuevos eventos
+        botonPase.addEventListener("click", cambioAEleccionPaseConMenosDeUnPuntoDeAccionDesdeTerminarTurno);
+    }
+/*Fin de funciones que actúan cuando el jugador tiene menos de 1 punto de accióin y la posesión de la pelota*/
+
+
+
+/*Estas funciones se van a aplicar cuando el jugador no tenga la posesión de la pelota*/
+    function quitoBotonesEleccionTerminarTurnoSinPelota(){
+        //Quito eventos de los botones y los oculto
+        botonConfirmar.removeEventListener("click", quitoBotonesEleccionTerminarTurnoSinPelota);
+        ocultoBoton("confirmar")
+        ocultoBoton("pase");
+        ocultoBoton("tiro");
+        ocultoBoton("terminarTurno");
+        //Ejecuto función que termina el turno
+        funcionalidadBotonTerminarTurno()
+    }
+    function pidoConfirmarEleccionTerminarTurnoSinPelota (evt){
+        pintoBotonSeleccionado(evt);
+        resaltoBotones("confirmar");
+        botonConfirmar.addEventListener("click", quitoBotonesEleccionTerminarTurnoSinPelota);
+        //Quito eventos base de otros botones
+        botonTerminarTurno.removeEventListener("click", pidoConfirmarEleccionTerminarTurnoConPelotaYMasDeUnPuntoDeAccion);
+    }
+/*Fin de funciones que actúan cuando el jugador no tenga la posesión de la pelota*/
+
 
     //Creo evento que sucederá al activarse el evento del botón "pase"
     function funcionalidadBotonPase (evt){
@@ -985,6 +1261,12 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
     
     //Creo función para terminar turno
     function funcionalidadBotonTerminarTurno(){
+        //Llamo a los jugadores con fondo seleccionado para poder quitarle el fondo
+        let jugadoresConFondoElegido= document.getElementsByClassName(`fondoSeleccionadoYLeToca`);
+        //Quito el color de fondo del jugador que acaba de terminar su turno
+        jugadoresConFondoElegido[0].classList.remove(`fondoSeleccionadoYLeToca`);
+
+
         //Le quito los puntos de acción restantes e indico que el turno ya fue usado
         estadosAmbosEquipos[equipo][jugador]["puntosDeAccion"] = 0;
         estadosAmbosEquipos[equipo][jugador]["turnoUsado"] = true;
@@ -996,62 +1278,64 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
         }
         //Si el equipo que comenzó eligiendo sus acciones fué el atacante
         else if (comparoIniciativas < 0){
+            //Pinto como seleccionado y que le toca al jugador elegido rival quitandole el otro fondo
+            let otroJugador = document.getElementsByClassName(`fondoJugadorActivo${queEquipoEs(equiposJugadoresElegidos[0])}`);
+            otroJugador[0].classList.add("fondoSeleccionadoYLeToca");
+            otroJugador[0].classList.remove(`fondoJugadorActivo${queEquipoEs(equiposJugadoresElegidos[0])}`);
+
             //Continúo por que el defensor elija sus acciones
             muestroPosiblesAccionesDefensa(equiposJugadoresElegidos[0], (rolJugadoresElegidos[0]-1));
         }
     }
 
-    //Llamo el boton terminar turno para darle funcionalidad básica puesto que siempre será elegible
-    botonTerminarTurno.addEventListener("click", pidoConfirmarEleccionTerminarTurno);
+    
 
     //Comprobar puntos de acción para saber cuáles son las posibles acciones. Poner obscuras las posibilidades que no alcanzan los puntos no ponerles eventos.
     if (estadosAmbosEquipos[equipo][jugador]["puntosDeAccion"] > 1){
+        //Siempre resalto el boton de terminar turno xq es una opción que no depende de ninguna condición
+        resaltoBotones("terminarTurno");
+
         /*MOVERSE*/
         // resaltoBotones("moverse");
         // let botonMoverse = document.getElementById("moverse");
         // botonMoverse.addEventListener("click", funcionalidadBotonMoverse);
 
+        /*FIN SEGMENTO MOVERSE*/
 
+        //Si además tiene la pelota resalto botones de pase y tiro y les pongo eventos
         if (estadosAmbosEquipos[equipo][jugador]["conPelota"] == true){
             resaltoBotones("pase");
-            botonPase.addEventListener("click", pidoConfirmarEleccionPase);
+            resaltoBotones("tiro");
+            botonPase.addEventListener("click", pidoConfirmarEleccionPaseConMasDeUnPuntoDeAccion);
+            botonTiro.addEventListener("click", pidoConfirmarEleccionTiro);
+            botonTerminarTurno.addEventListener("click", pidoConfirmarEleccionTerminarTurnoConPelotaYMasDeUnPuntoDeAccion);
         }
+        //Si no tiene la pelota dejo obscuros los botones de pase y tiro
         else if (estadosAmbosEquipos[equipo][jugador]["conPelota"] != true){
             muestroBotonObscuro("pase");
-        }
-
-        //Funcionalidad boton pase
-        botonPase.addEventListener("click", funcionalidadBotonPase);
-
-        if (estadosAmbosEquipos[equipo][jugador]["conPelota"] == true){
-            resaltoBotones("tiro");
-            botonTiro.addEventListener("click", pidoConfirmarEleccionTiro);
-        }
-
-
-        else if (estadosAmbosEquipos[equipo][jugador]["conPelota"] != true){
             muestroBotonObscuro("tiro");
+            botonTerminarTurno.addEventListener("click", pidoConfirmarEleccionTerminarTurnoSinPelota);
         }
-
 
         muestroBotonObscuro("confirmar");
-
-
-        resaltoBotones("terminarTurno");
     }
-    else if (estadosAmbosEquipos[equipo][jugador]["puntosDeAccion"] > 0.5){
+    else if ((estadosAmbosEquipos[equipo][jugador]["puntosDeAccion"] > 0.5) && (estadosAmbosEquipos[equipo][jugador]["puntosDeAccion"] < 1)){
+        //Siempre resalto el boton de terminar turno xq es una opción que no depende de ninguna condición
+        resaltoBotones("terminarTurno");
+
         /*MOVERSE*/
         // muestroBotonObscuro("moverse");
+
+        /*FIN SEGMENTO MOVERSE*/
         if (estadosAmbosEquipos[equipo][jugador]["conPelota"] == true){
             resaltoBotones("pase");
-            botonPase.addEventListener("click", pidoConfirmarEleccionPase);
+            botonPase.addEventListener("click", pidoConfirmarEleccionPaseConMasDeUnPuntoDeAccion);
         }
         else if (estadosAmbosEquipos[equipo][jugador]["conPelota"] != true){
             muestroBotonObscuro("pase");
         }
         muestroBotonObscuro("tiro");
         muestroBotonObscuro("confirmar");
-        resaltoBotones("terminarTurno");
     }
     //Hago que skipee a la acción correspondiente dependiendo de si es el primer equipo en jugar o el segundo
     else if (estadosAmbosEquipos[equipo][jugador]["puntosDeAccion"] < 0.5){
@@ -1060,6 +1344,7 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
 }
 
 /*MOVERSE*/
+
 // let lugarEnElQueEstaba;
 // let posiblesLugaresALosQueMoverse;
 // const mostrarOpcionesDeDondeMoverse = (equipo, jugador)=>{
@@ -1278,6 +1563,7 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
 //         }
 //     }
 // }
+/*FIN SEGMENTO MOVERSE*/
 
 const funcionGestionReloj= ()=>{
     //Resto un instante al contador de instantes
