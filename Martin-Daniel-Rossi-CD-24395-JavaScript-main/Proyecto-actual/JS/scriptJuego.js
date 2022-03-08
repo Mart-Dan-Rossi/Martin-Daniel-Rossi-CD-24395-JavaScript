@@ -639,80 +639,105 @@ const comparoIniciativasDeJugadoresElegidos = ()=>{
     //Comeinzo a calcular las iniciativas.
     //El cálculo se hace utilizando ciertas habilidades dependiendo de la posición en la que se encuentran
     comparoIniciativas = 0;
+    
+    const calculoSiDefensorEstaCercaDelAro = ()=>{
+        iniciativaJugador1 = dadoDe20()*2 + ((ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["altura"]-165)/0.65) + ((ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["peso"]-65)/0.55) + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["capacidadAtletica"]*1.2 + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["defensaInterna"]*2;
+    }
+    const calculoSiDefensorEstaMedianamenteCercaPeroNoTanto= ()=>{
+        iniciativaJugador1 = dadoDe20()*2 + ((ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["altura"]-165)/0.65)*0.75 + ((ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["peso"]-65)/0.55)*0.75 + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["capacidadAtletica"]*1.2 + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["defensaInterna"]*2*0.75 + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["defensaPerimetral"]*2*0.25;
+    }
+    const calculoSiDefensorEstaEnMediaDistancia= ()=>{
+        iniciativaJugador1 = dadoDe20()*2 + ((ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["altura"]-165)/0.65)*0.25 + ((ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["peso"]-65)/0.55)*0.25 + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["capacidadAtletica"]*1.2 + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["defensaInterna"]*2*0.25 + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["defensaPerimetral"]*2*0.75;
+    }
+    const calculoSiDefensorEstaLejos= ()=>{
+        iniciativaJugador1 = dadoDe20()*2 + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["capacidadAtletica"]*1.2 + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["defensaPerimetral"]*2*2;
+    }
+    const calculoSiAtacanteEstaCercaDelAro= ()=>{
+        iniciativaJugador2 = dadoDe20()*2 + ((ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["altura"]-165)/0.65) + ((ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["peso"]-65)/0.55) + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["capacidadAtletica"]*1.2 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["anotacionInterior"] + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["creacionDeJuego"];
+    }
+    const calculoSiAtacanteEstaMedianamenteCercaPeroNoTanto=()=>{
+        iniciativaJugador2 = dadoDe20()*2 + ((ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["altura"]-165)/0.65)*0.75 + ((ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["peso"]-65)/0.55)*0.75 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["capacidadAtletica"]*1.2 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["anotacionInterior"]*0.75 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["anotacionExterior"]*0.25 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["creacionDeJuego"];
+    }
+    const calculoSiAtacanteEstaEnMediaDistancia= ()=>{
+        iniciativaJugador2 = dadoDe20()*2 + ((ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["altura"]-165)/0.65)*0.25 + ((ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["peso"]-65)/0.55)*0.25 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["capacidadAtletica"]*1.2 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["anotacionInterior"]*0.25 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["anotacionExterior"]*0.75 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["creacionDeJuego"];
+    }
+    const calculoSiAtacanteEstaLejos= ()=>{
+        iniciativaJugador2 = dadoDe20()*2 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["capacidadAtletica"]*1.2 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["anotacionExterior"]*2*2 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["creacionDeJuego"];
+    }
     while (comparoIniciativas ==  0){
         //Cálculos para jugador defensor
         //Si el equipo defensor es el A
         if (equiposJugadoresElegidos[0] == 0){
             //Si está cerca del aro
             if ((estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 3) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] > 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] < 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] > 6) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] < 10)){
-                iniciativaJugador1 = dadoDe20()*2 + ((ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["altura"]-165)/0.65) + ((ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["peso"]-65)/0.55) + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["capacidadAtletica"]*1.2 + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["defensaInterna"]*2;
+                calculoSiDefensorEstaCercaDelAro();
             }
             //Si está medianamente cerca pero no tanto
             else if ((estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 4) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 5) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 6) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 2) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 6) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] == 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] > 6) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] < 10) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 6) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 2) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 10) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 4) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 11)){
-                iniciativaJugador1 = dadoDe20()*2 + ((ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["altura"]-165)/0.65)*0.75 + ((ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["peso"]-65)/0.55)*0.75 + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["capacidadAtletica"]*1.2 + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["defensaInterna"]*2*0.75 + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["defensaPerimetral"]*2*0.25;
+                calculoSiDefensorEstaMedianamenteCercaPeroNoTanto();
             }
             //Si está en media distancia
             else if ((estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 2) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 3) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 4) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 6) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 3) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 5) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] == 6) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] > 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] < 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 6) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 3) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 12) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] == 1) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 13)){
-                iniciativaJugador1 = dadoDe20()*2 + ((ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["altura"]-165)/0.65)*0.25 + ((ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["peso"]-65)/0.55)*0.25 + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["capacidadAtletica"]*1.2 + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["defensaInterna"]*2*0.25 + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["defensaPerimetral"]*2*0.75;
+                calculoSiDefensorEstaEnMediaDistancia();
             }
             //Si está lejos
             else if ((estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 1) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 2) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 14) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 15) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 1) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 3) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 4) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 4) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 5) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 6) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] > 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] < 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 4) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 12) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 1) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 13)){
-                iniciativaJugador1 = dadoDe20()*2 + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["capacidadAtletica"]*1.2 + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["defensaPerimetral"]*2*2;
+                calculoSiDefensorEstaLejos();
             }
         
             //Cálculos para jugador atacante
             //Si está cerca del aro
             if ((estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 3) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] > 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] < 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] > 6) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] < 10)){
-                iniciativaJugador2 = dadoDe20()*2 + ((ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["altura"]-165)/0.65) + ((ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["peso"]-65)/0.55) + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["capacidadAtletica"]*1.2 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["anotacionInterior"] + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["creacionDeJuego"];
+                calculoSiAtacanteEstaCercaDelAro();
             }
             //Si está medianamente cerca pero no tanto
             else if ((estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 4) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 5) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 6) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 2) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 6) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] == 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] > 6) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] < 10) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 6) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 2) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 10) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 4) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 11)){
-                iniciativaJugador2 = dadoDe20()*2 + ((ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["altura"]-165)/0.65)*0.75 + ((ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["peso"]-65)/0.55)*0.75 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["capacidadAtletica"]*1.2 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["anotacionInterior"]*0.75 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["anotacionExterior"]*0.25 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["creacionDeJuego"];
+                calculoSiAtacanteEstaMedianamenteCercaPeroNoTanto();
             }
             //Si está en media distancia
             else if ((estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 2) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 3) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 4) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 6) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 3) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 5) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] == 6) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] > 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] < 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 6) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 3) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 12) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] == 1) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 13)){
-                iniciativaJugador2 = dadoDe20()*2 + ((ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["altura"]-165)/0.65)*0.25 + ((ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["peso"]-65)/0.55)*0.25 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["capacidadAtletica"]*1.2 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["anotacionInterior"]*0.25 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["anotacionExterior"]*0.75 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["creacionDeJuego"];
+                calculoSiAtacanteEstaEnMediaDistancia();
             }
             //Si está lejos
             else if ((estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 1) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 2) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 14) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 15) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 1) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 3) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 4) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 4) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 5) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 6) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] > 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] < 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 4) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 12) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 1) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 13)){
-                iniciativaJugador2 = dadoDe20()*2 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["capacidadAtletica"]*1.2 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["anotacionExterior"]*2*2 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["creacionDeJuego"];
+                calculoSiAtacanteEstaLejos();
             }
         }
         //Si el equipo defensor es el B
         else if (equiposJugadoresElegidos[0] == 1){
             //Si está cerca del aro
             if ((estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 26) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] > 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] < 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 24) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] > 6) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] < 10)){
-                iniciativaJugador1 = dadoDe20()*2 + ((ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["altura"]-165)/0.65) + ((ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["peso"]-65)/0.55) + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["capacidadAtletica"]*1.2 + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["defensaInterna"]*2;
+                calculoSiDefensorEstaCercaDelAro();
             }
             //Si está medianamente cerca pero no tanto
             else if ((estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 24) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 5) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 22) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 27) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 6) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] == 24) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] > 6) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] < 10) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 22) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 27) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 10) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 25) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 11)){
-                iniciativaJugador1 = dadoDe20()*2 + ((ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["altura"]-165)/0.65)*0.75 + ((ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["peso"]-65)/0.55)*0.75 + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["capacidadAtletica"]*1.2 + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["defensaInterna"]*2*0.75 + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["defensaPerimetral"]*2*0.25;
+                calculoSiEstaMedianamenteCercaPeroNoTanto();
             }
             //Si está en media distancia
             else if ((estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 27) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 3) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 24) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 4) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 23) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 26) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 5) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] == 23) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] > 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] < 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 23) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 26) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] > 24) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 12) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] == 28) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 13)){
-                iniciativaJugador1 = dadoDe20()*2 + ((ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["altura"]-165)/0.65)*0.25 + ((ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["peso"]-65)/0.55)*0.25 + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["capacidadAtletica"]*1.2 + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["defensaInterna"]*2*0.25 + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["defensaPerimetral"]*2*0.75;
+                calculoSiEstaEnMediaDistancia();
             }
             //Si está lejos
             else if ((estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 1) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 2) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 14) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 15) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 28) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 3) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 25) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 4) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 24) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 5) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 23) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] > 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] < 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 24) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 25) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 12) || (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionX"] < 28) && (estadosAmbosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["ubicacionY"] == 13)){
-                iniciativaJugador1 = dadoDe20()*2 + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["capacidadAtletica"]*1.2 + ambosEquipos[equiposJugadoresElegidos[0]][rolJugadoresElegidos[0]-1]["defensaPerimetral"]*2*2;
+                calculoSiDefensorEstaLejos();
             }
         
             //Cálculos para jugador atacante
             //Si está cerca del aro
             if ((estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 26) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] > 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] < 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 24) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] > 6) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] < 10)){
-                iniciativaJugador2 = dadoDe20()*2 + ((ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["altura"]-165)/0.65) + ((ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["peso"]-65)/0.55) + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["capacidadAtletica"]*1.2 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["anotacionInterior"] + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["creacionDeJuego"];
+                calculoSiAtacanteEstaCercaDelAro();
             }
             //Si está medianamente cerca pero no tanto
             else if ((estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 24) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 5) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 22) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 27) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 6) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] == 24) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] > 6) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] < 10) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 22) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 27) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 10) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 25) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 11)){
-                iniciativaJugador2 = dadoDe20()*2 + ((ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["altura"]-165)/0.65)*0.75 + ((ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["peso"]-65)/0.55)*0.75 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["capacidadAtletica"]*1.2 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["anotacionInterior"]*0.75 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["anotacionExterior"]*0.25 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["creacionDeJuego"];
+                calculoSiAtacanteEstaMedianamenteCercaPeroNoTanto();
             }
             //Si está en media distancia
             else if ((estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 27) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 3) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 24) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 4) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 23) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 26) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 5) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] == 23) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] > 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] < 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 23) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 26) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] > 24) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 12) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] == 28) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 13)){
-                iniciativaJugador2 = dadoDe20()*2 + ((ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["altura"]-165)/0.65)*0.25 + ((ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["peso"]-65)/0.55)*0.25 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["capacidadAtletica"]*1.2 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["anotacionInterior"]*0.25 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["anotacionExterior"]*0.75 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["creacionDeJuego"];
+                calculoSiAtacanteEstaEnMediaDistancia();
             }
             //Si está lejos
             else if ((estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 1) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 2) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 14) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 15) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 28) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 3) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 25) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 4) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 24) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 5) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 23) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] > 5) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] < 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 24) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 11) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 25) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 12) || (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionX"] < 28) && (estadosAmbosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["ubicacionY"] == 13)){
-                iniciativaJugador2 = dadoDe20()*2 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["capacidadAtletica"]*1.2 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["anotacionExterior"]*2*2 + ambosEquipos[equiposJugadoresElegidos[1]][rolJugadoresElegidos[1]-1]["creacionDeJuego"];
+                calculoSiAtacanteEstaLejos();
             }
         }
     
@@ -1289,390 +1314,413 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
         }
         //WORKING
         //AGREGAR restar puntos de acción
-        let puntosAtacante;
-        let puntosDefensa =0;
+        let puntosAtacante = 0;
+        let puntosDefensa = 0;
         let comparoAYD;
-        let resultadoDados;
+        let resultadoDados = dadoDe20()+dadoDe20()+dadoDe20()+dadoDe20()+dadoDe20();
         let encesta=false;
+        let elEquipoDefensor;
+        if(equipo==0){
+            elEquipoDefensor=1;
+        }
+        else if(equipo==1){
+            elEquipoDefensor=0;
+        }
+        const calculoTiroCercaDelAro = (o)=>{
+            //Calculo cuántos puntos tiene el atacante cuando tira sólo
+            puntosAtacante= ambosEquipos[equipo][jugador]["capacidadAtletica"]*1.5 + ambosEquipos[equipo][jugador]["anotacionInterior"]*3.5;
+            //Calculo cuánto molestan las defensas (d) en el tiro
+            //Para eso hago un búcle que busque si hay jugadores defensores cerca del tirador
+            //Bucle que recorre eje x +/- 1
+            for (let x=-1; x <1; x++){
+                //Bucle que recorre eje y +/- 1
+                for (let y=-1; y <1; y++){
+                    //Bucle para recorrer a los jugadores del otro equipo
+                    for (let d=0; d <5; d++){
+                        if ((estadosAmbosEquipos[equipo][jugador]["ubicacionX"] + x == estadosAmbosEquipos[o][d]["ubicacionX"]) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] + y == estadosAmbosEquipos[o][d]["ubicacionY"])){
+                            puntosDefensa += (ambosEquipos[o][d].altura * 0.75 - ambosEquipos[equipo][jugador].altura)*1.25 + ambosEquipos[o][d]["capacidadAtletica"]*0.75 + ambosEquipos[o][d]["defensaInterna"]*3 + (ambosEquipos[o][d]["peso"]*0.75 - ambosEquipos[equipo][jugador]["peso"]) - ambosEquipos[equipo][jugador]["creacionDeJuego"]*0.25;
+                        }
+                    }
+                }
+            }
+            
+            comparoAYD = puntosAtacante-puntosDefensa;
+            //Dependiendo de cómo vaya la comparación entre el ataque y la defensa el jugador va a tener que sacar una mejor o una peor tirada de dados para conseguir encestar
+            if ((0 <= comparoAYD)&&(comparoAYD<=49)&&(resultadoDados>90)){
+                encesta=true;
+            }
+            else if ((50 <= comparoAYD)&&(comparoAYD<=99)&&(resultadoDados>=80)){
+                encesta=true;
+            }
+            else if ((100 <= comparoAYD)&&(comparoAYD<=149)&&(resultadoDados>=70)){
+                encesta=true;
+            }
+            else if ((150 <= comparoAYD)&&(comparoAYD<=199)&&(resultadoDados>=60)){
+                encesta=true;
+            }
+            else if ((200 <= comparoAYD)&&(comparoAYD<=249)&&(resultadoDados>=50)){
+                encesta=true;
+            }
+            else if ((250 <= comparoAYD)&&(comparoAYD<=299)&&(resultadoDados>=40)){
+                encesta=true;
+            }
+            else if ((300 <= comparoAYD)&&(comparoAYD<=349)&&(resultadoDados>=30)){
+                encesta=true;
+            }
+            else if ((350 <= comparoAYD)&&(comparoAYD<=349)&&(resultadoDados>=21)){
+                encesta=true;
+            }
+            else if ((400 <= comparoAYD)&&(comparoAYD<=449)&&(resultadoDados>=13)){
+                encesta=true;
+            }
+            else if ((450 <= comparoAYD)&&(resultadoDados>=6)){
+                encesta=true;
+            }
+        }
+        const calculoTiroCercaPeroNoTanto= (o)=>{
+            //Calculo cuántos puntos tiene el atacante cuando tira sólo
+            puntosAtacante= ambosEquipos[equipo][jugador]["capacidadAtletica"] + ambosEquipos[equipo][jugador]["anotacionInterior"]*3 + ambosEquipos[equipo][jugador]["anotacionExterior"];
+            //Calculo cuánto molestan las defensas (d) en el tiro
+            //Para eso hago un búcle que busque si hay jugadores defensores cerca del tirador
+            //Bucle que recorre eje x +/- 1
+            for (let x=-1; x <1; x++){
+                //Bucle que recorre eje y +/- 1
+                for (let y=-1; y <1; y++){
+                    //Bucle para recorrer a los jugadores del otro equipo
+                    for (let d=0; d <5; d++){
+                        if ((estadosAmbosEquipos[equipo][jugador]["ubicacionX"] + x == estadosAmbosEquipos[o][d]["ubicacionX"]) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] + y == estadosAmbosEquipos[o][d]["ubicacionY"])){
+                            puntosDefensa += (ambosEquipos[o][d].altura * 0.75 - ambosEquipos[equipo][jugador].altura) + ambosEquipos[o][d]["capacidadAtletica"]*0.75 + ambosEquipos[o][d]["defensaInterna"]*2 + ambosEquipos[o][d]["defensaPerimetral"] + (ambosEquipos[o][d]["peso"]*0.75 - ambosEquipos[equipo][jugador]["peso"])*0.75 - ambosEquipos[equipo][jugador]["creacionDeJuego"]*0.25;
+                        }
+                    }
+                }
+            }
+        
+            comparoAYD = puntosAtacante-puntosDefensa;
+            //Dependiendo de cómo vaya la comparación entre el ataque y la defensa el jugador va a tener que sacar una mejor o una peor tirada de dados para conseguir encestar
+            if ((50 <= comparoAYD)&&(comparoAYD<=99)&&(resultadoDados>=90)){
+                encesta=true;
+            }
+            else if ((100 <= comparoAYD)&&(comparoAYD<=149)&&(resultadoDados>=80)){
+                encesta=true;
+            }
+            else if ((150 <= comparoAYD)&&(comparoAYD<=199)&&(resultadoDados>=70)){
+                encesta=true;
+            }
+            else if ((200 <= comparoAYD)&&(comparoAYD<=249)&&(resultadoDados>=60)){
+                encesta=true;
+            }
+            else if ((250 <= comparoAYD)&&(comparoAYD<=299)&&(resultadoDados>=50)){
+                encesta=true;
+            }
+            else if ((300 <= comparoAYD)&&(comparoAYD<=349)&&(resultadoDados>=40)){
+                encesta=true;
+            }
+            else if ((350 <= comparoAYD)&&(comparoAYD<=349)&&(resultadoDados>=31)){
+                encesta=true;
+            }
+            else if ((400 <= comparoAYD)&&(comparoAYD<=449)&&(resultadoDados>=23)){
+                encesta=true;
+            }
+            else if ((450 <= comparoAYD)&&(resultadoDados>=16)){
+                encesta=true;
+            }
+        }
+        const calculoTiroMediaDistancia= (o)=>{
+            //Calculo cuántos puntos tiene el atacante cuando tira sólo
+            puntosAtacante=  ambosEquipos[equipo][jugador]["anotacionInterior"]*1.25 + ambosEquipos[equipo][jugador]["anotacionExterior"]*3;
+            //Calculo cuánto molestan las defensas (d) en el tiro
+            //Para eso hago un búcle que busque si hay jugadores defensores cerca del tirador
+            //Bucle que recorre eje x +/- 1
+            for (let x=-1; x <1; x++){
+                //Bucle que recorre eje y +/- 1
+                for (let y=-1; y <1; y++){
+                    //Bucle para recorrer a los jugadores del otro equipo
+                    for (let d=0; d <5; d++){
+                        if ((estadosAmbosEquipos[equipo][jugador]["ubicacionX"] + x == estadosAmbosEquipos[o][d]["ubicacionX"]) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] + y == estadosAmbosEquipos[o][d]["ubicacionY"])){
+                            puntosDefensa += (ambosEquipos[o][d].altura * 0.75 - ambosEquipos[equipo][jugador].altura) + ambosEquipos[o][d]["capacidadAtletica"]*0.75 + ambosEquipos[o][d]["defensaInterna"]*0.75 + ambosEquipos[o][d]["defensaPerimetral"]*2 - (ambosEquipos[o][d]["peso"]*0.75 - ambosEquipos[equipo][jugador]["peso"])*0.25 - ambosEquipos[equipo][jugador]["creacionDeJuego"]*0.5;
+                        }
+                    }
+                }
+            }
+        
+            comparoAYD = puntosAtacante-puntosDefensa;
+            //Dependiendo de cómo vaya la comparación entre el ataque y la defensa el jugador va a tener que sacar una mejor o una peor tirada de dados para conseguir encestar
+            if ((50 <= comparoAYD)&&(comparoAYD<=99)&&(resultadoDados>=94)){
+                encesta=true;
+            }
+            else if ((100 <= comparoAYD)&&(comparoAYD<=149)&&(resultadoDados>=87)){
+                encesta=true;
+            }
+            else if ((150 <= comparoAYD)&&(comparoAYD<=199)&&(resultadoDados>=80)){
+                encesta=true;
+            }
+            else if ((200 <= comparoAYD)&&(comparoAYD<=249)&&(resultadoDados>=73)){
+                encesta=true;
+            }
+            else if ((250 <= comparoAYD)&&(comparoAYD<=299)&&(resultadoDados>=66)){
+                encesta=true;
+            }
+            else if ((300 <= comparoAYD)&&(comparoAYD<=349)&&(resultadoDados>=59)){
+                encesta=true;
+            }
+            else if ((350 <= comparoAYD)&&(comparoAYD<=349)&&(resultadoDados>=52)){
+                encesta=true;
+            }
+            else if ((400 <= comparoAYD)&&(comparoAYD<=449)&&(resultadoDados>=45)){
+                encesta=true;
+            }
+            else if ((450 <= comparoAYD)&&(resultadoDados>=40)){
+                encesta=true;
+            }
+        }
+        const calculoTiroFueraDeLineaDe3= (o)=>{                    
+            //Calculo cuántos puntos tiene el atacante cuando tira sólo
+            puntosAtacante=  ambosEquipos[equipo][jugador]["anotacionExterior"]*4;
+            //Calculo cuánto molestan las defensas (d) en el tiro
+            //Para eso hago un búcle que busque si hay jugadores defensores cerca del tirador
+            //Bucle que recorre eje x +/- 1
+            for (let x=-1; x <1; x++){
+                //Bucle que recorre eje y +/- 1
+                for (let y=-1; y <1; y++){
+                    //Bucle para recorrer a los jugadores del otro equipo
+                    for (let d=0; d <5; d++){
+                        if ((estadosAmbosEquipos[equipo][jugador]["ubicacionX"] + x == estadosAmbosEquipos[o][d]["ubicacionX"]) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] + y == estadosAmbosEquipos[o][d]["ubicacionY"])){
+                            puntosDefensa += (ambosEquipos[o][d].altura * 0.75 - ambosEquipos[equipo][jugador].altura) + ambosEquipos[o][d]["capacidadAtletica"]*0.75 + ambosEquipos[o][d]["defensaPerimetral"]*3 - (ambosEquipos[o][d]["peso"]*0.75 - ambosEquipos[equipo][jugador]["peso"])*0.5 - ambosEquipos[equipo][jugador]["creacionDeJuego"]*0.75;
+                        }
+                    }
+                }
+            }
+        
+            comparoAYD = puntosAtacante-puntosDefensa;
+            //Dependiendo de cómo vaya la comparación entre el ataque y la defensa el jugador va a tener que sacar una mejor o una peor tirada de dados para conseguir encestar
+            if ((50 <= comparoAYD)&&(comparoAYD<=99)&&(resultadoDados>=90)){
+                encesta=true;
+            }
+            else if ((100 <= comparoAYD)&&(comparoAYD<=149)&&(resultadoDados>=80)){
+                encesta=true;
+            }
+            else if ((150 <= comparoAYD)&&(comparoAYD<=199)&&(resultadoDados>=74)){
+                encesta=true;
+            }
+            else if ((200 <= comparoAYD)&&(comparoAYD<=249)&&(resultadoDados>=68)){
+                encesta=true;
+            }
+            else if ((250 <= comparoAYD)&&(comparoAYD<=299)&&(resultadoDados>=60)){
+                encesta=true;
+            }
+            else if ((300 <= comparoAYD)&&(comparoAYD<=349)&&(resultadoDados>=55)){
+                encesta=true;
+            }
+            else if ((350 <= comparoAYD)&&(comparoAYD<=349)&&(resultadoDados>=50)){
+                encesta=true;
+            }
+            else if ((400 <= comparoAYD)&&(resultadoDados>=45)){
+                encesta=true;
+            }
+            //Si encesta por ser un triple voy a sumar un punto extra
+            if (encesta==true){
+                puntosEquipoA ++;
+            }
+        }
+        const calculoSiTiraUnTripleLargo= (o)=>{
+            //Calculo cuántos puntos tiene el atacante cuando tira sólo
+            puntosAtacante=  ambosEquipos[equipo][jugador]["anotacionExterior"]*4;
+            //Calculo cuánto molestan las defensas (d) en el tiro
+            //Para eso hago un búcle que busque si hay jugadores defensores cerca del tirador
+            //Bucle que recorre eje x +/- 1
+            for (let x=-1; x <1; x++){
+                //Bucle que recorre eje y +/- 1
+                for (let y=-1; y <1; y++){
+                    //Bucle para recorrer a los jugadores del otro equipo
+                    for (let d=0; d <5; d++){
+                        if ((estadosAmbosEquipos[equipo][jugador]["ubicacionX"] + x == estadosAmbosEquipos[o][d]["ubicacionX"]) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] + y == estadosAmbosEquipos[o][d]["ubicacionY"])){
+                            puntosDefensa += (ambosEquipos[o][d].altura * 0.75 - ambosEquipos[equipo][jugador].altura)*0.75 + ambosEquipos[o][d]["capacidadAtletica"]*0.75 + ambosEquipos[o][d]["defensaPerimetral"]*3.25 - (ambosEquipos[o][d]["peso"]*0.5 - ambosEquipos[equipo][jugador]["peso"])*0.75 - ambosEquipos[equipo][jugador]["creacionDeJuego"]*0.5;
+                        }
+                    }
+                }
+            }
+        
+            comparoAYD = puntosAtacante-puntosDefensa;
+            //Dependiendo de cómo vaya la comparación entre el ataque y la defensa el jugador va a tener que sacar una mejor o una peor tirada de dados para conseguir encestar
+            if ((50 <= comparoAYD)&&(comparoAYD<=99)&&(resultadoDados>=98)){
+                encesta=true;
+            }
+            else if ((100 <= comparoAYD)&&(comparoAYD<=149)&&(resultadoDados>=90)){
+                encesta=true;
+            }
+            else if ((150 <= comparoAYD)&&(comparoAYD<=199)&&(resultadoDados>=80)){
+                encesta=true;
+            }
+            else if ((200 <= comparoAYD)&&(comparoAYD<=249)&&(resultadoDados>=74)){
+                encesta=true;
+            }
+            else if ((250 <= comparoAYD)&&(comparoAYD<=299)&&(resultadoDados>=64)){
+                encesta=true;
+            }
+            else if ((300 <= comparoAYD)&&(comparoAYD<=349)&&(resultadoDados>=58)){
+                encesta=true;
+            }
+            else if ((350 <= comparoAYD)&&(comparoAYD<=349)&&(resultadoDados>=53)){
+                encesta=true;
+            }
+            else if ((400 <= comparoAYD)&&(resultadoDados>=47)){
+                encesta=true;
+            }
+            //Si encesta por ser un triple voy a sumar un punto extra
+            if (encesta==true){
+                puntosEquipoA ++;
+            }
+        }
+        const calculoSiEsUnTripleDeMediaCancha= (o)=>{
+            //Calculo cuántos puntos tiene el atacante cuando tira sólo
+            puntosAtacante=  ambosEquipos[equipo][jugador]["anotacionExterior"]*3.75;
+            //Calculo cuánto molestan las defensas (d) en el tiro
+            //Para eso hago un búcle que busque si hay jugadores defensores cerca del tirador
+            //Bucle que recorre eje x +/- 1
+            for (let x=-1; x <1; x++){
+                //Bucle que recorre eje y +/- 1
+                for (let y=-1; y <1; y++){
+                    //Bucle para recorrer a los jugadores del otro equipo
+                    for (let d=0; d <5; d++){
+                        if ((estadosAmbosEquipos[equipo][jugador]["ubicacionX"] + x == estadosAmbosEquipos[o][d]["ubicacionX"]) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] + y == estadosAmbosEquipos[o][d]["ubicacionY"])){
+                            puntosDefensa += (ambosEquipos[o][d].altura * 0.75 - ambosEquipos[equipo][jugador].altura)*0.75 + ambosEquipos[o][d]["capacidadAtletica"]*0.75 + ambosEquipos[o][d]["defensaPerimetral"]*3.25 - (ambosEquipos[o][d]["peso"]*0.5 - ambosEquipos[equipo][jugador]["peso"]) - ambosEquipos[equipo][jugador]["creacionDeJuego"]*0.5;
+                        }
+                    }
+                }
+            }
+        
+            comparoAYD = puntosAtacante-puntosDefensa;
+            //Dependiendo de cómo vaya la comparación entre el ataque y la defensa el jugador va a tener que sacar una mejor o una peor tirada de dados para conseguir encestar
+            if ((100 <= comparoAYD)&&(comparoAYD<=149)&&(resultadoDados>=98)){
+                encesta=true;
+            }
+            else if ((150 <= comparoAYD)&&(comparoAYD<=199)&&(resultadoDados>=90)){
+                encesta=true;
+            }
+            else if ((200 <= comparoAYD)&&(comparoAYD<=249)&&(resultadoDados>=84)){
+                encesta=true;
+            }
+            else if ((250 <= comparoAYD)&&(comparoAYD<=299)&&(resultadoDados>=77)){
+                encesta=true;
+            }
+            else if ((300 <= comparoAYD)&&(comparoAYD<=349)&&(resultadoDados>=70)){
+                encesta=true;
+            }
+            else if ((350 <= comparoAYD)&&(resultadoDados>=64)){
+                encesta=true;
+            }
+            //Si encesta por ser un triple voy a sumar un punto extra
+            if (encesta==true){
+                puntosEquipoA ++;
+            }
+        }
+        const calculoSiElTripleEsDeAtrasDeMitadDeCancha= (o)=>{
+            //Calculo cuántos puntos tiene el atacante cuando tira sólo
+            puntosAtacante=  ambosEquipos[equipo][jugador]["anotacionExterior"]*3.5;
+            //Calculo cuánto molestan las defensas (d) en el tiro
+            //Para eso hago un búcle que busque si hay jugadores defensores cerca del tirador
+            //Bucle que recorre eje x +/- 1
+            for (let x=-1; x <1; x++){
+                //Bucle que recorre eje y +/- 1
+                for (let y=-1; y <1; y++){
+                    //Bucle para recorrer a los jugadores del otro equipo
+                    for (let d=0; d <5; d++){
+                        if ((estadosAmbosEquipos[equipo][jugador]["ubicacionX"] + x == estadosAmbosEquipos[o][d]["ubicacionX"]) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] + y == estadosAmbosEquipos[o][d]["ubicacionY"])){
+                            puntosDefensa += (ambosEquipos[o][d].altura * 0.75 - ambosEquipos[equipo][jugador].altura)*0.75 + ambosEquipos[o][d]["capacidadAtletica"]*0.5 + ambosEquipos[o][d]["defensaPerimetral"]*3.5 - (ambosEquipos[o][d]["peso"]*0.25 - ambosEquipos[equipo][jugador]["peso"]*0.75) - ambosEquipos[equipo][jugador]["creacionDeJuego"]*0.25;
+                        }
+                    }
+                }
+            }
+        
+            comparoAYD = puntosAtacante-puntosDefensa;
+            //Dependiendo de cómo vaya la comparación entre el ataque y la defensa el jugador va a tener que sacar una mejor o una peor tirada de dados para conseguir encestar
+            if ((200 <= comparoAYD)&&(comparoAYD<=249)&&(resultadoDados>=98)){
+                encesta=true;
+            }
+            else if ((250 <= comparoAYD)&&(comparoAYD<=299)&&(resultadoDados>=93)){
+                encesta=true;
+            }
+            else if ((300 <= comparoAYD)&&(comparoAYD<=349)&&(resultadoDados>=86)){
+                encesta=true;
+            }
+            else if ((350 <= comparoAYD)&&(resultadoDados>=78)){
+                encesta=true;
+            }
+            //Si encesta por ser un triple voy a sumar un punto extra
+            if (encesta==true){
+                puntosEquipoA ++;
+            }
+        }
+        const calculoSiTiraDesdeLaOtraPuntaDeLaCancha= (o)=>{
+            //Calculo cuántos puntos tiene el atacante cuando tira sólo
+            puntosAtacante=  ambosEquipos[equipo][jugador]["anotacionExterior"]*3;
+            //Calculo cuánto molestan las defensas (d) en el tiro
+            //Para eso hago un búcle que busque si hay jugadores defensores cerca del tirador
+            //Bucle que recorre eje x +/- 1
+            for (let x=-1; x <1; x++){
+                //Bucle que recorre eje y +/- 1
+                for (let y=-1; y <1; y++){
+                    //Bucle para recorrer a los jugadores del otro equipo
+                    for (let d=0; d <5; d++){
+                        if ((estadosAmbosEquipos[equipo][jugador]["ubicacionX"] + x == estadosAmbosEquipos[o][d]["ubicacionX"]) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] + y == estadosAmbosEquipos[o][d]["ubicacionY"])){
+                            puntosDefensa += (ambosEquipos[o][d].altura * 0.75 - ambosEquipos[equipo][jugador].altura)*0.75 + ambosEquipos[o][d]["capacidadAtletica"]*0.5 + ambosEquipos[o][d]["defensaPerimetral"]*3.5 - (ambosEquipos[o][d]["peso"]*0.25 - ambosEquipos[equipo][jugador]["peso"]*0.75) - ambosEquipos[equipo][jugador]["creacionDeJuego"]*0.25;
+                        }
+                    }
+                }
+            }
+        
+            comparoAYD = puntosAtacante-puntosDefensa;
+            //Dependiendo de cómo vaya la comparación entre el ataque y la defensa el jugador va a tener que sacar una mejor o una peor tirada de dados para conseguir encestar
+            if ((250 <= comparoAYD)&&(comparoAYD<=299)&&(resultadoDados>=99)){
+                encesta=true;
+            }
+            else if ((300 <= comparoAYD)&&(comparoAYD<=349)&&(resultadoDados>=95)){
+                encesta=true;
+            }
+            else if ((350 <= comparoAYD)&&(resultadoDados>=88)){
+                encesta=true;
+            }
+            //Si encesta por ser un triple voy a sumar un punto extra
+            if (encesta==true){
+                puntosEquipoA ++;
+            }
+        }
         //Si el equipo que ataca es el A
         if (equipo == 0){
             //Le saco la poseción de la pelota al que tira
             estadosAmbosEquipos[equipo][jugador].conPelota=false;
             //Y está cerca del aro
             if ((estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 28) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 5) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 28) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 11) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 28) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 26) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 6) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 28) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 26) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 10) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 27) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 25) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 7) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 9)){
-                //Calculo cuántos puntos tiene el atacante cuando tira sólo
-                puntosAtacante= ambosEquipos[equipo][jugador]["capacidadAtletica"]*1.5 + ambosEquipos[equipo][jugador]["anotacionInterior"]*3.5;
-                //Calculo cuánto molestan las defensas (d) en el tiro
-                //Para eso hago un búcle que busque si hay jugadores defensores cerca del tirador
-                //Bucle que recorre eje x +/- 1
-                for (let x=-1; x <1; x++){
-                    //Bucle que recorre eje y +/- 1
-                    for (let y=-1; y <1; y++){
-                        //Bucle para recorrer a los jugadores del otro equipo
-                        for (let d=0; d <5; d++){
-                            if ((estadosAmbosEquipos[equipo][jugador]["ubicacionX"] + x == estadosAmbosEquipos[1][d]["ubicacionX"]) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] + y == estadosAmbosEquipos[1][d]["ubicacionY"])){
-                                puntosDefensa += (ambosEquipos[1][d].altura * 0.75 - ambosEquipos[equipo][jugador].altura)*1.25 + ambosEquipos[1][d]["capacidadAtletica"]*0.75 + ambosEquipos[1][d]["defensaInterna"]*3 + (ambosEquipos[1][d]["peso"]*0.75 - ambosEquipos[equipo][jugador]["peso"]) - ambosEquipos[equipo][jugador]["creacionDeJuego"]*0.25;
-                            }
-                        }
-                    }
-                }
-                
-                comparoAYD = puntosAtacante-puntosDefensa;
-                resultadoDados= dadoDe20()+dadoDe20()+dadoDe20()+dadoDe20()+dadoDe20();
-                //Dependiendo de cómo vaya la comparación entre el ataque y la defensa el jugador va a tener que sacar una mejor o una peor tirada de dados para conseguir encestar
-                if ((0 <= comparoAYD)&&(comparoAYD<=49)&&(resultadoDados>90)){
-                    encesta=true;
-                }
-                else if ((50 <= comparoAYD)&&(comparoAYD<=99)&&(resultadoDados>=80)){
-                    encesta=true;
-                }
-                else if ((100 <= comparoAYD)&&(comparoAYD<=149)&&(resultadoDados>=70)){
-                    encesta=true;
-                }
-                else if ((150 <= comparoAYD)&&(comparoAYD<=199)&&(resultadoDados>=60)){
-                    encesta=true;
-                }
-                else if ((200 <= comparoAYD)&&(comparoAYD<=249)&&(resultadoDados>=50)){
-                    encesta=true;
-                }
-                else if ((250 <= comparoAYD)&&(comparoAYD<=299)&&(resultadoDados>=40)){
-                    encesta=true;
-                }
-                else if ((300 <= comparoAYD)&&(comparoAYD<=349)&&(resultadoDados>=30)){
-                    encesta=true;
-                }
-                else if ((350 <= comparoAYD)&&(comparoAYD<=349)&&(resultadoDados>=21)){
-                    encesta=true;
-                }
-                else if ((400 <= comparoAYD)&&(comparoAYD<=449)&&(resultadoDados>=13)){
-                    encesta=true;
-                }
-                else if ((450 <= comparoAYD)&&(resultadoDados>=6)){
-                    encesta=true;
-                }                
+                calculoTiroCercaDelAro(elEquipoDefensor);
             }
             //O si está a cerca pero no tanto
             else if ((estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 28) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 7) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 9) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 28) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 3) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 4) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 28) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 12) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 13) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 27) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 26) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 4) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 5) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 27) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 26) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 11) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 12) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 25) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 5) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 6) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 25) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 10) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 11) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 24) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 6) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 10)){
-                //Calculo cuántos puntos tiene el atacante cuando tira sólo
-                puntosAtacante= ambosEquipos[equipo][jugador]["capacidadAtletica"] + ambosEquipos[equipo][jugador]["anotacionInterior"]*3 + ambosEquipos[equipo][jugador]["anotacionExterior"];
-                //Calculo cuánto molestan las defensas (d) en el tiro
-                //Para eso hago un búcle que busque si hay jugadores defensores cerca del tirador
-                //Bucle que recorre eje x +/- 1
-                for (let x=-1; x <1; x++){
-                    //Bucle que recorre eje y +/- 1
-                    for (let y=-1; y <1; y++){
-                        //Bucle para recorrer a los jugadores del otro equipo
-                        for (let d=0; d <5; d++){
-                            if ((estadosAmbosEquipos[equipo][jugador]["ubicacionX"] + x == estadosAmbosEquipos[1][d]["ubicacionX"]) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] + y == estadosAmbosEquipos[1][d]["ubicacionY"])){
-                                puntosDefensa += (ambosEquipos[1][d].altura * 0.75 - ambosEquipos[equipo][jugador].altura) + ambosEquipos[1][d]["capacidadAtletica"]*0.75 + ambosEquipos[1][d]["defensaInterna"]*2 + ambosEquipos[1][d]["defensaPerimetral"] + (ambosEquipos[1][d]["peso"]*0.75 - ambosEquipos[equipo][jugador]["peso"])*0.75 - ambosEquipos[equipo][jugador]["creacionDeJuego"]*0.25;
-                            }
-                        }
-                    }
-                }
-            
-                comparoAYD = puntosAtacante-puntosDefensa;
-                resultadoDados= dadoDe20()+dadoDe20()+dadoDe20()+dadoDe20()+dadoDe20();
-                //Dependiendo de cómo vaya la comparación entre el ataque y la defensa el jugador va a tener que sacar una mejor o una peor tirada de dados para conseguir encestar
-                if ((50 <= comparoAYD)&&(comparoAYD<=99)&&(resultadoDados>=90)){
-                    encesta=true;
-                }
-                else if ((100 <= comparoAYD)&&(comparoAYD<=149)&&(resultadoDados>=80)){
-                    encesta=true;
-                }
-                else if ((150 <= comparoAYD)&&(comparoAYD<=199)&&(resultadoDados>=70)){
-                    encesta=true;
-                }
-                else if ((200 <= comparoAYD)&&(comparoAYD<=249)&&(resultadoDados>=60)){
-                    encesta=true;
-                }
-                else if ((250 <= comparoAYD)&&(comparoAYD<=299)&&(resultadoDados>=50)){
-                    encesta=true;
-                }
-                else if ((300 <= comparoAYD)&&(comparoAYD<=349)&&(resultadoDados>=40)){
-                    encesta=true;
-                }
-                else if ((350 <= comparoAYD)&&(comparoAYD<=349)&&(resultadoDados>=31)){
-                    encesta=true;
-                }
-                else if ((400 <= comparoAYD)&&(comparoAYD<=449)&&(resultadoDados>=23)){
-                    encesta=true;
-                }
-                else if ((450 <= comparoAYD)&&(resultadoDados>=16)){
-                    encesta=true;
-                }
+                calculoTiroCercaPeroNoTanto(elEquipoDefensor);
             }
             
             //O si está a media distancia
             else if ((estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 28) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 24) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 2) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 28) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 24) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 14) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 27) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 23) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 3) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 27) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 23) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 13) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 25) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 22) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 4) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 25) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 22) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 12) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 24) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 21) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 5) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 24) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 21) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 11) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 23) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 21) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 6) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 10)){
-                //Calculo cuántos puntos tiene el atacante cuando tira sólo
-                puntosAtacante=  ambosEquipos[equipo][jugador]["anotacionInterior"]*1.25 + ambosEquipos[equipo][jugador]["anotacionExterior"]*3;
-                //Calculo cuánto molestan las defensas (d) en el tiro
-                //Para eso hago un búcle que busque si hay jugadores defensores cerca del tirador
-                //Bucle que recorre eje x +/- 1
-                for (let x=-1; x <1; x++){
-                    //Bucle que recorre eje y +/- 1
-                    for (let y=-1; y <1; y++){
-                        //Bucle para recorrer a los jugadores del otro equipo
-                        for (let d=0; d <5; d++){
-                            if ((estadosAmbosEquipos[equipo][jugador]["ubicacionX"] + x == estadosAmbosEquipos[1][d]["ubicacionX"]) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] + y == estadosAmbosEquipos[1][d]["ubicacionY"])){
-                                puntosDefensa += (ambosEquipos[1][d].altura * 0.75 - ambosEquipos[equipo][jugador].altura) + ambosEquipos[1][d]["capacidadAtletica"]*0.75 + ambosEquipos[1][d]["defensaInterna"]*0.75 + ambosEquipos[1][d]["defensaPerimetral"]*2 - (ambosEquipos[1][d]["peso"]*0.75 - ambosEquipos[equipo][jugador]["peso"])*0.25 - ambosEquipos[equipo][jugador]["creacionDeJuego"]*0.5;
-                            }
-                        }
-                    }
-                }
-            
-                comparoAYD = puntosAtacante-puntosDefensa;
-                resultadoDados= dadoDe20()+dadoDe20()+dadoDe20()+dadoDe20()+dadoDe20();
-                //Dependiendo de cómo vaya la comparación entre el ataque y la defensa el jugador va a tener que sacar una mejor o una peor tirada de dados para conseguir encestar
-                if ((50 <= comparoAYD)&&(comparoAYD<=99)&&(resultadoDados>=94)){
-                    encesta=true;
-                }
-                else if ((100 <= comparoAYD)&&(comparoAYD<=149)&&(resultadoDados>=87)){
-                    encesta=true;
-                }
-                else if ((150 <= comparoAYD)&&(comparoAYD<=199)&&(resultadoDados>=80)){
-                    encesta=true;
-                }
-                else if ((200 <= comparoAYD)&&(comparoAYD<=249)&&(resultadoDados>=73)){
-                    encesta=true;
-                }
-                else if ((250 <= comparoAYD)&&(comparoAYD<=299)&&(resultadoDados>=66)){
-                    encesta=true;
-                }
-                else if ((300 <= comparoAYD)&&(comparoAYD<=349)&&(resultadoDados>=59)){
-                    encesta=true;
-                }
-                else if ((350 <= comparoAYD)&&(comparoAYD<=349)&&(resultadoDados>=52)){
-                    encesta=true;
-                }
-                else if ((400 <= comparoAYD)&&(comparoAYD<=449)&&(resultadoDados>=45)){
-                    encesta=true;
-                }
-                else if ((450 <= comparoAYD)&&(resultadoDados>=40)){
-                    encesta=true;
-                }
+                calculoTiroMediaDistancia(elEquipoDefensor);
             }
             //O si está fuera de la línea de 3
             else if ((estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 22) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 1) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 22) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 15) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 23) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 21) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 2) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 23) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 21) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 14) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 22) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 20) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 3) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 22) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 20) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 13) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 21) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 4) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 21) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 12) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 20) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 19) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 4) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 12)){
-                //Calculo cuántos puntos tiene el atacante cuando tira sólo
-                puntosAtacante=  ambosEquipos[equipo][jugador]["anotacionExterior"]*4;
-                //Calculo cuánto molestan las defensas (d) en el tiro
-                //Para eso hago un búcle que busque si hay jugadores defensores cerca del tirador
-                //Bucle que recorre eje x +/- 1
-                for (let x=-1; x <1; x++){
-                    //Bucle que recorre eje y +/- 1
-                    for (let y=-1; y <1; y++){
-                        //Bucle para recorrer a los jugadores del otro equipo
-                        for (let d=0; d <5; d++){
-                            if ((estadosAmbosEquipos[equipo][jugador]["ubicacionX"] + x == estadosAmbosEquipos[1][d]["ubicacionX"]) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] + y == estadosAmbosEquipos[1][d]["ubicacionY"])){
-                                puntosDefensa += (ambosEquipos[1][d].altura * 0.75 - ambosEquipos[equipo][jugador].altura) + ambosEquipos[1][d]["capacidadAtletica"]*0.75 + ambosEquipos[1][d]["defensaPerimetral"]*3 - (ambosEquipos[1][d]["peso"]*0.75 - ambosEquipos[equipo][jugador]["peso"])*0.5 - ambosEquipos[equipo][jugador]["creacionDeJuego"]*0.75;
-                            }
-                        }
-                    }
-                }
-            
-                comparoAYD = puntosAtacante-puntosDefensa;
-                resultadoDados= dadoDe20()+dadoDe20()+dadoDe20()+dadoDe20()+dadoDe20();
-                //Dependiendo de cómo vaya la comparación entre el ataque y la defensa el jugador va a tener que sacar una mejor o una peor tirada de dados para conseguir encestar
-                if ((50 <= comparoAYD)&&(comparoAYD<=99)&&(resultadoDados>=90)){
-                    encesta=true;
-                }
-                else if ((100 <= comparoAYD)&&(comparoAYD<=149)&&(resultadoDados>=80)){
-                    encesta=true;
-                }
-                else if ((150 <= comparoAYD)&&(comparoAYD<=199)&&(resultadoDados>=74)){
-                    encesta=true;
-                }
-                else if ((200 <= comparoAYD)&&(comparoAYD<=249)&&(resultadoDados>=68)){
-                    encesta=true;
-                }
-                else if ((250 <= comparoAYD)&&(comparoAYD<=299)&&(resultadoDados>=60)){
-                    encesta=true;
-                }
-                else if ((300 <= comparoAYD)&&(comparoAYD<=349)&&(resultadoDados>=55)){
-                    encesta=true;
-                }
-                else if ((350 <= comparoAYD)&&(comparoAYD<=349)&&(resultadoDados>=50)){
-                    encesta=true;
-                }
-                else if ((400 <= comparoAYD)&&(resultadoDados>=45)){
-                    encesta=true;
-                }
-                //Si encesta por ser un triple voy a sumar un punto extra
-                if (encesta==true){
-                    puntosEquipoA ++;
-                }
+                calculoTiroFueraDeLineaDe3(elEquipoDefensor);
             }
             //O si está en un triple largo
             else if ((estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 15) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 8) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 16) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 4) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 12) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 17) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 3) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 13) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 18) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 2) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 14) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 19) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 3) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 19) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 13) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 20) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 2) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 20) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 14) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 21) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 1) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 21) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 15)){
-                //Calculo cuántos puntos tiene el atacante cuando tira sólo
-                puntosAtacante=  ambosEquipos[equipo][jugador]["anotacionExterior"]*4;
-                //Calculo cuánto molestan las defensas (d) en el tiro
-                //Para eso hago un búcle que busque si hay jugadores defensores cerca del tirador
-                //Bucle que recorre eje x +/- 1
-                for (let x=-1; x <1; x++){
-                    //Bucle que recorre eje y +/- 1
-                    for (let y=-1; y <1; y++){
-                        //Bucle para recorrer a los jugadores del otro equipo
-                        for (let d=0; d <5; d++){
-                            if ((estadosAmbosEquipos[equipo][jugador]["ubicacionX"] + x == estadosAmbosEquipos[1][d]["ubicacionX"]) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] + y == estadosAmbosEquipos[1][d]["ubicacionY"])){
-                                puntosDefensa += (ambosEquipos[1][d].altura * 0.75 - ambosEquipos[equipo][jugador].altura)*0.75 + ambosEquipos[1][d]["capacidadAtletica"]*0.75 + ambosEquipos[1][d]["defensaPerimetral"]*3.25 - (ambosEquipos[1][d]["peso"]*0.5 - ambosEquipos[equipo][jugador]["peso"])*0.75 - ambosEquipos[equipo][jugador]["creacionDeJuego"]*0.5;
-                            }
-                        }
-                    }
-                }
-            
-                comparoAYD = puntosAtacante-puntosDefensa;
-                resultadoDados= dadoDe20()+dadoDe20()+dadoDe20()+dadoDe20()+dadoDe20();
-                //Dependiendo de cómo vaya la comparación entre el ataque y la defensa el jugador va a tener que sacar una mejor o una peor tirada de dados para conseguir encestar
-                if ((50 <= comparoAYD)&&(comparoAYD<=99)&&(resultadoDados>=98)){
-                    encesta=true;
-                }
-                else if ((100 <= comparoAYD)&&(comparoAYD<=149)&&(resultadoDados>=90)){
-                    encesta=true;
-                }
-                else if ((150 <= comparoAYD)&&(comparoAYD<=199)&&(resultadoDados>=80)){
-                    encesta=true;
-                }
-                else if ((200 <= comparoAYD)&&(comparoAYD<=249)&&(resultadoDados>=74)){
-                    encesta=true;
-                }
-                else if ((250 <= comparoAYD)&&(comparoAYD<=299)&&(resultadoDados>=64)){
-                    encesta=true;
-                }
-                else if ((300 <= comparoAYD)&&(comparoAYD<=349)&&(resultadoDados>=58)){
-                    encesta=true;
-                }
-                else if ((350 <= comparoAYD)&&(comparoAYD<=349)&&(resultadoDados>=53)){
-                    encesta=true;
-                }
-                else if ((400 <= comparoAYD)&&(resultadoDados>=47)){
-                    encesta=true;
-                }
-                //Si encesta por ser un triple voy a sumar un punto extra
-                if (encesta==true){
-                    puntosEquipoA ++;
-                }
+                calculoSiTiraUnTripleLargo(elEquipoDefensor);
             }
             //O si está en un triple de media cancha
             else if ((estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 10) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 8) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 11) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 14) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 5) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 12) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 15) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 5) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 7) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 15) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 9) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 11) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 12) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 15) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 4) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 12) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 15) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 12) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 26) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 13) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 16) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 3) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 13) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 16) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 13) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 14) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 17) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 2) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 14) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 17) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 2) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 14) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 17) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 14) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 15) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 18) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 1) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 15) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 18) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 15)){
-                //Calculo cuántos puntos tiene el atacante cuando tira sólo
-                puntosAtacante=  ambosEquipos[equipo][jugador]["anotacionExterior"]*3.75;
-                //Calculo cuánto molestan las defensas (d) en el tiro
-                //Para eso hago un búcle que busque si hay jugadores defensores cerca del tirador
-                //Bucle que recorre eje x +/- 1
-                for (let x=-1; x <1; x++){
-                    //Bucle que recorre eje y +/- 1
-                    for (let y=-1; y <1; y++){
-                        //Bucle para recorrer a los jugadores del otro equipo
-                        for (let d=0; d <5; d++){
-                            if ((estadosAmbosEquipos[equipo][jugador]["ubicacionX"] + x == estadosAmbosEquipos[1][d]["ubicacionX"]) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] + y == estadosAmbosEquipos[1][d]["ubicacionY"])){
-                                puntosDefensa += (ambosEquipos[1][d].altura * 0.75 - ambosEquipos[equipo][jugador].altura)*0.75 + ambosEquipos[1][d]["capacidadAtletica"]*0.75 + ambosEquipos[1][d]["defensaPerimetral"]*3.25 - (ambosEquipos[1][d]["peso"]*0.5 - ambosEquipos[equipo][jugador]["peso"]) - ambosEquipos[equipo][jugador]["creacionDeJuego"]*0.5;
-                            }
-                        }
-                    }
-                }
-            
-                comparoAYD = puntosAtacante-puntosDefensa;
-                resultadoDados= dadoDe20()+dadoDe20()+dadoDe20()+dadoDe20()+dadoDe20();
-                //Dependiendo de cómo vaya la comparación entre el ataque y la defensa el jugador va a tener que sacar una mejor o una peor tirada de dados para conseguir encestar
-                if ((100 <= comparoAYD)&&(comparoAYD<=149)&&(resultadoDados>=98)){
-                    encesta=true;
-                }
-                else if ((150 <= comparoAYD)&&(comparoAYD<=199)&&(resultadoDados>=90)){
-                    encesta=true;
-                }
-                else if ((200 <= comparoAYD)&&(comparoAYD<=249)&&(resultadoDados>=84)){
-                    encesta=true;
-                }
-                else if ((250 <= comparoAYD)&&(comparoAYD<=299)&&(resultadoDados>=77)){
-                    encesta=true;
-                }
-                else if ((300 <= comparoAYD)&&(comparoAYD<=349)&&(resultadoDados>=70)){
-                    encesta=true;
-                }
-                else if ((350 <= comparoAYD)&&(resultadoDados>=64)){
-                    encesta=true;
-                }
-                //Si encesta por ser un triple voy a sumar un punto extra
-                if (encesta==true){
-                    puntosEquipoA ++;
-                }
+                calculoSiEsUnTripleDeMediaCancha(elEquipoDefensor);
             }
             //O si está detrás de media cancha
             else if ((estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 6) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 8) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 7) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 9) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 5) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 11) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 10) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 5) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 7) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 10) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 9) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 11) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 8) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 11) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 4) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 8) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 11) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 12) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 9) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 12) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 3) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 9) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 12) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 13) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 10) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 13) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 2) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 10) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 13) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 14) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 11) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 14) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 1) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 11) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 14) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 15)){
-                //Calculo cuántos puntos tiene el atacante cuando tira sólo
-                puntosAtacante=  ambosEquipos[equipo][jugador]["anotacionExterior"]*3.5;
-                //Calculo cuánto molestan las defensas (d) en el tiro
-                //Para eso hago un búcle que busque si hay jugadores defensores cerca del tirador
-                //Bucle que recorre eje x +/- 1
-                for (let x=-1; x <1; x++){
-                    //Bucle que recorre eje y +/- 1
-                    for (let y=-1; y <1; y++){
-                        //Bucle para recorrer a los jugadores del otro equipo
-                        for (let d=0; d <5; d++){
-                            if ((estadosAmbosEquipos[equipo][jugador]["ubicacionX"] + x == estadosAmbosEquipos[1][d]["ubicacionX"]) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] + y == estadosAmbosEquipos[1][d]["ubicacionY"])){
-                                puntosDefensa += (ambosEquipos[1][d].altura * 0.75 - ambosEquipos[equipo][jugador].altura)*0.75 + ambosEquipos[1][d]["capacidadAtletica"]*0.5 + ambosEquipos[1][d]["defensaPerimetral"]*3.5 - (ambosEquipos[1][d]["peso"]*0.25 - ambosEquipos[equipo][jugador]["peso"]*0.75) - ambosEquipos[equipo][jugador]["creacionDeJuego"]*0.25;
-                            }
-                        }
-                    }
-                }
-            
-                comparoAYD = puntosAtacante-puntosDefensa;
-                resultadoDados= dadoDe20()+dadoDe20()+dadoDe20()+dadoDe20()+dadoDe20();
-                //Dependiendo de cómo vaya la comparación entre el ataque y la defensa el jugador va a tener que sacar una mejor o una peor tirada de dados para conseguir encestar
-                if ((200 <= comparoAYD)&&(comparoAYD<=249)&&(resultadoDados>=98)){
-                    encesta=true;
-                }
-                else if ((250 <= comparoAYD)&&(comparoAYD<=299)&&(resultadoDados>=93)){
-                    encesta=true;
-                }
-                else if ((300 <= comparoAYD)&&(comparoAYD<=349)&&(resultadoDados>=86)){
-                    encesta=true;
-                }
-                else if ((350 <= comparoAYD)&&(resultadoDados>=78)){
-                    encesta=true;
-                }
-                //Si encesta por ser un triple voy a sumar un punto extra
-                if (encesta==true){
-                    puntosEquipoA ++;
-                }
+                calculoSiElTripleEsDeAtrasDeMitadDeCancha(elEquipoDefensor);
             }
             //O si está en la otra punta de la cancha
             else if((estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 6) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 7) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 6) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 9) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 5) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 5) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 7) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 4) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 7) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 12) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 8) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 3) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 8) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 13) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 9) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 2) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 9) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 14) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 10) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 1) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 10) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 15)){
-                //Calculo cuántos puntos tiene el atacante cuando tira sólo
-                puntosAtacante=  ambosEquipos[equipo][jugador]["anotacionExterior"]*3;
-                //Calculo cuánto molestan las defensas (d) en el tiro
-                //Para eso hago un búcle que busque si hay jugadores defensores cerca del tirador
-                //Bucle que recorre eje x +/- 1
-                for (let x=-1; x <1; x++){
-                    //Bucle que recorre eje y +/- 1
-                    for (let y=-1; y <1; y++){
-                        //Bucle para recorrer a los jugadores del otro equipo
-                        for (let d=0; d <5; d++){
-                            if ((estadosAmbosEquipos[equipo][jugador]["ubicacionX"] + x == estadosAmbosEquipos[1][d]["ubicacionX"]) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] + y == estadosAmbosEquipos[1][d]["ubicacionY"])){
-                                puntosDefensa += (ambosEquipos[1][d].altura * 0.75 - ambosEquipos[equipo][jugador].altura)*0.75 + ambosEquipos[1][d]["capacidadAtletica"]*0.5 + ambosEquipos[1][d]["defensaPerimetral"]*3.5 - (ambosEquipos[1][d]["peso"]*0.25 - ambosEquipos[equipo][jugador]["peso"]*0.75) - ambosEquipos[equipo][jugador]["creacionDeJuego"]*0.25;
-                            }
-                        }
-                    }
-                }
-            
-                comparoAYD = puntosAtacante-puntosDefensa;
-                resultadoDados= dadoDe20()+dadoDe20()+dadoDe20()+dadoDe20()+dadoDe20();
-                //Dependiendo de cómo vaya la comparación entre el ataque y la defensa el jugador va a tener que sacar una mejor o una peor tirada de dados para conseguir encestar
-                if ((250 <= comparoAYD)&&(comparoAYD<=299)&&(resultadoDados>=99)){
-                    encesta=true;
-                }
-                else if ((300 <= comparoAYD)&&(comparoAYD<=349)&&(resultadoDados>=95)){
-                    encesta=true;
-                }
-                else if ((350 <= comparoAYD)&&(resultadoDados>=88)){
-                    encesta=true;
-                }
-                //Si encesta por ser un triple voy a sumar un punto extra
-                if (encesta==true){
-                    puntosEquipoA ++;
-                }
+                calculoSiTiraDesdeLaOtraPuntaDeLaCancha(elEquipoDefensor);
             }
             //Si erra
             if (encesta==false){
@@ -1689,7 +1737,60 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
                 calculoQuienGanaReboteTiraA();
             }
         }
-        //AGREGAR Si el equipo que ataca es el B
+
+
+        //Si el equipo que ataca es el B
+        if (equipo == 1){
+            //Le saco la poseción de la pelota al que tira
+            estadosAmbosEquipos[equipo][jugador].conPelota=false;
+            //Y está cerca del aro
+            if ((estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 1) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 5) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 6) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 1) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 10) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 11) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 2) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 3) && (estadosAmbosEquipos[equipo][jugador]["ubicaciony"] >= 6) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 10) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 4) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 7) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 9)){
+                calculoTiroCercaDelAro(elEquipoDefensor);
+            }
+            //O si está a cerca pero no tanto
+            else if ((estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 1) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 3) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 4) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 1) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 7) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 9) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 1) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 12) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 13) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 2) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 3) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 4) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 5) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 2) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 3) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 11) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 12) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 4) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 5) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 6) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 4) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 10) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 11) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 5) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 6) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 10)){
+                calculoTiroCercaPeroNoTanto(elEquipoDefensor);
+            }
+            
+            //O si está a media distancia
+            else if ((estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 6) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 8) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 5) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 11) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 5) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 5) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 5) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 11) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 4) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 7) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 4) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 4) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 7) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 12) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 2) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 6) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 3) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 2) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 6) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 13) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 5) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 2) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 5) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 14)){
+                calculoTiroMediaDistancia(elEquipoDefensor);
+            }
+            //O si está fuera de la línea de 3
+            else if ((estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 7) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 1) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 7) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 15) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 8) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 6) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 2) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 8) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 6) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 14) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 9) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 7) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 3) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 9) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 7) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 13) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 10) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 8) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 4) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 10) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 8) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 12) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 10) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 9) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 5) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 11)){
+                calculoTiroFueraDeLineaDe3(elEquipoDefensor);
+            }
+            //O si está en un triple largo
+            else if ((estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 10) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 8) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 1) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 10) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 8) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 15) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 11) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 9) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 2) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 11) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 9) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 14) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 12) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 10) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 3) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 12) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 10) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 13) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 13) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 11) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 4) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 12) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 14) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 8)){
+                calculoSiTiraUnTripleLargo(elEquipoDefensor);
+            }
+            //O si está en un triple de media cancha
+            else if ((estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 14) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 11) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 1) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 14) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 11) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 15) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 15) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 12) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 2) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 15) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 12) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 14) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 16) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 13) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 3) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 16) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 13) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 13) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 17) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 14) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 4) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 17) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 14) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 12) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 18) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 14) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 5) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 7) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 18) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 14) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 9) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 11) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 19) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 15) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 8)){
+                calculoSiEsUnTripleDeMediaCancha(elEquipoDefensor);
+            }
+            //O si está detrás de media cancha
+            else if ((estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 18) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 15) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 1) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 18) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 15) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 15) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 19) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 16) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 2) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 19) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 16) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 14) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 20) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 17) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 3) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 20) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 17) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 13) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 21) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 18) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 4) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 21) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 18) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 12) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 22) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 19) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 5) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 7) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 22) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 19) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 9) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 11) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 23) && (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 20) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 8)){
+                calculoSiElTripleEsDeAtrasDeMitadDeCancha(elEquipoDefensor)
+            }
+            //O si está en la otra punta de la cancha
+            else if((estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 19) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 1) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 19) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 15) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 20) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 2) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 20) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 14) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 21) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 3) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 21) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 13) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 22) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 4) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 22) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 12) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 23) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 5) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 7) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 23) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 9) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 11) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 24) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 8)){
+                calculoSiTiraDesdeLaOtraPuntaDeLaCancha(elEquipoDefensor);
+            }
+            //Si erra
+            if (encesta==false){
+                //AGREGAR termino turnos
+                //AGREGAR comienzo nuevo instante
+                calculoQuienGanaReboteTiraB();
+            }
+
+            //Si encesta
+            else if (encesta==true){
+                puntosEquipoA +=2;
+                //AGREGAR termino turnos
+                //AGREGAR comienzo nuevo instante
+                calculoQuienGanaReboteTiraB();
+            }
+        }
     }
     
     //Creo función para terminar turno
