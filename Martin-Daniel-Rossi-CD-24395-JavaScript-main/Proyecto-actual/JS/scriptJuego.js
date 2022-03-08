@@ -894,7 +894,7 @@ const muestroPosiblesAccionesDefensa = (equipo, jugador)=>{
 
         /*FIN SEGMENTO MOVERSE*/
     }
-    //WORKING hacer que skipee a la acción correspondiente dependiendo de si es el primer equipo en jugar o el segundo
+    //Skipeo a la acción correspondiente dependiendo de si es el primer equipo en jugar o el segundo
     else if (estadosAmbosEquipos[equipo][jugador]["puntosDeAccion"] < 0.5){
         funcionalidadBotonTerminarTurnoA();
     }
@@ -1300,19 +1300,101 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
     
     
     //Creo evento que sucederá al activarse el evento del botón "pase"
-    function funcionalidadBotonPase (evt){
+    function funcionalidadBotonPase (){
         //Decido dejarlo de lado hasta resolver el tema de que no puedo remover los eventListeners
     }
     
     //Creo evento que sucederá al activarse el evento del botón "tiro"
-    function funcionalidadBotonTiro(evt){
-        function calculoQuienGanaReboteTiraA(){
-            //AGREGAR
+    function funcionalidadBotonTiro(){
+        function calculoQuienGanaRebote(){
+            //WORKING
+            //Creo un array que contendrá los puntos que consiguen para ganar el rebote
+            const puntosEquipoAParaGanarRebotes =[];
+            const puntosEquipoBParaGanarRebotes =[];
+            let puntosParaReboteDeEsteJugador;
+            let maximosPuntosA;
+            let maximosPuntosB;
+            let comparoMaximosPuntosParaRebote=0;
+            const herramientaCalcularReboteTiraA= (e, j)=>{                
+                if (estadosAmbosEquipos[e][j].ubicacionX ==28){
+                    puntosParaReboteDeEsteJugador-=  1* 3;
+                }
+                else if (estadosAmbosEquipos[e][j].ubicacionX < 27){
+                    puntosParaReboteDeEsteJugador-= (27 - estadosAmbosEquipos[e][j].ubicacionX) * 3;
+                }
+            }
+            const herramientaCalcularReboteTiraB= (e, j)=>{
+                if (estadosAmbosEquipos[e][j].ubicacionX ==1){
+                    puntosParaReboteDeEsteJugador-=  1* 3;
+                }
+                else if (estadosAmbosEquipos[e][j].ubicacionX > 2){
+                    puntosParaReboteDeEsteJugador-= (estadosAmbosEquipos[e][j].ubicacionX -2) * 3;
+                }
+            }
+            //Hago un búcle para que no pueda haber empate (Hay un dado que eventualmente va a desempatar)
+            while (comparoMaximosPuntosParaRebote==0){
+                //Hago un bucle que recorre los equipos (e)
+                for (let e=0; e <2; e++){
+                    //Hago un bucle para recorrer a los jugadores (j)
+                    for (j in estadosAmbosEquipos[e]){
+                            puntosParaReboteDeEsteJugador= dadoDe20()*0.75 + ambosEquipos[e][j].capacidadReboteadora *1.5 + ambosEquipos[e][j].capacidadAtletica;
+                        //Dependiendo de hacia qué dirección se encuentre usará una u otra forma de calcular
+                        if (estadosAmbosEquipos[e][j].ubicacionY < 8){
+                            puntosParaReboteDeEsteJugador-= (8 - estadosAmbosEquipos[e][j].ubicacionY) * 3;
+                        }
+                        else if (estadosAmbosEquipos[e][j].ubicacionY > 8){
+                            puntosParaReboteDeEsteJugador-=  (estadosAmbosEquipos[e][j].ubicacionY -8) * 3;
+                        }
+                        if (e==0){
+                            herramientaCalcularReboteTiraA(e, j);
+                            puntosEquipoAParaGanarRebotes.push(puntosParaReboteDeEsteJugador);
+                        }
+                        else if (e==1){
+                            herramientaCalcularReboteTiraB(e, j);
+                            puntosEquipoBParaGanarRebotes.push(puntosParaReboteDeEsteJugador);
+                        }
+                    }
+                }
+                //Hago un bucle para ver cuál es el jugador que más puntos tiene de cada equipo
+                for (let j=0; j <5; j++){
+                    if (j==0){
+                        maximosPuntosA= puntosEquipoAParaGanarRebotes[j];
+                        maximosPuntosB= puntosEquipoBParaGanarRebotes[j];
+                    }
+                    else if (0<j){
+                        if (maximosPuntosA < puntosEquipoAParaGanarRebotes[j]){
+                            maximosPuntosA = puntosEquipoAParaGanarRebotes[j];
+                        }
+                        if (maximosPuntosB < puntosEquipoBParaGanarRebotes[j]){
+                            maximosPuntosB= puntosEquipoBParaGanarRebotes[j];
+                        }
+                    }
+                }
+                //Comparo a ver qué equipo tiene más puntos para ganar el rebote
+                comparoMaximosPuntosParaRebote= maximosPuntosA-maximosPuntosB;    
+            }
+
+            
+            //Una vez sé qué equipo ganó veo cuál de sus jugadores fué el que ganó el rebote
+            //Si ganó el equipo A
+            if (comparoMaximosPuntosParaRebote > 0){
+                //Creo un búcle para recorrer a los jugadores
+                for (let j=0; j <5; j++){
+                    if (maximosPuntosA == puntosEquipoAParaGanarRebotes[j]){
+                        estadosAmbosEquipos[0][j].conPelota= true;
+                    }
+                }
+            }
+            //Si ganó el equipo B
+            if (comparoMaximosPuntosParaRebote < 0){
+                //Creo un búcle para recorrer a los jugadores
+                for (let j=0; j <5; j++){
+                    if (maximosPuntosB == puntosEquipoBParaGanarRebotes[j]){
+                        estadosAmbosEquipos[1][j].conPelota= true;
+                    }
+                }
+            }
         }
-        function calculoQuienGanaReboteTiraB(){
-            //AGREGAR
-        }
-        //WORKING
         //AGREGAR restar puntos de acción
         let puntosAtacante = 0;
         let puntosDefensa = 0;
@@ -1726,15 +1808,17 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
             if (encesta==false){
                 //AGREGAR termino turnos
                 //AGREGAR comienzo nuevo instante
-                calculoQuienGanaReboteTiraA();
+                calculoQuienGanaRebote();
+                //AGREGAR mostrar en el tablero cuál es el nuevo jugador con pelota
             }
 
             //Si encesta
             else if (encesta==true){
                 puntosEquipoA +=2;
+                //AGREGAR dale la poseción de la pelota a alguno de los que era defensor
                 //AGREGAR termino turnos
                 //AGREGAR comienzo nuevo instante
-                calculoQuienGanaReboteTiraA();
+                //AGREGAR mostrar en tablero cuál es el nuevo jugador con pelota
             }
         }
 
@@ -1780,15 +1864,17 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
             if (encesta==false){
                 //AGREGAR termino turnos
                 //AGREGAR comienzo nuevo instante
-                calculoQuienGanaReboteTiraB();
+                calculoQuienGanaRebote();
+                //AGREGAR mostrar en el tablero cuál es el nuevo jugador con pelota
             }
 
             //Si encesta
             else if (encesta==true){
                 puntosEquipoA +=2;
+                //AGREGAR dale la poseción de la pelota a alguno de los que era defensor
                 //AGREGAR termino turnos
                 //AGREGAR comienzo nuevo instante
-                calculoQuienGanaReboteTiraB();
+                //AGREGAR mostrar en tablero cuál es el nuevo jugador con pelota
             }
         }
     }
