@@ -58,6 +58,16 @@
     color: #050259;
 }
 
+.tanteador, .relojPartido {
+    background-color: black;
+    color: red;
+    font-size: large;
+    height: 100%;
+    padding: 4px;
+    border-radius: 3px;
+    border: grey 2px ridge; 
+}
+
 .fondoVerde {
     background-color: rgba(128, 255, 0, 0.527);
 }
@@ -276,6 +286,13 @@ body{
 
 .conPelota {
     z-index: 2;
+}
+
+.relatoPartido {
+    width: 100%;
+    background-color: black;
+    color: rgba(255, 228, 72, 0.699);
+    text-align: center;
 }
 
 .contenedorBotonesDeAccion {

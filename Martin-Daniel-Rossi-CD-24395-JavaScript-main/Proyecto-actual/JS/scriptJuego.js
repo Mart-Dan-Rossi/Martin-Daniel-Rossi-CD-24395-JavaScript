@@ -51,8 +51,12 @@ let rolJugadoresElegidos;
 let cuentoVuelta=2;
 let esPrimeraVuelta = true;
 
-let puntosEquipoA;
-let puntosEquipoB;
+let puntosEquipoA=0;
+let puntosEquipoB=0;
+const arrayConPuntosPorEquipo= [puntosEquipoA, puntosEquipoB];
+
+let locutorDice;
+let textoLocutor = document.getElementById("relatoPartido");
 
 const letraEquipo = ["A","B"];
 //Pretendo agregar más imágenes que determinen de forma visual las habilidades de los jugadores, por eso creo estos array.
@@ -115,6 +119,7 @@ let botonConfirmar = document.getElementById("confirmar");
 
 /*Creo una función que sirve para asignar nuevos puntos de acción a los jugadores al comenzar cada turno*/
 const nuevosPuntosDeAccion = ()=>{
+    textoLocutor.innerHTML+=`<br><p>Comienza un nuevo turno por lo que los jugadores reponen sus puntos de acción</p>`;
     //Búcle que selecciona equipo
     for (listas in estadosAmbosEquipos){
         //Búcle que selecciona cada jugador dentro de cada equipo
@@ -460,6 +465,21 @@ const pintoBotonSeleccionado = (ponerComoVariableElEventoDelBoton)=>{
 
 /*Creo función refresca estados de los jugadores en el "instante" que está comenzando*/
 const comienzaInstante = ()=>{
+    //Imprimo en el tablero la información relacionada al tiempo restante y puntos
+    let tanteadorA=document.getElementById("tanteadorA");
+    let tanteadorB=document.getElementById("tanteadorB");
+    let relojPartido=document.getElementById("relojPartido");
+    function segundosAString(seconds) {
+        let minute = Math.floor((seconds / 60) % 60);
+        minute = (minute < 10)? '0' + minute : minute;
+        let second = seconds % 60;
+        second = (second < 10)? '0' + second : second;
+        return minute + ':' + second;
+    }
+
+    tanteadorA.innerHTML= `${arrayConPuntosPorEquipo[0]}`;
+    tanteadorB.innerHTML= `${arrayConPuntosPorEquipo[1]}`;
+    relojPartido.innerHTML= `${segundosAString(instantesEnPeriodo)}`;
     for (equipo in estadosAmbosEquipos){
         for (let i=0; i<5; i++){
             //Indico que los jugadores todavía no usaron su turno en este nuevo instante
@@ -474,6 +494,7 @@ const comienzaInstante = ()=>{
 /*Creo función para que los coach vean qué jugadres tienen puntos de acción*/
 //El parámetro contiene la función "queEquipoDefiendeNumero" o "queEquipoAtacaNumero" según toque al coach atacante o defensor.
 const muestroJugadoresConTurno = (ataqueODefensa)=>{
+    textoLocutor.innerHTML+=`<br><p>Los jugadores que tienen turno aparecen marcados con verde claro</p>`;
     //Utilizo esta herramienta para contar la cantidad de jugadores a los que les queda turno en este instante
     let cuentoJugadoresConTurno = 0;
     for (jugador in estadosAmbosEquipos[ataqueODefensa]){
@@ -520,6 +541,7 @@ const coachElijeJugador = (ataqueODefensa)=>{
         
         //Función que se ejecuta con ese evento
         function seleccionoJugador(evt){
+            textoLocutor.innerHTML+=`<br><p>El jugador clickeado se ha pintado de verde obscuro. Si desea confirmas su selección presione el botón confirmar</p>`;
             //Muestro el botón llamado confirmar
             resaltoBotones("confirmar")
             //Reseteo color de a quienes corresponda a seleccionable ("fondoVerde") Para que no figure más de un elegido
@@ -552,6 +574,7 @@ const coachElijeJugador = (ataqueODefensa)=>{
         
         //Función que se ejecuta con ese evento
         function funcionalidad(){
+            textoLocutor.innerHTML+=`<br><p>Se confirma la selección de ese jugador</p>`;
             //Guardo en el sesienStorage el jugador seleccionado
             if (guardoJugadorSeleccionado.length>1){
                 guardoJugadorSeleccionado.pop();
@@ -746,7 +769,7 @@ const comparoIniciativasDeJugadoresElegidos = ()=>{
     }
     
     if (comparoIniciativas > 0){
-        console.log("Le toca al que defiende");
+        textoLocutor.innerHTML+=`<br><p>Le toca al que defiende</p>`;
         //Cambio color de fondo para que destaque por sobre el otro jugador elegido
         let herramientaParaCambiarFondoAlQueJuegaAhora;
         if (equiposJugadoresElegidos[0] == 0){
@@ -769,7 +792,7 @@ const comparoIniciativasDeJugadoresElegidos = ()=>{
         muestroPosiblesAccionesDefensa(equiposJugadoresElegidos[0], (rolJugadoresElegidos[0]-1));
     }
     else if (comparoIniciativas < 0){
-        console.log("Le toca al que ataca");
+        textoLocutor.innerHTML+=`<br><p>Le toca al que defiende</p>`;
         //Cambio color de fondo para que destaque por sobre el otro jugador elegido
         let herramientaParaCambiarFondoAlQueJuegaAhora;
         if (equiposJugadoresElegidos[1] == 0){
@@ -797,6 +820,7 @@ const comparoIniciativasDeJugadoresElegidos = ()=>{
 //Creo función para mostrar botones de acción posibles para cada jugador (Separar las acciones defensivas de las ofensivas).
 //(Los parámetros son usados para cargar los datos de los jugadores elegidos)
 const muestroPosiblesAccionesDefensa = (equipo, jugador)=>{
+    textoLocutor.innerHTML+=`<br><p>De los botones que aparecieron, los iluminados son las posibles acciones que puede realizar el jugador seleccionado</p>`;
     /*MOVERSE*/
     //Creo evento que sucederá al activarse el evento del botón "moverse"  (modificar este evento para que primero permita seleccionarlo y luego ponerle los eventos al tablero con el botón confirmar como los demás botones)
     // function funcionalidadBotonMoverse(evt){
@@ -901,8 +925,8 @@ const muestroPosiblesAccionesDefensa = (equipo, jugador)=>{
 }
 
 
-
 const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
+    textoLocutor.innerHTML+=`<br><p>De los botones que aparecieron, los iluminados son las posibles acciones que puede hacer el jugador seleccionado</p>`;
     //Creo función que será de utilidad para armar el choclo que continúa
     function cambioColoresAApropiados(evt){
         let botonActivado = document.querySelector(".botonActivado");
@@ -925,6 +949,7 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
     }
     //Creo funcionalidad para confirmar que deseo terminar el turno
     function pidoConfirmarEleccionTerminarTurnoConPelotaYMasDeUnPuntoDeAccion (evt){
+        textoLocutor.innerHTML+=`<br><p>Confirme si quiere realizar esta acción</p>`;
         pintoBotonSeleccionado(evt);
         resaltoBotones("confirmar");
         botonConfirmar.addEventListener("click", quitoBotonesTerminarTurnoConPelotaYMasDeUnPuntoDeAccion);
@@ -953,6 +978,7 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
     }
     //Creo funcionalidad para confirmar que deseo hacer un pase
     function pidoConfirmarEleccionPaseConMasDeUnPuntoDeAccion (evt){
+        textoLocutor.innerHTML+=`<br><p>Confirme si quiere realizar esta acción</p>`;
         pintoBotonSeleccionado(evt);
         resaltoBotones("confirmar");
         botonConfirmar.addEventListener("click", quitoBotonesPaseConMasDeUnPuntoDeAccion);
@@ -981,6 +1007,7 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
     }
     //Creo funcionalidad para confirmar que deseo hacer un tiro
     function pidoConfirmarEleccionTiro (evt){
+        textoLocutor.innerHTML+=`<br><p>Confirme si quiere realizar esta acción</p>`;
         pintoBotonSeleccionado(evt);
         resaltoBotones("confirmar");
         botonConfirmar.addEventListener("click", quitoBotonesEleccionTiro);
@@ -1008,6 +1035,7 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
         funcionalidadBotonPase()
     }
     function cambioAEleccionPaseConMasDeUnPuntoDeAccionDesdeTerminarTurno(evt){
+        textoLocutor.innerHTML+=`<br><p>Confirme si quiere realizar esta acción</p>`;
         
         cambioColoresAApropiados(evt);
         
@@ -1038,6 +1066,7 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
         funcionalidadBotonTiro()
     }
     function cambioAEleccionTiroDesdeTerminarTurno(evt){
+        textoLocutor.innerHTML+=`<br><p>Confirme si quiere realizar esta acción</p>`;
         
         cambioColoresAApropiados(evt);
         
@@ -1068,7 +1097,7 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
         funcionalidadBotonTiro()
     }
     function cambioAEleccionTiroDesdePase(evt){
-        
+        textoLocutor.innerHTML+=`<br><p>Confirme si quiere realizar esta acción</p>`;
         cambioColoresAApropiados(evt);
         
         //Cambio evento del boton confirmar
@@ -1098,7 +1127,7 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
         funcionalidadBotonTerminarTurnoA()
     }
     function cambioAEleccionTerminarTurnoConMasDeUnPuntoDeAccionDesdePase(evt){
-        
+        textoLocutor.innerHTML+=`<br><p>Confirme si quiere realizar esta acción</p>`;
         cambioColoresAApropiados(evt);
         
         //Cambio evento del boton confirmar
@@ -1128,7 +1157,7 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
         funcionalidadBotonPase()
     }
     function cambioAEleccionPaseDesdeTiro(evt){
-        
+        textoLocutor.innerHTML+=`<br><p>Confirme si quiere realizar esta acción</p>`;
         cambioColoresAApropiados(evt);
         
         //Cambio evento del boton confirmar
@@ -1157,7 +1186,7 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
         funcionalidadBotonTiro()
     }
     function cambioAEleccionTerminarTurnoDesdeTiro(evt){
-        
+        textoLocutor.innerHTML+=`<br><p>Confirme si quiere realizar esta acción</p>`;
         cambioColoresAApropiados(evt);
         
         //Cambio evento del boton confirmar
@@ -1191,6 +1220,7 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
     function pidoConfirmarEleccionTerminarTurnoConPelotaConMenosDeUnPuntoDeAccion (evt){
         pintoBotonSeleccionado(evt);
         resaltoBotones("confirmar");
+        textoLocutor.innerHTML+=`<br><p>Confirme si quiere realizar esta acción</p>`;
         botonConfirmar.addEventListener("click", quitoBotonesTerminarTurnoConPelotaConMenosDeUnPuntoDeAccion);
         //Quito eventos base de otros botones
         botonPase.removeEventListener("click", pidoConfirmarEleccionPaseConMenosDeUnPuntoDeAccion);
@@ -1235,7 +1265,7 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
         funcionalidadBotonPase()
     }
     function cambioAEleccionPaseConMenosDeUnPuntoDeAccionDesdeTerminarTurno (evt){
-        
+        textoLocutor.innerHTML+=`<br><p>Confirme si quiere realizar esta acción</p>`;
         cambioColoresAApropiados(evt);
         
         //Cambio evento del boton confirmar
@@ -1261,7 +1291,7 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
         funcionalidadBotonTerminarTurnoA()
     }
     function cambioAEleccionTerminarTurnoConMenosDeUnPuntoDeAccionDesdePase (evt){
-        
+        textoLocutor.innerHTML+=`<br><p>Confirme si quiere realizar esta acción</p>`;
         cambioColoresAApropiados(evt);
         
         //Cambio evento del boton confirmar
@@ -1292,6 +1322,7 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
     function pidoConfirmarEleccionTerminarTurnoSinPelota (evt){
         pintoBotonSeleccionado(evt);
         resaltoBotones("confirmar");
+        textoLocutor.innerHTML+=`<br><p>Confirme si quiere realizar esta acción</p>`;
         botonConfirmar.addEventListener("click", quitoBotonesEleccionTerminarTurnoSinPelota);
         //Quito eventos base de otros botones
         botonTerminarTurno.removeEventListener("click", pidoConfirmarEleccionTerminarTurnoSinPelota);
@@ -1306,6 +1337,37 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
     
     //Creo evento que sucederá al activarse el evento del botón "tiro"
     function funcionalidadBotonTiro(){
+        let puntosAtacante = 0;
+        let puntosDefensa = 0;
+        let comparoAYD;
+        let resultadoDados = dadoDe20()+dadoDe20()+dadoDe20()+dadoDe20()+dadoDe20();
+        let encesta=false;
+        let elEquipoDefensor;
+
+        const luegoDelTiro= ()=>{
+            
+            //Si erra
+            if (encesta==false){
+                calculoQuienGanaRebote();
+            }
+
+            //Si encesta
+            else if (encesta==true){
+                arrayConPuntosPorEquipo[equipo]=+2
+                if (equipo==0){
+                    estadosAmbosEquipos[1][0].conPelota=true;
+                }
+                else if (equipo==1){
+                    estadosAmbosEquipos[0][0].conPelota=true;
+                }
+                //AGREGAR actualizo marcador
+            }
+            funcionGestionReloj();
+            muestroPosicionesEnCancha();
+            comienzaInstante();
+            muestroJugadoresConTurno(queEquipoDefiendeNumero());
+        }
+        
         function calculoQuienGanaRebote(){
             //WORKING
             //Creo un array que contendrá los puntos que consiguen para ganar el rebote
@@ -1315,22 +1377,7 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
             let maximosPuntosA;
             let maximosPuntosB;
             let comparoMaximosPuntosParaRebote=0;
-            const herramientaCalcularReboteTiraA= (e, j)=>{                
-                if (estadosAmbosEquipos[e][j].ubicacionX ==28){
-                    puntosParaReboteDeEsteJugador-=  1* 3;
-                }
-                else if (estadosAmbosEquipos[e][j].ubicacionX < 27){
-                    puntosParaReboteDeEsteJugador-= (27 - estadosAmbosEquipos[e][j].ubicacionX) * 3;
-                }
-            }
-            const herramientaCalcularReboteTiraB= (e, j)=>{
-                if (estadosAmbosEquipos[e][j].ubicacionX ==1){
-                    puntosParaReboteDeEsteJugador-=  1* 3;
-                }
-                else if (estadosAmbosEquipos[e][j].ubicacionX > 2){
-                    puntosParaReboteDeEsteJugador-= (estadosAmbosEquipos[e][j].ubicacionX -2) * 3;
-                }
-            }
+            
             //Hago un búcle para que no pueda haber empate (Hay un dado que eventualmente va a desempatar)
             while (comparoMaximosPuntosParaRebote==0){
                 //Hago un bucle que recorre los equipos (e)
@@ -1346,11 +1393,21 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
                             puntosParaReboteDeEsteJugador-=  (estadosAmbosEquipos[e][j].ubicacionY -8) * 3;
                         }
                         if (e==0){
-                            herramientaCalcularReboteTiraA(e, j);
+                            if (estadosAmbosEquipos[e][j].ubicacionX ==28){
+                                puntosParaReboteDeEsteJugador-=  1* 3;
+                            }
+                            else if (estadosAmbosEquipos[e][j].ubicacionX < 27){
+                                puntosParaReboteDeEsteJugador-= (27 - estadosAmbosEquipos[e][j].ubicacionX) * 3;
+                            }
                             puntosEquipoAParaGanarRebotes.push(puntosParaReboteDeEsteJugador);
                         }
                         else if (e==1){
-                            herramientaCalcularReboteTiraB(e, j);
+                            if (estadosAmbosEquipos[e][j].ubicacionX ==1){
+                                puntosParaReboteDeEsteJugador-=  1* 3;
+                            }
+                            else if (estadosAmbosEquipos[e][j].ubicacionX > 2){
+                                puntosParaReboteDeEsteJugador-= (estadosAmbosEquipos[e][j].ubicacionX -2) * 3;
+                            }
                             puntosEquipoBParaGanarRebotes.push(puntosParaReboteDeEsteJugador);
                         }
                     }
@@ -1381,6 +1438,8 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
                 //Creo un búcle para recorrer a los jugadores
                 for (let j=0; j <5; j++){
                     if (maximosPuntosA == puntosEquipoAParaGanarRebotes[j]){
+                        textoLocutor.innerHTML+=`<br><p>El lanzamiento no es bueno!</p>`;
+                        textoLocutor.innerHTML+=`<br><p>${ambosEquipos[0][j].nombre} se queda con el rebote</p>`;
                         estadosAmbosEquipos[0][j].conPelota= true;
                     }
                 }
@@ -1390,18 +1449,14 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
                 //Creo un búcle para recorrer a los jugadores
                 for (let j=0; j <5; j++){
                     if (maximosPuntosB == puntosEquipoBParaGanarRebotes[j]){
+                        textoLocutor.innerHTML+=`<br><p>El lanzamiento no es bueno!</p>`;
+                        textoLocutor.innerHTML+=`<br><p>${ambosEquipos[1][j].nombre} se queda con el rebote</p>`;
                         estadosAmbosEquipos[1][j].conPelota= true;
                     }
                 }
             }
         }
         //AGREGAR restar puntos de acción
-        let puntosAtacante = 0;
-        let puntosDefensa = 0;
-        let comparoAYD;
-        let resultadoDados = dadoDe20()+dadoDe20()+dadoDe20()+dadoDe20()+dadoDe20();
-        let encesta=false;
-        let elEquipoDefensor;
         if(equipo==0){
             elEquipoDefensor=1;
         }
@@ -1410,6 +1465,7 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
         }
         const calculoTiroCercaDelAro = (o)=>{
             //Calculo cuántos puntos tiene el atacante cuando tira sólo
+            textoLocutor.innerHTML+=`<br><p>${ambosEquipos[equipo][jugador].nombre} se eleva para lanzar de al lado del aro!</p>`;
             puntosAtacante= ambosEquipos[equipo][jugador]["capacidadAtletica"]*1.5 + ambosEquipos[equipo][jugador]["anotacionInterior"]*3.5;
             //Calculo cuánto molestan las defensas (d) en el tiro
             //Para eso hago un búcle que busque si hay jugadores defensores cerca del tirador
@@ -1420,6 +1476,7 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
                     //Bucle para recorrer a los jugadores del otro equipo
                     for (let d=0; d <5; d++){
                         if ((estadosAmbosEquipos[equipo][jugador]["ubicacionX"] + x == estadosAmbosEquipos[o][d]["ubicacionX"]) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] + y == estadosAmbosEquipos[o][d]["ubicacionY"])){
+                            textoLocutor.innerHTML+=`<br><p>${ambosEquipos[o][d].nombre} trata de molestar el lanzamiento!</p>`;
                             puntosDefensa += (ambosEquipos[o][d].altura * 0.75 - ambosEquipos[equipo][jugador].altura)*1.25 + ambosEquipos[o][d]["capacidadAtletica"]*0.75 + ambosEquipos[o][d]["defensaInterna"]*3 + (ambosEquipos[o][d]["peso"]*0.75 - ambosEquipos[equipo][jugador]["peso"]) - ambosEquipos[equipo][jugador]["creacionDeJuego"]*0.25;
                         }
                     }
@@ -1430,36 +1487,47 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
             //Dependiendo de cómo vaya la comparación entre el ataque y la defensa el jugador va a tener que sacar una mejor o una peor tirada de dados para conseguir encestar
             if ((0 <= comparoAYD)&&(comparoAYD<=49)&&(resultadoDados>90)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((50 <= comparoAYD)&&(comparoAYD<=99)&&(resultadoDados>=80)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((100 <= comparoAYD)&&(comparoAYD<=149)&&(resultadoDados>=70)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((150 <= comparoAYD)&&(comparoAYD<=199)&&(resultadoDados>=60)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((200 <= comparoAYD)&&(comparoAYD<=249)&&(resultadoDados>=50)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((250 <= comparoAYD)&&(comparoAYD<=299)&&(resultadoDados>=40)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((300 <= comparoAYD)&&(comparoAYD<=349)&&(resultadoDados>=30)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((350 <= comparoAYD)&&(comparoAYD<=349)&&(resultadoDados>=21)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((400 <= comparoAYD)&&(comparoAYD<=449)&&(resultadoDados>=13)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((450 <= comparoAYD)&&(resultadoDados>=6)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
         }
         const calculoTiroCercaPeroNoTanto= (o)=>{
+            textoLocutor.innerHTML+=`<br><p>${ambosEquipos[equipo][jugador].nombre} se eleva para lanzar muy cerca del aro!</p>`;
             //Calculo cuántos puntos tiene el atacante cuando tira sólo
             puntosAtacante= ambosEquipos[equipo][jugador]["capacidadAtletica"] + ambosEquipos[equipo][jugador]["anotacionInterior"]*3 + ambosEquipos[equipo][jugador]["anotacionExterior"];
             //Calculo cuánto molestan las defensas (d) en el tiro
@@ -1471,6 +1539,7 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
                     //Bucle para recorrer a los jugadores del otro equipo
                     for (let d=0; d <5; d++){
                         if ((estadosAmbosEquipos[equipo][jugador]["ubicacionX"] + x == estadosAmbosEquipos[o][d]["ubicacionX"]) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] + y == estadosAmbosEquipos[o][d]["ubicacionY"])){
+                            textoLocutor.innerHTML+=`<br><p>${ambosEquipos[o][d].nombre} trata de molestar el lanzamiento!</p>`;
                             puntosDefensa += (ambosEquipos[o][d].altura * 0.75 - ambosEquipos[equipo][jugador].altura) + ambosEquipos[o][d]["capacidadAtletica"]*0.75 + ambosEquipos[o][d]["defensaInterna"]*2 + ambosEquipos[o][d]["defensaPerimetral"] + (ambosEquipos[o][d]["peso"]*0.75 - ambosEquipos[equipo][jugador]["peso"])*0.75 - ambosEquipos[equipo][jugador]["creacionDeJuego"]*0.25;
                         }
                     }
@@ -1481,33 +1550,43 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
             //Dependiendo de cómo vaya la comparación entre el ataque y la defensa el jugador va a tener que sacar una mejor o una peor tirada de dados para conseguir encestar
             if ((50 <= comparoAYD)&&(comparoAYD<=99)&&(resultadoDados>=90)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((100 <= comparoAYD)&&(comparoAYD<=149)&&(resultadoDados>=80)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((150 <= comparoAYD)&&(comparoAYD<=199)&&(resultadoDados>=70)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((200 <= comparoAYD)&&(comparoAYD<=249)&&(resultadoDados>=60)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((250 <= comparoAYD)&&(comparoAYD<=299)&&(resultadoDados>=50)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((300 <= comparoAYD)&&(comparoAYD<=349)&&(resultadoDados>=40)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((350 <= comparoAYD)&&(comparoAYD<=349)&&(resultadoDados>=31)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((400 <= comparoAYD)&&(comparoAYD<=449)&&(resultadoDados>=23)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((450 <= comparoAYD)&&(resultadoDados>=16)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
         }
         const calculoTiroMediaDistancia= (o)=>{
+            textoLocutor.innerHTML+=`<br><p>${ambosEquipos[equipo][jugador].nombre} se eleva para lanzar de media distancia!</p>`;
             //Calculo cuántos puntos tiene el atacante cuando tira sólo
             puntosAtacante=  ambosEquipos[equipo][jugador]["anotacionInterior"]*1.25 + ambosEquipos[equipo][jugador]["anotacionExterior"]*3;
             //Calculo cuánto molestan las defensas (d) en el tiro
@@ -1519,6 +1598,7 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
                     //Bucle para recorrer a los jugadores del otro equipo
                     for (let d=0; d <5; d++){
                         if ((estadosAmbosEquipos[equipo][jugador]["ubicacionX"] + x == estadosAmbosEquipos[o][d]["ubicacionX"]) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] + y == estadosAmbosEquipos[o][d]["ubicacionY"])){
+                            textoLocutor.innerHTML+=`<br><p>${ambosEquipos[o][d].nombre} trata de molestar el lanzamiento!</p>`;
                             puntosDefensa += (ambosEquipos[o][d].altura * 0.75 - ambosEquipos[equipo][jugador].altura) + ambosEquipos[o][d]["capacidadAtletica"]*0.75 + ambosEquipos[o][d]["defensaInterna"]*0.75 + ambosEquipos[o][d]["defensaPerimetral"]*2 - (ambosEquipos[o][d]["peso"]*0.75 - ambosEquipos[equipo][jugador]["peso"])*0.25 - ambosEquipos[equipo][jugador]["creacionDeJuego"]*0.5;
                         }
                     }
@@ -1529,33 +1609,43 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
             //Dependiendo de cómo vaya la comparación entre el ataque y la defensa el jugador va a tener que sacar una mejor o una peor tirada de dados para conseguir encestar
             if ((50 <= comparoAYD)&&(comparoAYD<=99)&&(resultadoDados>=94)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((100 <= comparoAYD)&&(comparoAYD<=149)&&(resultadoDados>=87)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((150 <= comparoAYD)&&(comparoAYD<=199)&&(resultadoDados>=80)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((200 <= comparoAYD)&&(comparoAYD<=249)&&(resultadoDados>=73)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((250 <= comparoAYD)&&(comparoAYD<=299)&&(resultadoDados>=66)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((300 <= comparoAYD)&&(comparoAYD<=349)&&(resultadoDados>=59)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((350 <= comparoAYD)&&(comparoAYD<=349)&&(resultadoDados>=52)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((400 <= comparoAYD)&&(comparoAYD<=449)&&(resultadoDados>=45)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((450 <= comparoAYD)&&(resultadoDados>=40)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
         }
-        const calculoTiroFueraDeLineaDe3= (o)=>{                    
+        const calculoTiroFueraDeLineaDe3= (o)=>{
+            textoLocutor.innerHTML+=`<br><p>${ambosEquipos[equipo][jugador].nombre} se eleva intentar un triple!</p>`;
             //Calculo cuántos puntos tiene el atacante cuando tira sólo
             puntosAtacante=  ambosEquipos[equipo][jugador]["anotacionExterior"]*4;
             //Calculo cuánto molestan las defensas (d) en el tiro
@@ -1567,6 +1657,7 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
                     //Bucle para recorrer a los jugadores del otro equipo
                     for (let d=0; d <5; d++){
                         if ((estadosAmbosEquipos[equipo][jugador]["ubicacionX"] + x == estadosAmbosEquipos[o][d]["ubicacionX"]) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] + y == estadosAmbosEquipos[o][d]["ubicacionY"])){
+                            textoLocutor.innerHTML+=`<br><p>${ambosEquipos[o][d].nombre} trata de molestar el lanzamiento!</p>`;
                             puntosDefensa += (ambosEquipos[o][d].altura * 0.75 - ambosEquipos[equipo][jugador].altura) + ambosEquipos[o][d]["capacidadAtletica"]*0.75 + ambosEquipos[o][d]["defensaPerimetral"]*3 - (ambosEquipos[o][d]["peso"]*0.75 - ambosEquipos[equipo][jugador]["peso"])*0.5 - ambosEquipos[equipo][jugador]["creacionDeJuego"]*0.75;
                         }
                     }
@@ -1577,34 +1668,43 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
             //Dependiendo de cómo vaya la comparación entre el ataque y la defensa el jugador va a tener que sacar una mejor o una peor tirada de dados para conseguir encestar
             if ((50 <= comparoAYD)&&(comparoAYD<=99)&&(resultadoDados>=90)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((100 <= comparoAYD)&&(comparoAYD<=149)&&(resultadoDados>=80)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((150 <= comparoAYD)&&(comparoAYD<=199)&&(resultadoDados>=74)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((200 <= comparoAYD)&&(comparoAYD<=249)&&(resultadoDados>=68)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((250 <= comparoAYD)&&(comparoAYD<=299)&&(resultadoDados>=60)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((300 <= comparoAYD)&&(comparoAYD<=349)&&(resultadoDados>=55)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((350 <= comparoAYD)&&(comparoAYD<=349)&&(resultadoDados>=50)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((400 <= comparoAYD)&&(resultadoDados>=45)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             //Si encesta por ser un triple voy a sumar un punto extra
             if (encesta==true){
-                puntosEquipoA ++;
+                arrayConPuntosPorEquipo[equipo]++;
             }
         }
         const calculoSiTiraUnTripleLargo= (o)=>{
+            textoLocutor.innerHTML+=`<br><p>${ambosEquipos[equipo][jugador].nombre} toma un triple largo!</p>`;
             //Calculo cuántos puntos tiene el atacante cuando tira sólo
             puntosAtacante=  ambosEquipos[equipo][jugador]["anotacionExterior"]*4;
             //Calculo cuánto molestan las defensas (d) en el tiro
@@ -1616,6 +1716,7 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
                     //Bucle para recorrer a los jugadores del otro equipo
                     for (let d=0; d <5; d++){
                         if ((estadosAmbosEquipos[equipo][jugador]["ubicacionX"] + x == estadosAmbosEquipos[o][d]["ubicacionX"]) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] + y == estadosAmbosEquipos[o][d]["ubicacionY"])){
+                            textoLocutor.innerHTML+=`<br><p>${ambosEquipos[o][d].nombre} trata de molestar el lanzamiento!</p>`;
                             puntosDefensa += (ambosEquipos[o][d].altura * 0.75 - ambosEquipos[equipo][jugador].altura)*0.75 + ambosEquipos[o][d]["capacidadAtletica"]*0.75 + ambosEquipos[o][d]["defensaPerimetral"]*3.25 - (ambosEquipos[o][d]["peso"]*0.5 - ambosEquipos[equipo][jugador]["peso"])*0.75 - ambosEquipos[equipo][jugador]["creacionDeJuego"]*0.5;
                         }
                     }
@@ -1626,34 +1727,43 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
             //Dependiendo de cómo vaya la comparación entre el ataque y la defensa el jugador va a tener que sacar una mejor o una peor tirada de dados para conseguir encestar
             if ((50 <= comparoAYD)&&(comparoAYD<=99)&&(resultadoDados>=98)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((100 <= comparoAYD)&&(comparoAYD<=149)&&(resultadoDados>=90)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((150 <= comparoAYD)&&(comparoAYD<=199)&&(resultadoDados>=80)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((200 <= comparoAYD)&&(comparoAYD<=249)&&(resultadoDados>=74)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((250 <= comparoAYD)&&(comparoAYD<=299)&&(resultadoDados>=64)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((300 <= comparoAYD)&&(comparoAYD<=349)&&(resultadoDados>=58)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((350 <= comparoAYD)&&(comparoAYD<=349)&&(resultadoDados>=53)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((400 <= comparoAYD)&&(resultadoDados>=47)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             //Si encesta por ser un triple voy a sumar un punto extra
             if (encesta==true){
-                puntosEquipoA ++;
+                arrayConPuntosPorEquipo[equipo]++;
             }
         }
         const calculoSiEsUnTripleDeMediaCancha= (o)=>{
+            textoLocutor.innerHTML+=`<br><p>${ambosEquipos[equipo][jugador].nombre} trata un lanzamiento desde media cancha!</p>`;
             //Calculo cuántos puntos tiene el atacante cuando tira sólo
             puntosAtacante=  ambosEquipos[equipo][jugador]["anotacionExterior"]*3.75;
             //Calculo cuánto molestan las defensas (d) en el tiro
@@ -1665,6 +1775,7 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
                     //Bucle para recorrer a los jugadores del otro equipo
                     for (let d=0; d <5; d++){
                         if ((estadosAmbosEquipos[equipo][jugador]["ubicacionX"] + x == estadosAmbosEquipos[o][d]["ubicacionX"]) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] + y == estadosAmbosEquipos[o][d]["ubicacionY"])){
+                            textoLocutor.innerHTML+=`<br><p>${ambosEquipos[o][d].nombre} trata de molestar el lanzamiento!</p>`;
                             puntosDefensa += (ambosEquipos[o][d].altura * 0.75 - ambosEquipos[equipo][jugador].altura)*0.75 + ambosEquipos[o][d]["capacidadAtletica"]*0.75 + ambosEquipos[o][d]["defensaPerimetral"]*3.25 - (ambosEquipos[o][d]["peso"]*0.5 - ambosEquipos[equipo][jugador]["peso"]) - ambosEquipos[equipo][jugador]["creacionDeJuego"]*0.5;
                         }
                     }
@@ -1675,28 +1786,35 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
             //Dependiendo de cómo vaya la comparación entre el ataque y la defensa el jugador va a tener que sacar una mejor o una peor tirada de dados para conseguir encestar
             if ((100 <= comparoAYD)&&(comparoAYD<=149)&&(resultadoDados>=98)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((150 <= comparoAYD)&&(comparoAYD<=199)&&(resultadoDados>=90)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((200 <= comparoAYD)&&(comparoAYD<=249)&&(resultadoDados>=84)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((250 <= comparoAYD)&&(comparoAYD<=299)&&(resultadoDados>=77)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((300 <= comparoAYD)&&(comparoAYD<=349)&&(resultadoDados>=70)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((350 <= comparoAYD)&&(resultadoDados>=64)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             //Si encesta por ser un triple voy a sumar un punto extra
             if (encesta==true){
-                puntosEquipoA ++;
+                arrayConPuntosPorEquipo[equipo]++;
             }
         }
         const calculoSiElTripleEsDeAtrasDeMitadDeCancha= (o)=>{
+            textoLocutor.innerHTML+=`<br><p>${ambosEquipos[equipo][jugador].nombre} lanza desde saturno!</p>`;
             //Calculo cuántos puntos tiene el atacante cuando tira sólo
             puntosAtacante=  ambosEquipos[equipo][jugador]["anotacionExterior"]*3.5;
             //Calculo cuánto molestan las defensas (d) en el tiro
@@ -1708,6 +1826,7 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
                     //Bucle para recorrer a los jugadores del otro equipo
                     for (let d=0; d <5; d++){
                         if ((estadosAmbosEquipos[equipo][jugador]["ubicacionX"] + x == estadosAmbosEquipos[o][d]["ubicacionX"]) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] + y == estadosAmbosEquipos[o][d]["ubicacionY"])){
+                            textoLocutor.innerHTML+=`<br><p>${ambosEquipos[o][d].nombre} trata de molestar el lanzamiento!</p>`;
                             puntosDefensa += (ambosEquipos[o][d].altura * 0.75 - ambosEquipos[equipo][jugador].altura)*0.75 + ambosEquipos[o][d]["capacidadAtletica"]*0.5 + ambosEquipos[o][d]["defensaPerimetral"]*3.5 - (ambosEquipos[o][d]["peso"]*0.25 - ambosEquipos[equipo][jugador]["peso"]*0.75) - ambosEquipos[equipo][jugador]["creacionDeJuego"]*0.25;
                         }
                     }
@@ -1718,22 +1837,27 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
             //Dependiendo de cómo vaya la comparación entre el ataque y la defensa el jugador va a tener que sacar una mejor o una peor tirada de dados para conseguir encestar
             if ((200 <= comparoAYD)&&(comparoAYD<=249)&&(resultadoDados>=98)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((250 <= comparoAYD)&&(comparoAYD<=299)&&(resultadoDados>=93)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((300 <= comparoAYD)&&(comparoAYD<=349)&&(resultadoDados>=86)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((350 <= comparoAYD)&&(resultadoDados>=78)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             //Si encesta por ser un triple voy a sumar un punto extra
             if (encesta==true){
-                puntosEquipoA ++;
+                arrayConPuntosPorEquipo[equipo]++;
             }
         }
         const calculoSiTiraDesdeLaOtraPuntaDeLaCancha= (o)=>{
+            textoLocutor.innerHTML+=`<br><p>${ambosEquipos[equipo][jugador].nombre} hace un intento desesperado para encestar desde su propio aro!</p>`;
             //Calculo cuántos puntos tiene el atacante cuando tira sólo
             puntosAtacante=  ambosEquipos[equipo][jugador]["anotacionExterior"]*3;
             //Calculo cuánto molestan las defensas (d) en el tiro
@@ -1745,6 +1869,7 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
                     //Bucle para recorrer a los jugadores del otro equipo
                     for (let d=0; d <5; d++){
                         if ((estadosAmbosEquipos[equipo][jugador]["ubicacionX"] + x == estadosAmbosEquipos[o][d]["ubicacionX"]) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] + y == estadosAmbosEquipos[o][d]["ubicacionY"])){
+                            textoLocutor.innerHTML+=`<br><p>${ambosEquipos[o][d].nombre} trata de molestar el lanzamiento!</p>`;
                             puntosDefensa += (ambosEquipos[o][d].altura * 0.75 - ambosEquipos[equipo][jugador].altura)*0.75 + ambosEquipos[o][d]["capacidadAtletica"]*0.5 + ambosEquipos[o][d]["defensaPerimetral"]*3.5 - (ambosEquipos[o][d]["peso"]*0.25 - ambosEquipos[equipo][jugador]["peso"]*0.75) - ambosEquipos[equipo][jugador]["creacionDeJuego"]*0.25;
                         }
                     }
@@ -1755,16 +1880,19 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
             //Dependiendo de cómo vaya la comparación entre el ataque y la defensa el jugador va a tener que sacar una mejor o una peor tirada de dados para conseguir encestar
             if ((250 <= comparoAYD)&&(comparoAYD<=299)&&(resultadoDados>=99)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((300 <= comparoAYD)&&(comparoAYD<=349)&&(resultadoDados>=95)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             else if ((350 <= comparoAYD)&&(resultadoDados>=88)){
                 encesta=true;
+                textoLocutor.innerHTML+=`<br><p>Consigue la canasta!</p>`;
             }
             //Si encesta por ser un triple voy a sumar un punto extra
             if (encesta==true){
-                puntosEquipoA ++;
+                arrayConPuntosPorEquipo[equipo]++;
             }
         }
         //Si el equipo que ataca es el A
@@ -1803,22 +1931,6 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
             //O si está en la otra punta de la cancha
             else if((estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 6) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 7) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 6) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 9) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] <= 5) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 5) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 7) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 4) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 7) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 12) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 8) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 3) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 8) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 13) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 9) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 2) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 9) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 14) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 10) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 1) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] == 10) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 15)){
                 calculoSiTiraDesdeLaOtraPuntaDeLaCancha(elEquipoDefensor);
-            }
-            //Si erra
-            if (encesta==false){
-                //AGREGAR termino turnos
-                //AGREGAR comienzo nuevo instante
-                calculoQuienGanaRebote();
-                //AGREGAR mostrar en el tablero cuál es el nuevo jugador con pelota
-            }
-
-            //Si encesta
-            else if (encesta==true){
-                puntosEquipoA +=2;
-                //AGREGAR dale la poseción de la pelota a alguno de los que era defensor
-                //AGREGAR termino turnos
-                //AGREGAR comienzo nuevo instante
-                //AGREGAR mostrar en tablero cuál es el nuevo jugador con pelota
             }
         }
 
@@ -1860,27 +1972,15 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
             else if((estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 19) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 1) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 19) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 15) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 20) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 2) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 20) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 14) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 21) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 3) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 21) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 13) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 22) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 4) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 22) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 12) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 23) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 5) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 7) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 23) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] >= 9) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] <= 11) || (estadosAmbosEquipos[equipo][jugador]["ubicacionX"] >= 24) && (estadosAmbosEquipos[equipo][jugador]["ubicacionY"] == 8)){
                 calculoSiTiraDesdeLaOtraPuntaDeLaCancha(elEquipoDefensor);
             }
-            //Si erra
-            if (encesta==false){
-                //AGREGAR termino turnos
-                //AGREGAR comienzo nuevo instante
-                calculoQuienGanaRebote();
-                //AGREGAR mostrar en el tablero cuál es el nuevo jugador con pelota
-            }
-
-            //Si encesta
-            else if (encesta==true){
-                puntosEquipoA +=2;
-                //AGREGAR dale la poseción de la pelota a alguno de los que era defensor
-                //AGREGAR termino turnos
-                //AGREGAR comienzo nuevo instante
-                //AGREGAR mostrar en tablero cuál es el nuevo jugador con pelota
-            }
         }
+        luegoDelTiro();
     }
+
+
     
     //Creo función para terminar turno
     function funcionalidadBotonTerminarTurnoA(){
+        textoLocutor.innerHTML+=`<br><p>Ha pasado su turno</p>`;
         //Llamo a los jugadores con fondo seleccionado para poder quitarle el fondo
         let jugadoresConFondoElegido= document.getElementsByClassName(`fondoSeleccionadoYLeToca`);
         //Quito el color de fondo del jugador que acaba de terminar su turno
@@ -1926,16 +2026,17 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
     if (estadosAmbosEquipos[equipo][jugador]["puntosDeAccion"] > 1){
         //Siempre resalto el boton de terminar turno xq es una opción que no depende de ninguna condición
         resaltoBotones("terminarTurno");
-
+        
         /*MOVERSE*/
         // resaltoBotones("moverse");
         // let botonMoverse = document.getElementById("moverse");
         // botonMoverse.addEventListener("click", funcionalidadBotonMoverse);
-
+        
         /*FIN SEGMENTO MOVERSE*/
-
+        
         //Si además tiene la pelota resalto botones de pase y tiro y les pongo eventos
         if (estadosAmbosEquipos[equipo][jugador]["conPelota"] == true){
+            textoLocutor.innerHTML+=`<br><p>${ambosEquipos[equipo][jugador].nombre} aún tiene más de un punto de acción y está en poseción del balón</p>`;
             // resaltoBotones("pase");
             resaltoBotones("tiro");
             botonPase.addEventListener("click", pidoConfirmarEleccionPaseConMasDeUnPuntoDeAccion);
@@ -1944,6 +2045,7 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
         }
         //Si no tiene la pelota dejo obscuros los botones de pase y tiro
         else if (estadosAmbosEquipos[equipo][jugador]["conPelota"] != true){
+            textoLocutor.innerHTML+=`<br><p>${ambosEquipos[equipo][jugador].nombre} aún tiene más de un punto de acción</p>`;
             muestroBotonObscuro("pase");
             muestroBotonObscuro("tiro");
             botonTerminarTurno.addEventListener("click", pidoConfirmarEleccionTerminarTurnoSinPelota);
@@ -1954,16 +2056,18 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
     else if ((estadosAmbosEquipos[equipo][jugador]["puntosDeAccion"] > 0.5) && (estadosAmbosEquipos[equipo][jugador]["puntosDeAccion"] < 1)){
         //Siempre resalto el boton de terminar turno xq es una opción que no depende de ninguna condición
         resaltoBotones("terminarTurno");
-
+        
         /*MOVERSE*/
         // muestroBotonObscuro("moverse");
-
+        
         /*FIN SEGMENTO MOVERSE*/
         if (estadosAmbosEquipos[equipo][jugador]["conPelota"] == true){
+            textoLocutor.innerHTML+=`<br><p>${ambosEquipos[equipo][jugador].nombre} tiene menos de un punto de acción y está en poseción del balón</p>`;
             // resaltoBotones("pase");
             botonPase.addEventListener("click", pidoConfirmarEleccionPaseConMasDeUnPuntoDeAccion);
         }
         else if (estadosAmbosEquipos[equipo][jugador]["conPelota"] != true){
+            textoLocutor.innerHTML+=`<br><p>${ambosEquipos[equipo][jugador].nombre} tiene menos de un punto de acción</p>`;
             muestroBotonObscuro("pase");
         }
         muestroBotonObscuro("tiro");
@@ -1971,6 +2075,7 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
     }
     //Hago que skipee a la acción correspondiente dependiendo de si es el primer equipo en jugar o el segundo
     else if (estadosAmbosEquipos[equipo][jugador]["puntosDeAccion"] < 0.5){
+        textoLocutor.innerHTML+=`<br><p>${ambosEquipos[equipo][jugador].nombre} ya no tiene más puntos de acción</p>`;
         funcionalidadBotonTerminarTurno();
     }
 }
@@ -2216,6 +2321,7 @@ const funcionGestionReloj= ()=>{
         //Si ya pasaron 2 periodos cambio el valor de finDePartido para terminar el juego
         if (periodo == 3){
             //AGREGAR esta función
+            textoLocutor.innerHTML+=`<br><p>Finaliza el encuentro! Marcador nos muestra que el equipo A terminó con ${arrayConPuntosPorEquipo[0]} puntos y el equipo B terminó con ${arrayConPuntosPorEquipo[1]} puntos!</p>`;
             terminoPartido();
         }
     }
@@ -2223,36 +2329,36 @@ const funcionGestionReloj= ()=>{
 
 
 /*Se disputa el salto entre 2 para comenzar el partido*/
-console.log("El árbitro se dispone en mitad de cancha a lanzar el balón hacia arriba para iniciar del encuentro. Lo lanza y..");
+textoLocutor.innerHTML+=`<br><p>El árbitro se dispone en mitad de cancha a lanzar el balón hacia arriba para iniciar del encuentro. Lo lanza y..</p>`;
 //Creo un bucle para resolver quién consigue más puntos considerando las estadísticas que influyen en esta acción y lo que sacan con el dado
 
 //Si empatan vuelve a comenzar el ciclo
 while (saltoA == saltoB){
     //Calculo cuántos puntos consigue cada jugador para esta acción
     saltoA = dadoDe20() + listaJugadoresA[4].altura+listaJugadoresA[4].capacidadAtletica;
-    console.log(`${listaJugadoresA[4].nombre} consigue ${saltoA} puntos en el salto`);
+    textoLocutor.innerHTML+=`<br><p>${listaJugadoresA[4].nombre} consigue ${saltoA} puntos en el salto</p>`;
     saltoB = dadoDe20() + listaJugadoresB[4].altura+listaJugadoresB[4].capacidadAtletica;
-    console.log(`${listaJugadoresB[4].nombre} consigue ${saltoB} puntos en el salto`);
+    textoLocutor.innerHTML+=`<br><p>${listaJugadoresB[4].nombre} consigue ${saltoB} puntos en el salto</p>`;
     //Comparo el desempeño de los jugadores y devuelvo lo que ocurre considerando los resultados
     let resultadoSalto = saltoA-saltoB;
     if (resultadoSalto > 0){
-        console.log(`El salto lo gana el equipo A y la pelota ahora está en posesión de ${listaJugadoresA[0].nombre}`);
+        textoLocutor.innerHTML+=`<br><p>El salto lo gana el equipo A y la pelota ahora está en posesión de ${listaJugadoresA[0].nombre}</p>`;
         listaEstadosJugadoresA[0].conPelota = true;
-        listaEstadosJugadoresA[0].ultimaAccion = `${listaJugadoresA[0].nombre} recibe un pase`;
-        console.log(`${listaEstadosJugadoresA[0].ultimaAccion}`);
         listaEstadosJugadoresA[4].ultimaAccion = `${listaJugadoresA[4].nombre} gana el salto`;
-        console.log(`${listaEstadosJugadoresA[4].ultimaAccion}`);
+        listaEstadosJugadoresA[0].ultimaAccion = `${listaJugadoresA[0].nombre} recibe un pase`;
+        textoLocutor.innerHTML+=`<br><p>${listaEstadosJugadoresA[0].ultimaAccion}</p>`;
+        textoLocutor.innerHTML+=`<br><p>${listaEstadosJugadoresA[4].ultimaAccion}</p>`;
     }
     else if (resultadoSalto < 0){
-        console.log(`El salto lo gana el equipo B y la pelota ahora está en posesión de ${listaJugadoresB[0].nombre}`);
+        textoLocutor.innerHTML+=`<br><p>El salto lo gana el equipo B y la pelota ahora está en posesión de ${listaJugadoresB[0].nombre}</p>`;
         listaEstadosJugadoresB[0].conPelota = true;
-        listaEstadosJugadoresB[0].ultimaAccion = `${listaJugadoresB[0].nombre} recibe un pase`;
-        console.log(`${listaEstadosJugadoresB[0].ultimaAccion}`);
         listaEstadosJugadoresB[4].ultimaAccion = `${listaJugadoresB[4].nombre} gana el salto`;
-        console.log(`${listaEstadosJugadoresB[4].ultimaAccion}`);
+        listaEstadosJugadoresB[0].ultimaAccion = `${listaJugadoresB[0].nombre} recibe un pase`;
+        textoLocutor.innerHTML+=`<br><p>${listaEstadosJugadoresB[0].ultimaAccion}</p>`;
+        textoLocutor.innerHTML+=`<br><p>${listaEstadosJugadoresB[4].ultimaAccion}</p>`;
     }
     else{
-        console.log("Ambos jugadores alcanzan el balón al mismo tiempo, la disputa por el salto sigue!");
+        textoLocutor.innerHTML+=`<br><p>Ambos jugadores alcanzan el balón al mismo tiempo, la disputa por el salto sigue!</p>`;
     }
 };
 //Continúa el partido luego del salto

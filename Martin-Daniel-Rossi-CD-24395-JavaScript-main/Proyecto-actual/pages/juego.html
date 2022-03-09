@@ -22,6 +22,12 @@
     <main>
         <div class="contenedorBotonesMostrarStatsJugadores">
             <span id="mostrarStatsJugadoresEquipoA" class="boton">Stats equipo A</span>
+            <div id="contenedorTablero">
+                <span id="tanteadorA" class="tanteador"></span>
+                <span id="relojPartido" class="relojPartido"></span>
+                <span id="tanteadorB" class="tanteador"></span>
+            </div>
+
             <span id="mostrarStatsJugadoresEquipoB" class="boton">Stats equipo B</span>
         </div>
         <div class="contenedorCanchaCompletaYStats">
@@ -48,114 +54,114 @@
                 <span id="creacionDeJuegoA" class="noDisplay statsQueAparecenA"></span>
             </div>
             <div class="contenedorCanchaCompleta">
-                <div id="1_1" class=""></div>
-                <div id="2_1" class=""></div>
-                <div id="3_1" class=""></div>
-                <div id="4_1" class=""></div>
-                <div id="5_1" class=""></div>
-                <div id="6_1" class=""></div>
-                <div id="7_1" class=""></div>
-                <div id="8_1" class=""></div>
-                <div id="9_1" class=""></div>
-                <div id="10_1" class=""></div>
-                <div id="11_1" class=""></div>
-                <div id="12_1" class=""></div>
-                <div id="13_1" class=""></div>
-                <div id="14_1" class=""></div>
-                <div id="15_1" class=""></div>
-                <div id="16_1" class=""></div>
-                <div id="17_1" class=""></div>
-                <div id="18_1" class=""></div>
-                <div id="19_1" class=""></div>
-                <div id="20_1" class=""></div>
-                <div id="21_1" class=""></div>
-                <div id="22_1" class=""></div>
-                <div id="23_1" class=""></div>
-                <div id="24_1" class=""></div>
-                <div id="25_1" class=""></div>
-                <div id="26_1" class=""></div>
-                <div id="27_1" class=""></div>
-                <div id="28_1" class=""></div>
-                <div id="1_2" class=""></div>
-                <div id="2_2" class=""></div>
-                <div id="3_2" class=""></div>
-                <div id="4_2" class=""></div>
-                <div id="5_2" class=""></div>
-                <div id="6_2" class=""></div>
-                <div id="7_2" class=""></div>
-                <div id="8_2" class=""></div>
-                <div id="9_2" class=""></div>
-                <div id="10_2" class=""></div>
-                <div id="11_2" class=""></div>
-                <div id="12_2" class=""></div>
-                <div id="13_2" class=""></div>
-                <div id="14_2" class=""></div>
-                <div id="15_2" class=""></div>
-                <div id="16_2" class=""></div>
-                <div id="17_2" class=""></div>
-                <div id="18_2" class=""></div>
-                <div id="19_2" class=""></div>
-                <div id="20_2" class=""></div>
-                <div id="21_2" class=""></div>
-                <div id="22_2" class=""></div>
-                <div id="23_2" class=""></div>
-                <div id="24_2" class=""></div>
-                <div id="25_2" class=""></div>
-                <div id="26_2" class=""></div>
-                <div id="27_2" class=""></div>
-                <div id="28_2" class=""></div>
+                <div id="1_1"></div>
+                <div id="2_1"></div>
+                <div id="3_1"></div>
+                <div id="4_1"></div>
+                <div id="5_1"></div>
+                <div id="6_1"></div>
+                <div id="7_1"></div>
+                <div id="8_1"></div>
+                <div id="9_1"></div>
+                <div id="10_1"></div>
+                <div id="11_1"></div>
+                <div id="12_1"></div>
+                <div id="13_1"></div>
+                <div id="14_1"></div>
+                <div id="15_1"></div>
+                <div id="16_1"></div>
+                <div id="17_1"></div>
+                <div id="18_1"></div>
+                <div id="19_1"></div>
+                <div id="20_1"></div>
+                <div id="21_1"></div>
+                <div id="22_1"></div>
+                <div id="23_1"></div>
+                <div id="24_1"></div>
+                <div id="25_1"></div>
+                <div id="26_1"></div>
+                <div id="27_1"></div>
+                <div id="28_1"></div>
+                <div id="1_2"></div>
+                <div id="2_2"></div>
+                <div id="3_2"></div>
+                <div id="4_2"></div>
+                <div id="5_2"></div>
+                <div id="6_2"></div>
+                <div id="7_2"></div>
+                <div id="8_2"></div>
+                <div id="9_2"></div>
+                <div id="10_2"></div>
+                <div id="11_2"></div>
+                <div id="12_2"></div>
+                <div id="13_2"></div>
+                <div id="14_2"></div>
+                <div id="15_2"></div>
+                <div id="16_2"></div>
+                <div id="17_2"></div>
+                <div id="18_2"></div>
+                <div id="19_2"></div>
+                <div id="20_2"></div>
+                <div id="21_2"></div>
+                <div id="22_2"></div>
+                <div id="23_2"></div>
+                <div id="24_2"></div>
+                <div id="25_2"></div>
+                <div id="26_2"></div>
+                <div id="27_2"></div>
+                <div id="28_2"></div>
                 <div id="1_3" class="defensaAMixtaMasExterior"></div>
-                <div id="2_3" class=""></div>
-                <div id="3_3" class=""></div>
-                <div id="4_3" class=""></div>
-                <div id="5_3" class=""></div>
-                <div id="6_3" class=""></div>
-                <div id="7_3" class=""></div>
-                <div id="8_3" class=""></div>
-                <div id="9_3" class=""></div>
-                <div id="10_3" class=""></div>
-                <div id="11_3" class=""></div>
-                <div id="12_3" class=""></div>
-                <div id="13_3" class=""></div>
-                <div id="14_3" class=""></div>
-                <div id="15_3" class=""></div>
-                <div id="16_3" class=""></div>
-                <div id="17_3" class=""></div>
-                <div id="18_3" class=""></div>
-                <div id="19_3" class=""></div>
-                <div id="20_3" class=""></div>
-                <div id="21_3" class=""></div>
-                <div id="22_3" class=""></div>
-                <div id="23_3" class=""></div>
-                <div id="24_3" class=""></div>
-                <div id="25_3" class=""></div>
-                <div id="26_3" class=""></div>
-                <div id="27_3" class=""></div>
+                <div id="2_3"></div>
+                <div id="3_3"></div>
+                <div id="4_3"></div>
+                <div id="5_3"></div>
+                <div id="6_3"></div>
+                <div id="7_3"></div>
+                <div id="8_3"></div>
+                <div id="9_3"></div>
+                <div id="10_3"></div>
+                <div id="11_3"></div>
+                <div id="12_3"></div>
+                <div id="13_3"></div>
+                <div id="14_3"></div>
+                <div id="15_3"></div>
+                <div id="16_3"></div>
+                <div id="17_3"></div>
+                <div id="18_3"></div>
+                <div id="19_3"></div>
+                <div id="20_3"></div>
+                <div id="21_3"></div>
+                <div id="22_3"></div>
+                <div id="23_3"></div>
+                <div id="24_3"></div>
+                <div id="25_3"></div>
+                <div id="26_3"></div>
+                <div id="27_3"></div>
                 <div id="28_3" class="defensaBMixtaMasExterior"></div>
                 <div id="1_4" class="defensaAMixtaMasExterior"></div>
                 <div id="2_4" class="defensaAMixtaMasExterior"></div>
                 <div id="3_4" class="defensaAMixtaMasExterior"></div>
                 <div id="4_4" class="defensaAMixtaMasExterior"></div>
-                <div id="5_4" class=""></div>
-                <div id="6_4" class=""></div>
-                <div id="7_4" class=""></div>
-                <div id="8_4" class=""></div>
-                <div id="9_4" class=""></div>
-                <div id="10_4" class=""></div>
-                <div id="11_4" class=""></div>
-                <div id="12_4" class=""></div>
-                <div id="13_4" class=""></div>
-                <div id="14_4" class=""></div>
-                <div id="15_4" class=""></div>
-                <div id="16_4" class=""></div>
-                <div id="17_4" class=""></div>
-                <div id="18_4" class=""></div>
-                <div id="19_4" class=""></div>
-                <div id="20_4" class=""></div>
-                <div id="21_4" class=""></div>
-                <div id="22_4" class=""></div>
-                <div id="23_4" class=""></div>
-                <div id="24_4" class=""></div>
+                <div id="5_4"></div>
+                <div id="6_4"></div>
+                <div id="7_4"></div>
+                <div id="8_4"></div>
+                <div id="9_4"></div>
+                <div id="10_4"></div>
+                <div id="11_4"></div>
+                <div id="12_4"></div>
+                <div id="13_4"></div>
+                <div id="14_4"></div>
+                <div id="15_4"></div>
+                <div id="16_4"></div>
+                <div id="17_4"></div>
+                <div id="18_4"></div>
+                <div id="19_4"></div>
+                <div id="20_4"></div>
+                <div id="21_4"></div>
+                <div id="22_4"></div>
+                <div id="23_4"></div>
+                <div id="24_4"></div>
                 <div id="25_4" class="defensaBMixtaMasExterior"></div>
                 <div id="26_4" class="defensaBMixtaMasExterior"></div>
                 <div id="27_4" class="defensaBMixtaMasExterior"></div>
@@ -165,24 +171,24 @@
                 <div id="3_5" class="defensaAMixtaMasInterior"></div>
                 <div id="4_5" class="defensaAMixtaMasExterior"></div>
                 <div id="5_5" class="defensaAMixtaMasExterior"></div>
-                <div id="6_5" class=""></div>
-                <div id="7_5" class=""></div>
-                <div id="8_5" class=""></div>
-                <div id="9_5" class=""></div>
-                <div id="10_5" class=""></div>
-                <div id="11_5" class=""></div>
-                <div id="12_5" class=""></div>
-                <div id="13_5" class=""></div>
-                <div id="14_5" class=""></div>
-                <div id="15_5" class=""></div>
-                <div id="16_5" class=""></div>
-                <div id="17_5" class=""></div>
-                <div id="18_5" class=""></div>
-                <div id="19_5" class=""></div>
-                <div id="20_5" class=""></div>
-                <div id="21_5" class=""></div>
-                <div id="22_5" class=""></div>
-                <div id="23_5" class=""></div>
+                <div id="6_5"></div>
+                <div id="7_5"></div>
+                <div id="8_5"></div>
+                <div id="9_5"></div>
+                <div id="10_5"></div>
+                <div id="11_5"></div>
+                <div id="12_5"></div>
+                <div id="13_5"></div>
+                <div id="14_5"></div>
+                <div id="15_5"></div>
+                <div id="16_5"></div>
+                <div id="17_5"></div>
+                <div id="18_5"></div>
+                <div id="19_5"></div>
+                <div id="20_5"></div>
+                <div id="21_5"></div>
+                <div id="22_5"></div>
+                <div id="23_5"></div>
                 <div id="24_5" class="defensaBMixtaMasExterior"></div>
                 <div id="25_5" class="defensaBMixtaMasExterior"></div>
                 <div id="26_5" class="defensaBMixtaMasInterior"></div>
@@ -194,22 +200,22 @@
                 <div id="4_6" class="defensaAMixtaMasInterior"></div>
                 <div id="5_6" class="defensaAMixtaMasInterior"></div>
                 <div id="6_6" class="defensaAMixtaMasExterior"></div>
-                <div id="7_6" class=""></div>
-                <div id="8_6" class=""></div>
-                <div id="9_6" class=""></div>
-                <div id="10_6" class=""></div>
-                <div id="11_6" class=""></div>
-                <div id="12_6" class=""></div>
-                <div id="13_6" class=""></div>
-                <div id="14_6" class=""></div>
-                <div id="15_6" class=""></div>
-                <div id="16_6" class=""></div>
-                <div id="17_6" class=""></div>
-                <div id="18_6" class=""></div>
-                <div id="19_6" class=""></div>
-                <div id="20_6" class=""></div>
-                <div id="21_6" class=""></div>
-                <div id="22_6" class=""></div>
+                <div id="7_6"></div>
+                <div id="8_6"></div>
+                <div id="9_6"></div>
+                <div id="10_6"></div>
+                <div id="11_6"></div>
+                <div id="12_6"></div>
+                <div id="13_6"></div>
+                <div id="14_6"></div>
+                <div id="15_6"></div>
+                <div id="16_6"></div>
+                <div id="17_6"></div>
+                <div id="18_6"></div>
+                <div id="19_6"></div>
+                <div id="20_6"></div>
+                <div id="21_6"></div>
+                <div id="22_6"></div>
                 <div id="23_6" class="defensaBMixtaMasExterior"></div>
                 <div id="24_6" class="defensaBMixtaMasInterior"></div>
                 <div id="25_6" class="defensaBMixtaMasInterior"></div>
@@ -222,22 +228,22 @@
                 <div id="4_7" class="defensaAInterior"></div>
                 <div id="5_7" class="defensaAMixtaMasInterior"></div>
                 <div id="6_7" class="defensaAMixtaMasExterior"></div>
-                <div id="7_7" class=""></div>
-                <div id="8_7" class=""></div>
-                <div id="9_7" class=""></div>
-                <div id="10_7" class=""></div>
-                <div id="11_7" class=""></div>
-                <div id="12_7" class=""></div>
-                <div id="13_7" class=""></div>
-                <div id="14_7" class=""></div>
-                <div id="15_7" class=""></div>
-                <div id="16_7" class=""></div>
-                <div id="17_7" class=""></div>
-                <div id="18_7" class=""></div>
-                <div id="19_7" class=""></div>
-                <div id="20_7" class=""></div>
-                <div id="21_7" class=""></div>
-                <div id="22_7" class=""></div>
+                <div id="7_7"></div>
+                <div id="8_7"></div>
+                <div id="9_7"></div>
+                <div id="10_7"></div>
+                <div id="11_7"></div>
+                <div id="12_7"></div>
+                <div id="13_7"></div>
+                <div id="14_7"></div>
+                <div id="15_7"></div>
+                <div id="16_7"></div>
+                <div id="17_7"></div>
+                <div id="18_7"></div>
+                <div id="19_7"></div>
+                <div id="20_7"></div>
+                <div id="21_7"></div>
+                <div id="22_7"></div>
                 <div id="23_7" class="defensaBMixtaMasExterior"></div>
                 <div id="24_7" class="defensaBMixtaMasInterior"></div>
                 <div id="25_7" class="defensaBInterior"></div>
@@ -250,22 +256,22 @@
                 <div id="4_8" class="defensaAInterior"></div>
                 <div id="5_8" class="defensaAMixtaMasInterior"></div>
                 <div id="6_8" class="defensaAMixtaMasExterior"></div>
-                <div id="7_8" class=""></div>
-                <div id="8_8" class=""></div>
-                <div id="9_8" class=""></div>
-                <div id="10_8" class=""></div>
-                <div id="11_8" class=""></div>
-                <div id="12_8" class=""></div>
-                <div id="13_8" class=""></div>
-                <div id="14_8" class=""></div>
-                <div id="15_8" class=""></div>
-                <div id="16_8" class=""></div>
-                <div id="17_8" class=""></div>
-                <div id="18_8" class=""></div>
-                <div id="19_8" class=""></div>
-                <div id="20_8" class=""></div>
-                <div id="21_8" class=""></div>
-                <div id="22_8" class=""></div>
+                <div id="7_8"></div>
+                <div id="8_8"></div>
+                <div id="9_8"></div>
+                <div id="10_8"></div>
+                <div id="11_8"></div>
+                <div id="12_8"></div>
+                <div id="13_8"></div>
+                <div id="14_8"></div>
+                <div id="15_8"></div>
+                <div id="16_8"></div>
+                <div id="17_8"></div>
+                <div id="18_8"></div>
+                <div id="19_8"></div>
+                <div id="20_8"></div>
+                <div id="21_8"></div>
+                <div id="22_8"></div>
                 <div id="23_8" class="defensaBMixtaMasExterior"></div>
                 <div id="24_8" class="defensaBMixtaMasInterior"></div>
                 <div id="25_8" class="defensaBInterior"></div>
@@ -278,22 +284,22 @@
                 <div id="4_9" class="defensaAInterior"></div>
                 <div id="5_9" class="defensaAMixtaMasInterior"></div>
                 <div id="6_9" class="defensaAMixtaMasExterior"></div>
-                <div id="7_9" class=""></div>
-                <div id="8_9" class=""></div>
-                <div id="9_9" class=""></div>
-                <div id="10_9" class=""></div>
-                <div id="11_9" class=""></div>
-                <div id="12_9" class=""></div>
-                <div id="13_9" class=""></div>
-                <div id="14_9" class=""></div>
-                <div id="15_9" class=""></div>
-                <div id="16_9" class=""></div>
-                <div id="17_9" class=""></div>
-                <div id="18_9" class=""></div>
-                <div id="19_9" class=""></div>
-                <div id="20_9" class=""></div>
-                <div id="21_9" class=""></div>
-                <div id="22_9" class=""></div>
+                <div id="7_9"></div>
+                <div id="8_9"></div>
+                <div id="9_9"></div>
+                <div id="10_9"></div>
+                <div id="11_9"></div>
+                <div id="12_9"></div>
+                <div id="13_9"></div>
+                <div id="14_9"></div>
+                <div id="15_9"></div>
+                <div id="16_9"></div>
+                <div id="17_9"></div>
+                <div id="18_9"></div>
+                <div id="19_9"></div>
+                <div id="20_9"></div>
+                <div id="21_9"></div>
+                <div id="22_9"></div>
                 <div id="23_9" class="defensaBMixtaMasExterior"></div>
                 <div id="24_9" class="defensaBMixtaMasInterior"></div>
                 <div id="25_9" class="defensaBInterior"></div>
@@ -306,22 +312,22 @@
                 <div id="4_10" class="defensaAMixtaMasInterior"></div>
                 <div id="5_10" class="defensaAMixtaMasInterior"></div>
                 <div id="6_10" class="defensaAMixtaMasExterior"></div>
-                <div id="7_10" class=""></div>
-                <div id="8_10" class=""></div>
-                <div id="9_10" class=""></div>
-                <div id="10_10" class=""></div>
-                <div id="11_10" class=""></div>
-                <div id="12_10" class=""></div>
-                <div id="13_10" class=""></div>
-                <div id="14_10" class=""></div>
-                <div id="15_10" class=""></div>
-                <div id="16_10" class=""></div>
-                <div id="17_10" class=""></div>
-                <div id="18_10" class=""></div>
-                <div id="19_10" class=""></div>
-                <div id="20_10" class=""></div>
-                <div id="21_10" class=""></div>
-                <div id="22_10" class=""></div>
+                <div id="7_10"></div>
+                <div id="8_10"></div>
+                <div id="9_10"></div>
+                <div id="10_10"></div>
+                <div id="11_10"></div>
+                <div id="12_10"></div>
+                <div id="13_10"></div>
+                <div id="14_10"></div>
+                <div id="15_10"></div>
+                <div id="16_10"></div>
+                <div id="17_10"></div>
+                <div id="18_10"></div>
+                <div id="19_10"></div>
+                <div id="20_10"></div>
+                <div id="21_10"></div>
+                <div id="22_10"></div>
                 <div id="23_10" class="defensaBMixtaMasExterior"></div>
                 <div id="24_10" class="defensaBMixtaMasInterior"></div>
                 <div id="25_10" class="defensaBMixtaMasInterior"></div>
@@ -333,24 +339,24 @@
                 <div id="3_11" class="defensaAMixtaMasInterior"></div>
                 <div id="4_11" class="defensaAMixtaMasExterior"></div>
                 <div id="5_11" class="defensaAMixtaMasExterior"></div>
-                <div id="6_11" class=""></div>
-                <div id="7_11" class=""></div>
-                <div id="8_11" class=""></div>
-                <div id="9_11" class=""></div>
-                <div id="10_11" class=""></div>
-                <div id="11_11" class=""></div>
-                <div id="12_11" class=""></div>
-                <div id="13_11" class=""></div>
-                <div id="14_11" class=""></div>
-                <div id="15_11" class=""></div>
-                <div id="16_11" class=""></div>
-                <div id="17_11" class=""></div>
-                <div id="18_11" class=""></div>
-                <div id="19_11" class=""></div>
-                <div id="20_11" class=""></div>
-                <div id="21_11" class=""></div>
-                <div id="22_11" class=""></div>
-                <div id="23_11" class=""></div>
+                <div id="6_11"></div>
+                <div id="7_11"></div>
+                <div id="8_11"></div>
+                <div id="9_11"></div>
+                <div id="10_11"></div>
+                <div id="11_11"></div>
+                <div id="12_11"></div>
+                <div id="13_11"></div>
+                <div id="14_11"></div>
+                <div id="15_11"></div>
+                <div id="16_11"></div>
+                <div id="17_11"></div>
+                <div id="18_11"></div>
+                <div id="19_11"></div>
+                <div id="20_11"></div>
+                <div id="21_11"></div>
+                <div id="22_11"></div>
+                <div id="23_11"></div>
                 <div id="24_11" class="defensaBMixtaMasExterior"></div>
                 <div id="25_11" class="defensaBMixtaMasExterior"></div>
                 <div id="26_11" class="defensaBMixtaMasInterior"></div>
@@ -360,114 +366,114 @@
                 <div id="2_12" class="defensaAMixtaMasExterior"></div>
                 <div id="3_12" class="defensaAMixtaMasExterior"></div>
                 <div id="4_12" class="defensaAMixtaMasExterior"></div>
-                <div id="5_12" class=""></div>
-                <div id="6_12" class=""></div>
-                <div id="7_12" class=""></div>
-                <div id="8_12" class=""></div>
-                <div id="9_12" class=""></div>
-                <div id="10_12" class=""></div>
-                <div id="11_12" class=""></div>
-                <div id="12_12" class=""></div>
-                <div id="13_12" class=""></div>
-                <div id="14_12" class=""></div>
-                <div id="15_12" class=""></div>
-                <div id="16_12" class=""></div>
-                <div id="17_12" class=""></div>
-                <div id="18_12" class=""></div>
-                <div id="19_12" class=""></div>
-                <div id="20_12" class=""></div>
-                <div id="21_12" class=""></div>
-                <div id="22_12" class=""></div>
-                <div id="23_12" class=""></div>
-                <div id="24_12" class=""></div>
-                <div id="25_12" class=""></div>
+                <div id="5_12"></div>
+                <div id="6_12"></div>
+                <div id="7_12"></div>
+                <div id="8_12"></div>
+                <div id="9_12"></div>
+                <div id="10_12"></div>
+                <div id="11_12"></div>
+                <div id="12_12"></div>
+                <div id="13_12"></div>
+                <div id="14_12"></div>
+                <div id="15_12"></div>
+                <div id="16_12"></div>
+                <div id="17_12"></div>
+                <div id="18_12"></div>
+                <div id="19_12"></div>
+                <div id="20_12"></div>
+                <div id="21_12"></div>
+                <div id="22_12"></div>
+                <div id="23_12"></div>
+                <div id="24_12"></div>
+                <div id="25_12"></div>
                 <div id="26_12" class="defensaBMixtaMasExterior"></div>
                 <div id="27_12" class="defensaBMixtaMasExterior"></div>
                 <div id="28_12" class="defensaBMixtaMasExterior"></div>
                 <div id="1_13" class="defensaAMixtaMasExterior"></div>
-                <div id="2_13" class=""></div>
-                <div id="3_13" class=""></div>
-                <div id="4_13" class=""></div>
-                <div id="5_13" class=""></div>
-                <div id="6_13" class=""></div>
-                <div id="7_13" class=""></div>
-                <div id="8_13" class=""></div>
-                <div id="9_13" class=""></div>
-                <div id="10_13" class=""></div>
-                <div id="11_13" class=""></div>
-                <div id="12_13" class=""></div>
-                <div id="13_13" class=""></div>
-                <div id="14_13" class=""></div>
-                <div id="15_13" class=""></div>
-                <div id="16_13" class=""></div>
-                <div id="17_13" class=""></div>
-                <div id="18_13" class=""></div>
-                <div id="19_13" class=""></div>
-                <div id="20_13" class=""></div>
-                <div id="21_13" class=""></div>
-                <div id="22_13" class=""></div>
-                <div id="23_13" class=""></div>
-                <div id="24_13" class=""></div>
-                <div id="25_13" class=""></div>
-                <div id="26_13" class=""></div>
-                <div id="27_13" class=""></div>
+                <div id="2_13"></div>
+                <div id="3_13"></div>
+                <div id="4_13"></div>
+                <div id="5_13"></div>
+                <div id="6_13"></div>
+                <div id="7_13"></div>
+                <div id="8_13"></div>
+                <div id="9_13"></div>
+                <div id="10_13"></div>
+                <div id="11_13"></div>
+                <div id="12_13"></div>
+                <div id="13_13"></div>
+                <div id="14_13"></div>
+                <div id="15_13"></div>
+                <div id="16_13"></div>
+                <div id="17_13"></div>
+                <div id="18_13"></div>
+                <div id="19_13"></div>
+                <div id="20_13"></div>
+                <div id="21_13"></div>
+                <div id="22_13"></div>
+                <div id="23_13"></div>
+                <div id="24_13"></div>
+                <div id="25_13"></div>
+                <div id="26_13"></div>
+                <div id="27_13"></div>
                 <div id="28_13" class="defensaBMixtaMasExterior"></div>
                 <div id="1_14" class="defensaAMixtaMasExterior"></div>
                 <div id="2_14" class="defensaAMixtaMasExterior"></div>
                 <div id="3_14" class="defensaAMixtaMasExterior"></div>
-                <div id="4_14" class=""></div>
-                <div id="5_14" class=""></div>
-                <div id="6_14" class=""></div>
-                <div id="7_14" class=""></div>
-                <div id="8_14" class=""></div>
-                <div id="9_14" class=""></div>
-                <div id="10_14" class=""></div>
-                <div id="11_14" class=""></div>
-                <div id="12_14" class=""></div>
-                <div id="13_14" class=""></div>
-                <div id="14_14" class=""></div>
-                <div id="15_14" class=""></div>
-                <div id="16_14" class=""></div>
-                <div id="17_14" class=""></div>
-                <div id="18_14" class=""></div>
-                <div id="19_14" class=""></div>
-                <div id="20_14" class=""></div>
-                <div id="21_14" class=""></div>
-                <div id="22_14" class=""></div>
-                <div id="23_14" class=""></div>
-                <div id="24_14" class=""></div>
-                <div id="25_14" class=""></div>
-                <div id="26_14" class=""></div>
-                <div id="27_14" class=""></div>
-                <div id="28_14" class=""></div>
-                <div id="1_15" class=""></div>
-                <div id="2_15" class=""></div>
-                <div id="3_15" class=""></div>
-                <div id="4_15" class=""></div>
-                <div id="5_15" class=""></div>
-                <div id="6_15" class=""></div>
-                <div id="7_15" class=""></div>
-                <div id="8_15" class=""></div>
-                <div id="9_15" class=""></div>
-                <div id="10_15" class=""></div>
-                <div id="11_15" class=""></div>
-                <div id="12_15" class=""></div>
-                <div id="13_15" class=""></div>
-                <div id="14_15" class=""></div>
-                <div id="15_15" class=""></div>
-                <div id="16_15" class=""></div>
-                <div id="17_15" class=""></div>
-                <div id="18_15" class=""></div>
-                <div id="19_15" class=""></div>
-                <div id="20_15" class=""></div>
-                <div id="21_15" class=""></div>
-                <div id="22_15" class=""></div>
-                <div id="23_15" class=""></div>
-                <div id="24_15" class=""></div>
-                <div id="25_15" class=""></div>
-                <div id="26_15" class=""></div>
-                <div id="27_15" class=""></div>
-                <div id="28_15" class=""></div>            
+                <div id="4_14"></div>
+                <div id="5_14"></div>
+                <div id="6_14"></div>
+                <div id="7_14"></div>
+                <div id="8_14"></div>
+                <div id="9_14"></div>
+                <div id="10_14"></div>
+                <div id="11_14"></div>
+                <div id="12_14"></div>
+                <div id="13_14"></div>
+                <div id="14_14"></div>
+                <div id="15_14"></div>
+                <div id="16_14"></div>
+                <div id="17_14"></div>
+                <div id="18_14"></div>
+                <div id="19_14"></div>
+                <div id="20_14"></div>
+                <div id="21_14"></div>
+                <div id="22_14"></div>
+                <div id="23_14"></div>
+                <div id="24_14"></div>
+                <div id="25_14"></div>
+                <div id="26_14"></div>
+                <div id="27_14"></div>
+                <div id="28_14"></div>
+                <div id="1_15"></div>
+                <div id="2_15"></div>
+                <div id="3_15"></div>
+                <div id="4_15"></div>
+                <div id="5_15"></div>
+                <div id="6_15"></div>
+                <div id="7_15"></div>
+                <div id="8_15"></div>
+                <div id="9_15"></div>
+                <div id="10_15"></div>
+                <div id="11_15"></div>
+                <div id="12_15"></div>
+                <div id="13_15"></div>
+                <div id="14_15"></div>
+                <div id="15_15"></div>
+                <div id="16_15"></div>
+                <div id="17_15"></div>
+                <div id="18_15"></div>
+                <div id="19_15"></div>
+                <div id="20_15"></div>
+                <div id="21_15"></div>
+                <div id="22_15"></div>
+                <div id="23_15"></div>
+                <div id="24_15"></div>
+                <div id="25_15"></div>
+                <div id="26_15"></div>
+                <div id="27_15"></div>
+                <div id="28_15"></div>            
             </div>
             <div id="contenedorStatsEquipoB">
                 <h3 class="noDisplay statsQueAparecenB">Nombre:</h3>
@@ -506,6 +512,7 @@
             <span id="terminarTurno" class="boton noDisplay">Terminar turno</span>
             <span id="confirmar" class="boton noDisplay">Confirmar</span>
         </div>
+        <div id="relatoPartido" class="relatoPartido"></div>
         <div id="contenedorMuestroJugadoresJson">
             <fieldset>
                 <legend>Seleccione el jugador del que quiere saber más:</legend>
