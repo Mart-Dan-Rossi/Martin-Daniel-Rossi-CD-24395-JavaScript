@@ -1375,7 +1375,6 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
                 else if (equipo==1){
                     estadosAmbosEquipos[0][0].conPelota=true;
                 }
-                //AGREGAR actualizo marcador
             }
             muestroPosicionesEnCancha();
             comienzaInstante();
@@ -2318,8 +2317,6 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
 const funcionGestionReloj= ()=>{
     //Resto un instante al contador de instantes
     instantesEnPeriodo--;
-
-    //AGREGAR reloj de período
     
     //Si se acaban los instantes en el período
     if (instantesEnPeriodo == 0){
@@ -2333,7 +2330,6 @@ const funcionGestionReloj= ()=>{
         }
         //Si ya pasaron 2 periodos cambio el valor de finDePartido para terminar el juego
         if (periodo == 3){
-            //AGREGAR esta función
             textoLocutor.innerHTML+=`<br><p>Finaliza el encuentro! Marcador nos muestra que el equipo A terminó con ${arrayConPuntosPorEquipo[0]} puntos y el equipo B terminó con ${arrayConPuntosPorEquipo[1]} puntos!</p>`;
             terminoPartido();
         }
@@ -2380,6 +2376,3 @@ comienzaInstante();
 //Esto dispara funciones (muestroJugadoresConTurno, coachElijeJugador, funcionalidadBotonConfirmarJugador estas para ambos equipos y a continuación comparo iniciativas y muestro opciones que tienen los jugadores)
 muestroJugadoresConTurno(queEquipoDefiendeNumero());
 //La cadena de funciones previa completa todas las acciones de este instante
-
-
-//AGREGAR Indico quién ganó el partido
