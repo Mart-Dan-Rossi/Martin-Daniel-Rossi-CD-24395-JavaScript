@@ -337,9 +337,6 @@ const queEquipoAtaca = ()=>{
         else if (listaEstadosJugadoresB[i].conPelota == true){
             return "B";
         }
-        else{
-            console.log("error");
-        }
     }
 }
 
@@ -350,9 +347,6 @@ const queEquipoDefiende = ()=>{
         }
         else if (listaEstadosJugadoresB[i].conPelota == true){
             return "A";
-        }
-        else{
-            console.log("error");
         }
     }
 }
@@ -377,9 +371,6 @@ const queEquipoAtacaNumero = ()=>{
         else if (listaEstadosJugadoresB[i].conPelota == true){
             return 1;
         }
-        else{
-            console.log("error");
-        }
     }
 }
 
@@ -390,9 +381,6 @@ const queEquipoDefiendeNumero = ()=>{
         }
         else if (listaEstadosJugadoresB[i].conPelota == true){
             return 0;
-        }
-        else{
-            console.log("error");
         }
     }
 }
@@ -468,24 +456,6 @@ const comienzaInstante = ()=>{
     let tanteadorA=document.getElementById("tanteadorA");
     let tanteadorB=document.getElementById("tanteadorB");
     let relojPartido=document.getElementById("relojPartido");
-    //WORKING tengo que reubicar esto xq estoy despintando casillas q no debería despintar porque son las que deberían quedar coloreadas puesto que antes de correr esta función corrí la de mostrar jugadores
-    let fondoJugadorActivoA= document.getElementsByClassName("fondoJugadorActivoA");
-    let fondoJugadorActivoB= document.getElementsByClassName("fondoJugadorActivoB");
-    let fondoVerde = document.getElementsByClassName("fondoVerde");
-    let fondoSeleccionado= document.getElementsByClassName("fondoSeleccionado");
-    
-    if (fondoJugadorActivoA.length >0){
-        fondoJugadorActivoA[0].classList.remove("fondoJugadorActivoA");
-    }    
-    if (fondoJugadorActivoB.length >0){
-        fondoJugadorActivoB[0].classList.remove("fondoJugadorActivoB");
-    }
-    if (fondoVerde.length >0){
-        fondoVerde[0].classList.remove("fondoVerde");
-    }
-    if (fondoSeleccionado.length >0){
-        fondoSeleccionado[0].classList.remove("fondoSeleccionado");
-    }
 
     function segundosAString(seconds) {
         let minute = Math.floor((seconds / 60) % 60);
@@ -503,11 +473,13 @@ const comienzaInstante = ()=>{
     for (equipo in estadosAmbosEquipos){
         for (let i=0; i<5; i++){
             //Indico que los jugadores todavía no usaron su turno en este nuevo instante
-            estadosAmbosEquipos[equipo][jugador]["turnoUsado"] = false;
-            //Doy nuevos puntos de acción
-            nuevosPuntosDeAccion();
+            estadosAmbosEquipos[equipo][i]["turnoUsado"] = false;
         }
     }
+    //Doy nuevos puntos de acción
+    nuevosPuntosDeAccion();
+    //Actualizo el tablero
+    funcionGestionReloj();
 }
 
 
@@ -537,8 +509,11 @@ const muestroJugadoresConTurno = (ataqueODefensa)=>{
     else if ((ataqueODefensa == queEquipoAtacaNumero()) && (cuentoJugadoresConTurno != 0)){
         coachElijeJugador(queEquipoAtacaNumero());
     }
+    //Si no hay jugadores con turno comienzo un nuevo instante
     else if (cuentoJugadoresConTurno == 0){
-
+        muestroPosicionesEnCancha();
+        comienzaInstante();
+        muestroJugadoresConTurno(queEquipoDefiendeNumero());
     }
 }
 
@@ -642,6 +617,29 @@ const coachElijeJugador = (ataqueODefensa)=>{
 
 /*Creo una función que asegura que guardoJugadorSeleccionado no contenga jugadores elegidos previamente*/
 const borroJugadoresSeleccionadosPreviamente = ()=>{
+    //Despinto tablero    
+    let fondoJugadorActivoA= document.getElementsByClassName("fondoJugadorActivoA");
+    let fondoJugadorActivoB= document.getElementsByClassName("fondoJugadorActivoB");
+    let fondoVerde = document.getElementsByClassName("fondoVerde");
+    let fondoSeleccionado= document.getElementsByClassName("fondoSeleccionado");
+    let fondoSeleccionadoYLeToca= document.getElementsByClassName("fondoSeleccionadoYLeToca")
+    
+    if (fondoJugadorActivoA.length >0){
+        fondoJugadorActivoA[0].classList.remove("fondoJugadorActivoA");
+    }    
+    if (fondoJugadorActivoB.length >0){
+        fondoJugadorActivoB[0].classList.remove("fondoJugadorActivoB");
+    }
+    if (fondoVerde.length >0){
+        fondoVerde[0].classList.remove("fondoVerde");
+    }
+    if (fondoSeleccionado.length >0){
+        fondoSeleccionado[0].classList.remove("fondoSeleccionado");
+    }
+    if (fondoSeleccionadoYLeToca.length >0){
+        fondoSeleccionadoYLeToca[0].classList.remove("fondoSeleccionadoYLeToca");
+    }   
+    //Borro jugadores seleccionados previamente
     while (guardoJugadorSeleccionado.length>0){
         guardoJugadorSeleccionado.pop();
     }
@@ -881,7 +879,6 @@ const muestroPosiblesAccionesDefensa = (equipo, jugador)=>{
             if (comparoIniciativas < 0){
                 //Continúo al próximo instante
                 borroJugadoresSeleccionadosPreviamente();
-                funcionGestionReloj();
                 muestroJugadoresConTurno(queEquipoDefiendeNumero());
             }
             //Si el equipo que comenzó eligiendo sus acciones fué el defensor
@@ -1364,12 +1361,11 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
         let elEquipoDefensor;
 
         const luegoDelTiro= ()=>{
-            
             //Si erra
             if (encesta==false){
                 calculoQuienGanaRebote();
             }
-
+            
             //Si encesta
             else if (encesta==true){
                 arrayConPuntosPorEquipo[equipo]=+2
@@ -1381,9 +1377,9 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
                 }
                 //AGREGAR actualizo marcador
             }
-            funcionGestionReloj();
             muestroPosicionesEnCancha();
             comienzaInstante();
+            borroJugadoresSeleccionadosPreviamente();
             muestroJugadoresConTurno(queEquipoDefiendeNumero());
         }
         
@@ -2013,7 +2009,6 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
         if (comparoIniciativas > 0){
             //Continúo al próximo instante
             borroJugadoresSeleccionadosPreviamente();
-            funcionGestionReloj();
             muestroJugadoresConTurno(queEquipoDefiendeNumero());
         }
         //Si el equipo que comenzó eligiendo sus acciones fué el atacante
@@ -2024,7 +2019,6 @@ const muestroPosiblesAccionesAtaque = (equipo, jugador)=>{
                 otroJugador[0].classList.add("fondoSeleccionadoYLeToca");
                 otroJugador[0].classList.remove(`fondoJugadorActivo${queEquipoEs(equiposJugadoresElegidos[0])}`);
             }
-    
             //Continúo por que el defensor elija sus acciones
             muestroPosiblesAccionesDefensa(equiposJugadoresElegidos[0], (rolJugadoresElegidos[0]-1));
         }
