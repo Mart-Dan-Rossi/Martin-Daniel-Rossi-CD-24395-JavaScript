@@ -119,7 +119,6 @@ let botonConfirmar = document.getElementById("confirmar");
 
 /*Creo una función que sirve para asignar nuevos puntos de acción a los jugadores al comenzar cada turno*/
 const nuevosPuntosDeAccion = ()=>{
-    textoLocutor.innerHTML+=`<br><p>Comienza un nuevo turno por lo que los jugadores reponen sus puntos de acción</p>`;
     //Búcle que selecciona equipo
     for (listas in estadosAmbosEquipos){
         //Búcle que selecciona cada jugador dentro de cada equipo
@@ -469,6 +468,25 @@ const comienzaInstante = ()=>{
     let tanteadorA=document.getElementById("tanteadorA");
     let tanteadorB=document.getElementById("tanteadorB");
     let relojPartido=document.getElementById("relojPartido");
+    //WORKING tengo que reubicar esto xq estoy despintando casillas q no debería despintar porque son las que deberían quedar coloreadas puesto que antes de correr esta función corrí la de mostrar jugadores
+    let fondoJugadorActivoA= document.getElementsByClassName("fondoJugadorActivoA");
+    let fondoJugadorActivoB= document.getElementsByClassName("fondoJugadorActivoB");
+    let fondoVerde = document.getElementsByClassName("fondoVerde");
+    let fondoSeleccionado= document.getElementsByClassName("fondoSeleccionado");
+    
+    if (fondoJugadorActivoA.length >0){
+        fondoJugadorActivoA[0].classList.remove("fondoJugadorActivoA");
+    }    
+    if (fondoJugadorActivoB.length >0){
+        fondoJugadorActivoB[0].classList.remove("fondoJugadorActivoB");
+    }
+    if (fondoVerde.length >0){
+        fondoVerde[0].classList.remove("fondoVerde");
+    }
+    if (fondoSeleccionado.length >0){
+        fondoSeleccionado[0].classList.remove("fondoSeleccionado");
+    }
+
     function segundosAString(seconds) {
         let minute = Math.floor((seconds / 60) % 60);
         minute = (minute < 10)? '0' + minute : minute;
@@ -480,6 +498,8 @@ const comienzaInstante = ()=>{
     tanteadorA.innerHTML= `${arrayConPuntosPorEquipo[0]}`;
     tanteadorB.innerHTML= `${arrayConPuntosPorEquipo[1]}`;
     relojPartido.innerHTML= `${segundosAString(instantesEnPeriodo)}`;
+
+    textoLocutor.innerHTML+=`<br><p>Comienza un nuevo turno por lo que los jugadores reponen sus puntos de acción</p>`;
     for (equipo in estadosAmbosEquipos){
         for (let i=0; i<5; i++){
             //Indico que los jugadores todavía no usaron su turno en este nuevo instante
@@ -541,7 +561,7 @@ const coachElijeJugador = (ataqueODefensa)=>{
         
         //Función que se ejecuta con ese evento
         function seleccionoJugador(evt){
-            textoLocutor.innerHTML+=`<br><p>El jugador clickeado se ha pintado de verde obscuro. Si desea confirmas su selección presione el botón confirmar</p>`;
+            textoLocutor.innerHTML+=`<br><p>El jugador clickeado se ha pintado de verde obscuro. Si desea confirmar su selección presione el botón confirmar</p>`;
             //Muestro el botón llamado confirmar
             resaltoBotones("confirmar")
             //Reseteo color de a quienes corresponda a seleccionable ("fondoVerde") Para que no figure más de un elegido
@@ -574,7 +594,6 @@ const coachElijeJugador = (ataqueODefensa)=>{
         
         //Función que se ejecuta con ese evento
         function funcionalidad(){
-            textoLocutor.innerHTML+=`<br><p>Se confirma la selección de ese jugador</p>`;
             //Guardo en el sesienStorage el jugador seleccionado
             if (guardoJugadorSeleccionado.length>1){
                 guardoJugadorSeleccionado.pop();
@@ -2346,16 +2365,12 @@ while (saltoA == saltoB){
         listaEstadosJugadoresA[0].conPelota = true;
         listaEstadosJugadoresA[4].ultimaAccion = `${listaJugadoresA[4].nombre} gana el salto`;
         listaEstadosJugadoresA[0].ultimaAccion = `${listaJugadoresA[0].nombre} recibe un pase`;
-        textoLocutor.innerHTML+=`<br><p>${listaEstadosJugadoresA[0].ultimaAccion}</p>`;
-        textoLocutor.innerHTML+=`<br><p>${listaEstadosJugadoresA[4].ultimaAccion}</p>`;
     }
     else if (resultadoSalto < 0){
         textoLocutor.innerHTML+=`<br><p>El salto lo gana el equipo B y la pelota ahora está en posesión de ${listaJugadoresB[0].nombre}</p>`;
         listaEstadosJugadoresB[0].conPelota = true;
         listaEstadosJugadoresB[4].ultimaAccion = `${listaJugadoresB[4].nombre} gana el salto`;
         listaEstadosJugadoresB[0].ultimaAccion = `${listaJugadoresB[0].nombre} recibe un pase`;
-        textoLocutor.innerHTML+=`<br><p>${listaEstadosJugadoresB[0].ultimaAccion}</p>`;
-        textoLocutor.innerHTML+=`<br><p>${listaEstadosJugadoresB[4].ultimaAccion}</p>`;
     }
     else{
         textoLocutor.innerHTML+=`<br><p>Ambos jugadores alcanzan el balón al mismo tiempo, la disputa por el salto sigue!</p>`;
